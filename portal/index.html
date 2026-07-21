@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Fox's Den — Apps</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/favicon-192.png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="stylesheet" href="css/portal.css">
+  <link rel="stylesheet" href="css/theme-overrides.css">
+
+  <style>html:not(.auth-ok) body > :not(#auth-gate) { display: none; }</style>
+  <script src="js/auth.js"></script>
+
+</head>
+<body data-nav-scope="landing">
+  <div class="landing">
+    <img class="landing-logo" src="assets/logo.png" alt="The Fox's Den" onerror="this.onerror=null;this.src='assets/logo.svg';">
+    <h1 data-portal-title>The Fox's Den — Apps</h1>
+    <p class="subtitle" data-portal-tagline>Personal AppGen apps to browse, install, and test</p>
+
+
+    <div class="landing-search-wrap no-print">
+      <input type="search" id="landing-search" class="landing-search" placeholder="Search apps… (Ctrl+K)" readonly>
+    </div>
+
+
+    <ol class="landing-nav" data-portal-landing-nav></ol>
+
+
+  </div>
+
+
+  <script src="js/vendor/fuse.min.js"></script>
+  <script src="js/search-index.js"></script>
+  <script src="js/search.js"></script>
+
+  <script src="js/portal-data.js"></script>
+  <script src="js/portal.js"></script>
+</body>
+</html>

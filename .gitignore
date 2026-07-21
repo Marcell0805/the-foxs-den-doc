@@ -1,0 +1,12 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Local overrides (optional)
+portal/data/*.local.json
+
+# APKs exceed GitHub's 100 MB file limit; host via GitHub Releases (see README)
+portal/downloads/*.apk

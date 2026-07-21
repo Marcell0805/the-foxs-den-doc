@@ -1,0 +1,11 @@
+{
+    "items":  [
+                  {
+                      "id":  "active-huntress",
+                      "num":  1,
+                      "file":  "active-huntress.html",
+                      "label":  "Active Huntress",
+                      "available":  true
+                  }
+              ]
+}

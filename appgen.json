@@ -1,0 +1,85 @@
+{
+  "SchemaVersion": 9,
+  "ApplicationName": "The_Fox_s_Den",
+  "RootNamespace": "The_Fox_s_Den",
+  "Phase": "Portal",
+  "Portal": {
+    "Preset": "engineering-portal",
+    "Settings": {
+      "PortalName": "The Fox's Den — Apps",
+      "Tagline": "Personal AppGen apps to browse, install, and test",
+      "Version": "1.0",
+      "Auth": {
+        "Password": "the_fox_s_den",
+        "StorageKey": "the_fox_s_den_portal_auth"
+      },
+      "Theme": {
+        "PrimaryColor": "#2D4A3E",
+        "AccentColor": "#3F5F47",
+        "HighlightColor": "#B8860B",
+        "BackgroundColor": "#F5F1E8"
+      }
+    },
+    "Nav": [],
+    "Sections": [],
+    "Features": {
+      "PasswordGate": true,
+      "Search": true
+    }
+  },
+  "EntitySketches": [],
+  "Targets": {
+    "Documentation": {
+      "Enabled": true,
+      "Preset": "engineering-portal"
+    },
+    "Web": {
+      "Enabled": false,
+      "Auth": {
+        "Enabled": false,
+        "Issuer": "",
+        "TokenLifetimeMinutes": 60
+      }
+    },
+    "Mobile": {
+      "Enabled": false,
+      "Framework": "flutter",
+      "PackageName": "com.the_fox_s_den.app",
+      "ApiBaseUrl": "https://localhost:5001",
+      "StateManagement": "riverpod",
+      "Theme": {
+        "Preset": "nature"
+      },
+      "Offline": {
+        "Enabled": false,
+        "Mode": "none",
+        "Provider": "sqlite"
+      },
+      "Capabilities": {
+        "Enabled": []
+      },
+      "Publish": {
+        "BaseUrl": "https://marcell0805.github.io/the-foxs-den-doc",
+        "ApkFileName": "",
+        "AppId": "",
+        "PortalRepoPath": "D:\\repos\\The_Fox_s_Den Doc"
+      }
+    }
+  },
+  "Database": "SqlServer",
+  "UiTargets": [
+    "MvcWeb"
+  ],
+  "Entities": [],
+  "Setup": {
+    "ConfigEntries": [
+      {
+        "Name": "Dev",
+        "Kind": "ConnectionString",
+        "Value": "Server=localhost;Database=AppGenDb;Trusted_Connection=True;TrustServerCertificate=True"
+      }
+    ],
+    "ActiveConnectionName": "Dev",
+    "EnsureCreatedInDevelopment": true
+  }
+}

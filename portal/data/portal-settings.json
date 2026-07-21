@@ -1,0 +1,16 @@
+{
+  "portalName": "The Fox's Den — Apps",
+  "tagline": "Personal AppGen apps to browse, install, and test",
+  "version": "1.0",
+  "pagesBaseUrl": "https://marcell0805.github.io/the-foxs-den-doc",
+  "auth": {
+    "password": "the_fox_s_den",
+    "storageKey": "the_fox_s_den_portal_auth"
+  },
+  "theme": {
+    "primaryColor": "#2D4A3E",
+    "accentColor": "#3F5F47",
+    "highlightColor": "#B8860B",
+    "backgroundColor": "#F5F1E8"
+  }
+}

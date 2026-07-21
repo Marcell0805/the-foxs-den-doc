@@ -1,0 +1,15 @@
+{
+  "apps": [
+    {
+      "id": "active-huntress",
+      "title": "Active Huntress",
+      "repoPath": "D:\\repos\\Active_Huntress Mobile",
+      "mobileRoot": "D:\\repos\\Active_Huntress Mobile",
+      "readme": "README.md",
+      "apkSource": "build\\app\\outputs\\flutter-apk\\app-release.apk",
+      "apkFileName": "active-huntress.apk",
+      "status": "live",
+      "tags": ["flutter", "android", "workout"]
+    }
+  ]
+}
