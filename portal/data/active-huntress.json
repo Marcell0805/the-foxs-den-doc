@@ -21,7 +21,7 @@
                        "id":  "readme-1"
                    }
                ],
-    "sidebarNote":  "Official APK is hosted on GitHub Releases.",
+    "sidebarNote":  "Official APK is hosted on GitHub Pages.",
     "version":  "1.0.0",
     "build":  2,
     "releaseNotes":  "Huntress Home v1 - trends, backup, weekly plan",
@@ -29,6 +29,6 @@
     "apk":  {
                 "label":  "Download APK",
                 "fileName":  "active-huntress.apk",
-                "downloadUrl":  "https://github.com/Marcell0805/the-foxs-den-doc/releases/download/v1.0.0-b2/active-huntress.apk"
+                "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/active-huntress.apk"
             }
 }

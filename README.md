@@ -102,23 +102,19 @@ git push -u origin main
 
 Example: `https://marcell0805.github.io/the-foxs-den-doc/` → APK at `…/downloads/active-huntress.apk`.
 
-### APK files (too large for normal git push)
+### APK files
 
-GitHub rejects files **over 100 MB**. Flutter APKs often exceed that (especially **debug** builds). **Do not commit** `portal/downloads/*.apk` — they are in `.gitignore`.
+Same pattern as Huntress Cookbook: commit release APKs under `portal/downloads/` and serve them from GitHub Pages (typically ~50–70 MB — under GitHub’s 100 MB file limit).
 
-**Recommended:** upload the APK as a **[GitHub Release](https://docs.github.com/en/repositories/releasing-projects-on-github)** asset, then set `apkUrl` in `portal/downloads/<app-id>/mobile-version.json` and the app section’s download link to the release URL, for example:
-
-`https://github.com/Marcell0805/the-foxs-den-doc/releases/download/v1.0.0/active-huntress.apk`
-
-You can still commit **`mobile-version.json`** (small) on every publish. The portal site on Pages works; only the binary is on Releases.
-
-**Smaller APK option:** build per-CPU APKs (often under 100 MB each) if you ever want binaries in the repo:
+Publish flow:
 
 ```powershell
-flutter build apk --release --split-per-abi
+.\publish-app-mobile.ps1 -AppId active-huntress -ReleaseNotes "Your notes"
+.\build-portal.ps1
+# then commit portal/ (including downloads/*.apk) and push
 ```
 
-Then publish the `arm64-v8a` or `armeabi-v7a` artifact from `build/app/outputs/flutter-apk/`.
+If an APK ever approaches 100 MB, build a smaller split APK (`flutter build apk --release --split-per-abi`) and publish the `arm64-v8a` artifact instead.
 
 ### Security note
 

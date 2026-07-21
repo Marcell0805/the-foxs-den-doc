@@ -210,24 +210,14 @@ function Sync-AppsFromManifest {
         }
 
         $apkPath = Join-Path $DownloadsDir $apkFileName
-        $hasLocalApk = Test-Path $apkPath
-        $hasRemoteApk = $apkUrl -match 'github\.com/.+/releases/download/'
-        $hasApk = $hasLocalApk -or $hasRemoteApk
+        $hasApk = Test-Path $apkPath
         if (-not $hasApk) {
-            Write-Warning "APK missing for $id at $apkPath (run publish-app-mobile.ps1, then publish-apk-release.ps1)"
+            Write-Warning "APK missing for $id at $apkPath (run publish-app-mobile.ps1)"
         }
 
         $available = $true
         if ($null -ne $app.available) { $available = [bool]$app.available }
         if (-not $hasApk -and -not $app.allowWithoutApk) { $available = $false }
-
-        $sidebarNote = if ($hasRemoteApk) {
-            "Official APK is hosted on GitHub Releases."
-        } elseif ($hasLocalApk) {
-            "Official APK is hosted on GitHub Pages."
-        } else {
-            "APK not published yet."
-        }
 
         $section = [ordered]@{
             id = $id
@@ -237,7 +227,7 @@ function Sync-AppsFromManifest {
             searchKeywords = @()
             summary = if ($app.summaryOverride) { $app.summaryOverride } else { $parsed.Summary }
             blocks = $parsed.Blocks
-            sidebarNote = $sidebarNote
+            sidebarNote = if ($hasApk) { "Official APK is hosted on GitHub Pages." } else { "APK not published yet." }
             version = $versionName
             build = $buildNumber
             releaseNotes = $releaseNotes

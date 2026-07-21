@@ -5,7 +5,6 @@
       "title": "Active Huntress",
       "repoPath": "C:\\Users\\TheSlyFox\\source\\repos\\Active_Huntress-Mobile",
       "mobileRoot": "C:\\Users\\TheSlyFox\\source\\repos\\Active_Huntress-Mobile",
-      "allowWithoutApk": true,
       "readme": "README.md",
       "apkSource": "build\\app\\outputs\\flutter-apk\\app-release.apk",
       "apkFileName": "active-huntress.apk",
