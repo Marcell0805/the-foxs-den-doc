@@ -21,20 +21,20 @@
                        "id":  "readme-1"
                    }
                ],
-    "sidebarNote":  "APK not published yet.",
-    "version":  null,
-    "build":  null,
-    "releaseNotes":  null,
+    "sidebarNote":  "Official APK is hosted on GitHub Pages.",
+    "version":  "1.0.13",
+    "build":  19,
+    "releaseNotes":  "New gluten free app",
     "updateCheckUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/huntresscookbook-mobile/mobile-version.json",
     "apk":  {
-                "sizeLabel":  null,
+                "sizeLabel":  "63.8 MB",
                 "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/huntresscookbook-mobile.apk",
                 "channel":  "live",
                 "fileName":  "huntresscookbook-mobile.apk",
-                "build":  null,
-                "version":  null,
+                "build":  19,
+                "version":  "1.0.13",
                 "label":  "Download Live APK",
-                "sizeBytes":  null
+                "sizeBytes":  66896299
             },
     "apkBeta":  {
                     "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/huntresscookbook-mobile-beta.apk",

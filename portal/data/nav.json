@@ -14,7 +14,7 @@
                       "num":  2,
                       "file":  "huntresscookbook-mobile.html",
                       "label":  "HuntressCookbook Mobile",
-                      "available":  false,
+                      "available":  true,
                       "kind":  "mobile",
                       "status":  "live"
                   },

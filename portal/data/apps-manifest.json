@@ -29,7 +29,7 @@
       "repoPath": "C:\\Users\\msvn\\source\\repos\\HuntressCookbook-Mobile",
       "mobileRoot": "C:\\Users\\msvn\\source\\repos\\HuntressCookbook-Mobile",
       "readme": "README.md",
-      "apkSource": "build\\app\\outputs\\flutter-apk\\app-debug.apk",
+      "apkSource": "build\\app\\outputs\\flutter-apk\\app-release.apk",
       "apkFileName": "huntresscookbook-mobile.apk",
       "status": "live",
       "tags": [
@@ -38,7 +38,7 @@
       ],
       "beta": {
         "apkFileName": "huntresscookbook-mobile-beta.apk",
-        "apkSource": "build\\app\\outputs\\flutter-apk\\app-debug.apk"
+        "apkSource": "build\\app\\outputs\\flutter-apk\\app-release.apk"
       }
     }
   ]

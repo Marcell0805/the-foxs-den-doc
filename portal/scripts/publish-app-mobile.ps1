@@ -84,6 +84,13 @@ if (-not $ApkPath) {
     $ApkPath = Join-Path $MobileRoot $apkSourceRel
 }
 
+# Debug APKs are huge and must never be published to Pages.
+if ($ApkPath -match '(?i)debug') {
+    $releaseFallback = Join-Path $MobileRoot "build\app\outputs\flutter-apk\app-release.apk"
+    Write-Warning "apkSource points at a debug APK ($ApkPath). Switching to release: $releaseFallback"
+    $ApkPath = $releaseFallback
+}
+
 if (-not $SkipBuild) {
     Push-Location $MobileRoot
     try {
@@ -101,6 +108,10 @@ if (-not $SkipBuild) {
 
 if (-not (Test-Path $ApkPath)) {
     throw "APK not found at $ApkPath. Build first or pass -ApkPath."
+}
+
+if ($ApkPath -match '(?i)debug') {
+    throw "Refusing to publish a debug APK ($ApkPath). Use app-release.apk."
 }
 
 try {
