@@ -11,7 +11,11 @@
       "apkSource": "build\\app\\outputs\\flutter-apk\\app-release.apk",
       "apkFileName": "active-huntress.apk",
       "status": "live",
-      "tags": ["flutter", "android", "workout"],
+      "tags": [
+        "flutter",
+        "android",
+        "workout"
+      ],
       "beta": {
         "apkFileName": "active-huntress-beta.apk",
         "apkSource": "build\\app\\outputs\\flutter-apk\\app-release.apk"
@@ -28,7 +32,10 @@
       "apkSource": "build\\app\\outputs\\flutter-apk\\app-release.apk",
       "apkFileName": "huntresscookbook-mobile.apk",
       "status": "live",
-      "tags": ["flutter", "android"],
+      "tags": [
+        "flutter",
+        "android"
+      ],
       "beta": {
         "apkFileName": "huntresscookbook-mobile-beta.apk",
         "apkSource": "build\\app\\outputs\\flutter-apk\\app-release.apk"
@@ -42,10 +49,14 @@
       "repoPath": "C:\\Users\\msvn\\source\\repos\\huntress-cookbook",
       "readme": "README.md",
       "externalUrl": "https://marcell0805.github.io/huntress-cookbook/",
-      "note": "Gluten-free, onion-free, IBS-conscious recipes for the Huntress — browse chapters online.",
+      "note": "Gluten-free, onion-free, IBS-conscious recipes for the Huntress \u2014 browse chapters online.",
       "publishedAt": "2026-07-22",
       "status": "live",
-      "tags": ["website", "recipes", "cookbook"]
+      "tags": [
+        "website",
+        "recipes",
+        "cookbook"
+      ]
     }
   ]
 }
