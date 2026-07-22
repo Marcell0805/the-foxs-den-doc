@@ -8,6 +8,10 @@ param(
     [string]$ReleaseNotes = "Mobile app update.",
     [string]$PagesBaseUrl = "",
     [string]$PortalRoot = "",
+    [string]$ContentManifestUrl = "",
+    [string]$ContentVersion = "",
+    # Local downloads folder of any companion website that hosts mobile-content-manifest.json
+    [string]$ContentDownloadsRoot = "",
     [switch]$SkipBuild
 )
 
@@ -153,6 +157,51 @@ Write-Host "APK size: $sizeLabel ($sizeBytes bytes)"
 
 $apkUrl = "$PagesBaseUrl/downloads/$apkFileName"
 
+# Optional content OTA: any companion website can host mobile-content-manifest.json.
+# Configure via -ContentManifestUrl / -ContentVersion / -ContentDownloadsRoot, or apps-manifest contentOta.
+$contentOta = $app.contentOta
+if (-not $ContentManifestUrl -and $contentOta -and $contentOta.manifestUrl) {
+    $ContentManifestUrl = [string]$contentOta.manifestUrl
+}
+if (-not $ContentVersion -and $contentOta -and $contentOta.contentVersion) {
+    $ContentVersion = [string]$contentOta.contentVersion
+}
+if (-not $ContentDownloadsRoot) {
+    if ($contentOta -and $contentOta.downloadsRoot) {
+        $ContentDownloadsRoot = [string]$contentOta.downloadsRoot
+    } elseif ($app.contentDownloadsRoot) {
+        $ContentDownloadsRoot = [string]$app.contentDownloadsRoot
+    }
+}
+
+$manifestFileName = "mobile-content-manifest.json"
+if ($contentOta -and $contentOta.manifestFileName) {
+    $manifestFileName = [string]$contentOta.manifestFileName
+}
+
+if ((-not $ContentVersion -or -not $ContentManifestUrl) -and $ContentDownloadsRoot) {
+    $localManifestPath = Join-Path $ContentDownloadsRoot $manifestFileName
+    if (Test-Path $localManifestPath) {
+        $localManifest = Read-Json $localManifestPath
+        if (-not $ContentVersion) {
+            $ContentVersion = [string]$localManifest.contentVersion
+        }
+        if (-not $ContentManifestUrl -and $contentOta -and $contentOta.manifestUrl) {
+            $ContentManifestUrl = [string]$contentOta.manifestUrl
+        }
+        if (-not $ContentManifestUrl -and $app.contentManifestUrl) {
+            $ContentManifestUrl = [string]$app.contentManifestUrl
+        }
+        if ($ContentVersion -and $ContentManifestUrl) {
+            Write-Host "Attached content OTA from $localManifestPath ($ContentVersion)"
+        } elseif ($ContentVersion -and -not $ContentManifestUrl) {
+            Write-Warning "Found $manifestFileName but no contentManifestUrl (pass -ContentManifestUrl or set contentOta.manifestUrl in apps-manifest)."
+        }
+    } elseif ($ContentDownloadsRoot) {
+        Write-Warning "Content downloads root set but missing $localManifestPath"
+    }
+}
+
 $versionManifest = @{
     version = $versionName
     build = $buildNumber
@@ -161,6 +210,10 @@ $versionManifest = @{
     channel = $Channel
     sizeBytes = $sizeBytes
     sizeLabel = $sizeLabel
+}
+if ($ContentVersion -and $ContentManifestUrl) {
+    $versionManifest.contentVersion = $ContentVersion
+    $versionManifest.contentManifestUrl = $ContentManifestUrl
 }
 $versionPath = Join-Path $versionDir "mobile-version.json"
 Write-JsonFile $versionPath $versionManifest

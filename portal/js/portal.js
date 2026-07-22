@@ -88,6 +88,56 @@
     document.body.appendChild(backdrop);
   }
 
+  function partitionNav() {
+    var mobile = [];
+    var websites = [];
+    var about = [];
+    var other = [];
+    getNav().forEach(function (item) {
+      if (item.kind === 'about') about.push(item);
+      else if (item.kind === 'website') websites.push(item);
+      else if (item.kind === 'mobile' || !item.kind) mobile.push(item);
+      else other.push(item);
+    });
+    return { mobile: mobile, websites: websites, about: about, other: other };
+  }
+
+  function renderSidebarGroup(title, items, active, prefix) {
+    if (!items.length) return '';
+    var html = '<div class="sidebar-group">';
+    if (title) html += '<h2 class="sidebar-group-title">' + esc(title) + '</h2>';
+    html += '<ol>';
+    items.forEach(function (item, i) {
+      var label = (i + 1) + '. ' + item.label;
+      if (item.id === active) {
+        html += '<li class="active">' + esc(label) + '</li>';
+      } else if (item.available && item.file) {
+        html += '<li><a href="' + prefix + item.file + '">' + esc(label) + '</a></li>';
+      } else {
+        html += '<li class="unavailable">' + esc(label) + ' <em>(soon)</em></li>';
+      }
+    });
+    html += '</ol></div>';
+    return html;
+  }
+
+  function renderSidebarAbout(items, active, prefix) {
+    if (!items.length) return '';
+    var html = '<div class="sidebar-footer">';
+    items.forEach(function (item) {
+      var label = item.label || 'About';
+      if (item.id === active) {
+        html += '<div class="sidebar-footer-link active">' + esc(label) + '</div>';
+      } else if (item.available && item.file) {
+        html += '<a class="sidebar-footer-link" href="' + prefix + item.file + '">' + esc(label) + '</a>';
+      } else {
+        html += '<div class="sidebar-footer-link unavailable">' + esc(label) + '</div>';
+      }
+    });
+    html += '</div>';
+    return html;
+  }
+
   function renderSidebar() {
     var aside = document.querySelector('[data-portal-sidebar]');
     if (!aside) return;
@@ -101,22 +151,19 @@
     var active = document.body.getAttribute('data-section-id') || '';
     var scope = document.body.getAttribute('data-nav-scope') || 'section';
     var prefix = scope === 'section' ? '' : 'sections/';
-    var html = '<nav class="sidebar-nav"><ol>';
-    getNav().forEach(function (item) {
-      var label = item.num + '. ' + item.label;
-      if (item.id === active) {
-        html += '<li class="active">' + esc(label) + '</li>';
-      } else if (item.available && item.file) {
-        html += '<li><a href="' + prefix + item.file + '">' + esc(label) + '</a></li>';
-      } else {
-        html += '<li class="unavailable">' + esc(label) + ' <em>(soon)</em></li>';
-      }
-    });
-    html += '</ol></nav>';
+    var groups = partitionNav();
+    var html = '<div class="sidebar-scroll">';
+    html += '<nav class="sidebar-nav">';
+    html += renderSidebarGroup('Mobile apps', groups.mobile, active, prefix);
+    html += renderSidebarGroup('Websites', groups.websites, active, prefix);
+    html += renderSidebarGroup('More', groups.other, active, prefix);
+    html += '</nav>';
     var section = getSection(active);
     if (section && section.sidebarNote) {
       html += '<div class="sidebar-note"><strong>Note</strong><p>' + esc(section.sidebarNote) + '</p></div>';
     }
+    html += '</div>';
+    html += renderSidebarAbout(groups.about, active, prefix);
     aside.innerHTML = html;
     aside.querySelectorAll('a').forEach(function (a) {
       a.addEventListener('click', closeSidebar);
@@ -343,17 +390,18 @@
   function renderNavGroup(title, items) {
     if (!items.length) return '';
     var html = '<section class="landing-group"><h2 class="landing-group-title">' + esc(title) + '</h2><ol class="landing-nav">';
-    function renderItem(item, extra) {
+    function renderItem(item, index, extra) {
+      var n = index + 1;
       var badge = item.status === 'beta' ? ' <span class="status-badge status-beta">Beta</span>' : '';
       var cls = extra ? ' class="landing-nav-extra"' : '';
       var hiddenAttr = extra ? ' hidden' : '';
       if (item.available && item.file) {
-        return '<li' + cls + hiddenAttr + '><a href="sections/' + item.file + '"><span class="landing-nav-label">' + item.num + '. ' + esc(item.label) + '</span>' + badge + '</a></li>';
+        return '<li' + cls + hiddenAttr + '><a href="sections/' + item.file + '"><span class="landing-nav-label">' + n + '. ' + esc(item.label) + '</span>' + badge + '</a></li>';
       }
-      return '<li class="unavailable' + (extra ? ' landing-nav-extra' : '') + '"' + hiddenAttr + '><span class="landing-nav-label">' + item.num + '. ' + esc(item.label) + '</span>' + badge + ' <em>(coming soon)</em></li>';
+      return '<li class="unavailable' + (extra ? ' landing-nav-extra' : '') + '"' + hiddenAttr + '><span class="landing-nav-label">' + n + '. ' + esc(item.label) + '</span>' + badge + ' <em>(coming soon)</em></li>';
     }
     items.forEach(function (item, i) {
-      html += renderItem(item, i >= LANDING_GROUP_LIMIT);
+      html += renderItem(item, i, i >= LANDING_GROUP_LIMIT);
     });
     if (items.length > LANDING_GROUP_LIMIT) {
       var more = items.length - LANDING_GROUP_LIMIT;
@@ -369,19 +417,11 @@
   function renderLandingNav() {
     var mount = document.querySelector('[data-portal-landing-nav]');
     if (!mount) return;
-    var mobile = [];
-    var websites = [];
-    var other = [];
-    getNav().forEach(function (item) {
-      if (item.kind === 'about') return;
-      if (item.kind === 'website') websites.push(item);
-      else if (item.kind === 'mobile' || !item.kind) mobile.push(item);
-      else other.push(item);
-    });
+    var groups = partitionNav();
     var html = '';
-    html += renderNavGroup('Mobile apps', mobile);
-    html += renderNavGroup('Websites', websites);
-    html += renderNavGroup('More', other);
+    html += renderNavGroup('Mobile apps', groups.mobile);
+    html += renderNavGroup('Websites', groups.websites);
+    html += renderNavGroup('More', groups.other);
     if (!html) html = '<p class="landing-empty">No projects listed yet.</p>';
     mount.innerHTML = html;
     mount.querySelectorAll('.landing-nav-toggle').forEach(function (btn) {

@@ -36,6 +36,11 @@
         "flutter",
         "android"
       ],
+      "contentOta": {
+        "downloadsRoot": "C:\\Users\\msvn\\source\\repos\\huntress-cookbook\\downloads",
+        "manifestFileName": "mobile-content-manifest.json",
+        "manifestUrl": "https://marcell0805.github.io/huntress-cookbook/downloads/mobile-content-manifest.json"
+      },
       "beta": {
         "apkFileName": "huntresscookbook-mobile-beta.apk",
         "apkSource": "build\\app\\outputs\\flutter-apk\\app-release.apk"

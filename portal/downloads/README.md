@@ -20,18 +20,43 @@ Android shows extra prompts for apps installed outside the Google Play Store. Th
 
 If you already have an older test build with the same package name, you may need to **uninstall it first**, then install the new release.
 
-**In-app updates:** when online, the app checks `{pagesBaseUrl}/downloads/{app-id}/mobile-version.json` once per launch. If a newer **build** is published, you get a prompt with release notes and a download link (same contract as The Huntress Cookbook mobile app).
+**In-app updates:** when online, HuntressCookbook Mobile checks
+`{pagesBaseUrl}/downloads/huntresscookbook-mobile/mobile-version.json` once per launch.
+If a newer **build** is published, you get a prompt with release notes and a download link.
+Recipe-only (content) updates still use the cookbook-hosted `mobile-content-manifest.json` referenced from that file.
+
+Older APKs that still check `huntress-cookbook/downloads/mobile-version.json` get a **bridge** entry there pointing at the Fox's Den APK; after they install that build, future checks use Fox's Den only.
 
 ## For maintainers
 
-After `flutter build apk --release`, from this repo:
+**Preferred (APK + Fox's Den version JSON):**
 
 ```powershell
 cd portal\scripts
-.\publish-app-mobile.ps1 -AppId active-huntress -ReleaseNotes "Describe changes"
+.\publish-app-mobile.ps1 -AppId huntresscookbook-mobile -ReleaseNotes "Describe changes"
 .\build-portal.ps1
 ```
 
-Commit `portal/downloads/` (including the APK) and push for GitHub Pages.
+For apps with recipe/content OTA, set optional `contentOta` on the mobile entry in `data/apps-manifest.json`:
+
+```json
+"contentOta": {
+  "downloadsRoot": "C:\\path\\to\\any-website\\downloads",
+  "manifestFileName": "mobile-content-manifest.json",
+  "manifestUrl": "https://example.github.io/any-website/downloads/mobile-content-manifest.json"
+}
+```
+
+Or pass `-ContentDownloadsRoot`, `-ContentManifestUrl`, and/or `-ContentVersion` on the command line. This works for any companion website, not only the cookbook.
+
+**Content export + bridge JSON** (recipe seed / images still published from the cookbook repo):
+
+```powershell
+cd path\to\huntress-cookbook\scripts
+.\export-mobile-seed.ps1
+.\publish-mobile.ps1 -SkipBuild -ReleaseNotes "Describe changes"
+```
+
+Commit `portal/downloads/` (including the APK) and push for GitHub Pages. Also commit cookbook `downloads/` when content or the bridge JSON changed.
 
 Bump the **`+N`** build number in `pubspec.yaml` before every publish so update checks detect new APKs.

@@ -1,9 +1,11 @@
 {
-    "build":  19,
     "version":  "1.0.13",
-    "sizeLabel":  "63.8 MB",
+    "build":  19,
+    "apkUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/huntresscookbook-mobile.apk",
     "releaseNotes":  "New gluten free app",
     "channel":  "live",
     "sizeBytes":  66896299,
-    "apkUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/huntresscookbook-mobile.apk"
+    "sizeLabel":  "63.8 MB",
+    "contentVersion":  "a6a3ce41465222dcc84fb86b15c132003845dd3f0c52794c9b61f82025819ae7",
+    "contentManifestUrl":  "https://marcell0805.github.io/huntress-cookbook/downloads/mobile-content-manifest.json"
 }
