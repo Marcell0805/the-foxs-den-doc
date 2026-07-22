@@ -313,17 +313,32 @@ function Sync-AppsFromManifest {
         $num++
         $id = $app.id
         $kind = if ($app.kind) { $app.kind } else { "mobile" }
-        $repoPath = Resolve-RepoPath $DataDir $app.repoPath
+        $repoPath = ""
+        if ($app.repoPath) {
+            $repoPath = Resolve-RepoPath $DataDir $app.repoPath
+        } elseif ($app.mobileRoot) {
+            $repoPath = Resolve-RepoPath $DataDir $app.mobileRoot
+        }
         $readmeRel = if ($app.readme) { $app.readme } else { "README.md" }
-        $readmePath = Join-Path $repoPath $readmeRel
+        $readmePath = if ($repoPath) { Join-Path $repoPath $readmeRel } else { "" }
 
         $parsed = @{ Summary = $app.title; Blocks = @(@{
             id = "about"; heading = "About"; content = "Details coming soon."; bullets = @()
         }) }
-        if (Test-Path $readmePath) {
+        if ($readmePath -and (Test-Path $readmePath)) {
             $readmeText = [IO.File]::ReadAllText($readmePath, $utf8)
             $parsed = Parse-ReadmeContent $readmeText
-        } else {
+        } elseif ($kind -eq 'website' -and $app.note) {
+            $parsed = @{
+                Summary = if ($app.summaryOverride) { $app.summaryOverride } else { $app.note }
+                Blocks = @(@{
+                    id = "about"
+                    heading = "About"
+                    content = $app.note
+                    bullets = @()
+                })
+            }
+        } elseif ($readmePath) {
             Write-Warning "README not found for $id at $readmePath"
         }
 
@@ -339,6 +354,10 @@ function Sync-AppsFromManifest {
         if ($null -ne $app.available) { $available = [bool]$app.available }
         $allowWithoutApk = [bool]$app.allowWithoutApk -or ($kind -eq 'website')
         if ($kind -eq 'mobile' -and -not $live.hasApk -and -not $allowWithoutApk) { $available = $false }
+        if ($kind -eq 'website' -and -not $app.externalUrl) { $available = $false }
+
+        $websiteNote = if ($app.note) { [string]$app.note } else { "Website project." }
+        $publishedAt = if ($app.publishedAt) { [string]$app.publishedAt } else { $null }
 
         $section = [ordered]@{
             id = $id
@@ -350,7 +369,7 @@ function Sync-AppsFromManifest {
             summary = if ($app.summaryOverride) { $app.summaryOverride } else { $parsed.Summary }
             blocks = $parsed.Blocks
             sidebarNote = if ($kind -eq 'website') {
-                "Website project."
+                $websiteNote
             } elseif ($live.hasApk) {
                 "Official APK is hosted on GitHub Pages."
             } else {
@@ -358,7 +377,7 @@ function Sync-AppsFromManifest {
             }
             version = $live.version
             build = $live.build
-            releaseNotes = $live.releaseNotes
+            releaseNotes = if ($kind -eq 'website') { $websiteNote } else { $live.releaseNotes }
             updateCheckUrl = $live.updateCheckUrl
         }
 
@@ -366,6 +385,10 @@ function Sync-AppsFromManifest {
             if ($app.externalUrl) {
                 $section.externalUrl = $app.externalUrl
             }
+            if ($publishedAt) {
+                $section.publishedAt = $publishedAt
+            }
+            $section.note = $websiteNote
         } else {
             $section.apk = @{
                 downloadUrl = $live.apkUrl
@@ -431,10 +454,13 @@ function Sync-AppsFromManifest {
     Write-Host "Synced $($navItems.Count) nav item(s) (apps + About) from apps-manifest.json"
 }
 
-function Get-SearchText($doc) {
+  function Get-SearchText($doc) {
     $parts = [System.Collections.Generic.List[string]]::new()
     if ($doc.title) { $parts.Add($doc.title) }
     if ($doc.summary) { $parts.Add($doc.summary) }
+    if ($doc.note) { $parts.Add($doc.note) }
+    if ($doc.publishedAt) { $parts.Add($doc.publishedAt) }
+    if ($doc.externalUrl) { $parts.Add($doc.externalUrl) }
     if ($doc.searchKeywords) { foreach ($k in $doc.searchKeywords) { $parts.Add($k) } }
     if ($doc.tags) { foreach ($t in $doc.tags) { $parts.Add($t) } }
     if ($doc.version) { $parts.Add($doc.version) }

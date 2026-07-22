@@ -1,0 +1,33 @@
+{
+    "id":  "huntress-cookbook",
+    "title":  "The Huntress Cookbook",
+    "status":  "live",
+    "kind":  "website",
+    "tags":  [
+                 "website",
+                 "recipes",
+                 "cookbook"
+             ],
+    "searchKeywords":  [
+
+                       ],
+    "summary":  "# The Huntress Cookbook",
+    "blocks":  [
+                   {
+                       "content":  "# The Huntress Cookbook A personal cookbook for the Huntress — gluten-free, onion-free, and IBS-conscious meals built with care by the Sly Fox.",
+                       "heading":  "About",
+                       "bullets":  [
+
+                                   ],
+                       "id":  "readme-1"
+                   }
+               ],
+    "sidebarNote":  "Gluten-free, onion-free, IBS-conscious recipes for the Huntress — browse chapters online.",
+    "version":  null,
+    "build":  null,
+    "releaseNotes":  "Gluten-free, onion-free, IBS-conscious recipes for the Huntress — browse chapters online.",
+    "updateCheckUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/huntress-cookbook/mobile-version.json",
+    "externalUrl":  "https://marcell0805.github.io/huntress-cookbook/",
+    "publishedAt":  "2026-07-22",
+    "note":  "Gluten-free, onion-free, IBS-conscious recipes for the Huntress — browse chapters online."
+}

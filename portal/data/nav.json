@@ -19,8 +19,17 @@
                       "status":  "live"
                   },
                   {
-                      "id":  "about",
+                      "id":  "huntress-cookbook",
                       "num":  3,
+                      "file":  "huntress-cookbook.html",
+                      "label":  "The Huntress Cookbook",
+                      "available":  true,
+                      "kind":  "website",
+                      "status":  "live"
+                  },
+                  {
+                      "id":  "about",
+                      "num":  4,
                       "file":  "about.html",
                       "label":  "About",
                       "available":  true,

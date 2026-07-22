@@ -285,6 +285,13 @@
       html += '<p class="app-download-wrap">' +
         '<a href="' + esc(section.externalUrl) + '" class="app-download-btn" target="_blank" rel="noopener">Open site</a>' +
         '</p>';
+      var siteMeta = [];
+      if (section.publishedAt) siteMeta.push('Published ' + String(section.publishedAt));
+      if (section.note) siteMeta.push(String(section.note));
+      else if (section.releaseNotes) siteMeta.push(String(section.releaseNotes));
+      if (siteMeta.length) {
+        html += '<p class="app-channel-meta">' + esc(siteMeta.join(' · ')) + '</p>';
+      }
     } else if (section.apk || section.apkBeta) {
       html += '<div class="app-download-wrap">';
       if (section.apk) html += renderDownloadChannel(section.apk, '../downloads/README.md');
