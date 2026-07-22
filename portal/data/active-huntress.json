@@ -2,6 +2,7 @@
     "id":  "active-huntress",
     "title":  "Active Huntress",
     "status":  "live",
+    "kind":  "mobile",
     "tags":  [
                  "flutter",
                  "android",
@@ -27,8 +28,26 @@
     "releaseNotes":  "Huntress Home v1 - trends, backup, weekly plan",
     "updateCheckUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/active-huntress/mobile-version.json",
     "apk":  {
-                "label":  "Download APK",
+                "sizeLabel":  "55.3 MB",
+                "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/active-huntress.apk",
+                "channel":  "live",
                 "fileName":  "active-huntress.apk",
-                "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/active-huntress.apk"
-            }
+                "build":  2,
+                "version":  "1.0.0",
+                "label":  "Download Live APK",
+                "sizeBytes":  58008149
+            },
+    "apkBeta":  {
+                    "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/active-huntress-beta.apk",
+                    "build":  null,
+                    "fileName":  "active-huntress-beta.apk",
+                    "version":  null,
+                    "label":  "Download Beta APK",
+                    "available":  false,
+                    "sizeLabel":  null,
+                    "channel":  "beta",
+                    "releaseNotes":  null,
+                    "sizeBytes":  null,
+                    "updateCheckUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/active-huntress/beta/mobile-version.json"
+                }
 }

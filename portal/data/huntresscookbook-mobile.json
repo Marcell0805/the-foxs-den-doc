@@ -1,0 +1,52 @@
+{
+    "id":  "huntresscookbook-mobile",
+    "title":  "HuntressCookbook Mobile",
+    "status":  "live",
+    "kind":  "mobile",
+    "tags":  [
+                 "flutter",
+                 "android"
+             ],
+    "searchKeywords":  [
+
+                       ],
+    "summary":  "# The Huntress Cookbook — Mobile",
+    "blocks":  [
+                   {
+                       "content":  "# The Huntress Cookbook — Mobile Offline Flutter client for the Huntress Cookbook. Browse chapters, read recipes with photos, search ingredients, edit recipes locally, and view dietary guides — no network required after install.",
+                       "heading":  "About",
+                       "bullets":  [
+
+                                   ],
+                       "id":  "readme-1"
+                   }
+               ],
+    "sidebarNote":  "APK not published yet.",
+    "version":  null,
+    "build":  null,
+    "releaseNotes":  null,
+    "updateCheckUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/huntresscookbook-mobile/mobile-version.json",
+    "apk":  {
+                "sizeLabel":  null,
+                "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/huntresscookbook-mobile.apk",
+                "channel":  "live",
+                "fileName":  "huntresscookbook-mobile.apk",
+                "build":  null,
+                "version":  null,
+                "label":  "Download Live APK",
+                "sizeBytes":  null
+            },
+    "apkBeta":  {
+                    "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/huntresscookbook-mobile-beta.apk",
+                    "build":  null,
+                    "fileName":  "huntresscookbook-mobile-beta.apk",
+                    "version":  null,
+                    "label":  "Download Beta APK",
+                    "available":  false,
+                    "sizeLabel":  null,
+                    "channel":  "beta",
+                    "releaseNotes":  null,
+                    "sizeBytes":  null,
+                    "updateCheckUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/huntresscookbook-mobile/beta/mobile-version.json"
+                }
+}

@@ -73,7 +73,24 @@
       renderResults(input.value, document.getElementById('search-modal-results'));
     });
     input.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') close();
+      if (e.key === 'Escape') {
+        close();
+        return;
+      }
+      if (e.key === 'Enter') {
+        var q = String(input.value || '')
+          .trim()
+          .replace(/\s+/g, ' ')
+          .toLowerCase();
+        if (q === 'my huntress' || q === 'myhuntress') {
+          e.preventDefault();
+          close();
+          var href = document.body.getAttribute('data-nav-scope') === 'landing'
+            ? 'sections/my-huntress.html'
+            : 'my-huntress.html';
+          location.href = href;
+        }
+      }
     });
     return modal;
   }

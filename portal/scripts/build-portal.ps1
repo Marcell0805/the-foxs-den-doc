@@ -17,6 +17,9 @@ $jsDir = Join-Path $PortalRoot "js"
 $downloadsDir = Join-Path $PortalRoot "downloads"
 
 $dataExclude = @("portal-settings.json", "nav.json", "apps-manifest.json")
+$fixedNavIds = @("about")
+# Fixed sections kept out of nav / Fuse, but still generated into portal-data + HTML
+$hiddenSectionIds = @("my-huntress")
 
 function Read-Json([string]$path) {
     $text = [System.IO.File]::ReadAllText($path, $utf8)
@@ -26,11 +29,6 @@ function Read-Json([string]$path) {
 function Write-JsonFile([string]$path, $obj) {
     $json = $obj | ConvertTo-Json -Depth 30 -Compress:$false
     [IO.File]::WriteAllText($path, $json, $utf8)
-}
-
-function Escape-JsString([string]$s) {
-    if ($null -eq $s) { return "" }
-    return ($s -replace '\\', '\\\\' -replace '"', '\"' -replace "`r", '' -replace "`n", '\n')
 }
 
 function Resolve-RepoPath([string]$baseDir, [string]$path) {
@@ -94,7 +92,7 @@ function Parse-ReadmeContent([string]$readmeText) {
         }
     }
 
-    if (-not $summary) { $summary = "Mobile app from The Foxs Den hub." }
+    if (-not $summary) { $summary = "Project from The Foxs Den hub." }
 
     $blocks = @()
     $blockId = 0
@@ -156,11 +154,139 @@ function Parse-ReadmeContent([string]$readmeText) {
     return @{ Summary = $summary; Blocks = $blocks }
 }
 
+function Format-ApkSize([long]$Bytes) {
+    if ($Bytes -lt 1KB) { return "$Bytes B" }
+    if ($Bytes -lt 1MB) { return ("{0:N1} KB" -f ($Bytes / 1KB)) }
+    if ($Bytes -lt 1GB) { return ("{0:N1} MB" -f ($Bytes / 1MB)) }
+    return ("{0:N2} GB" -f ($Bytes / 1GB))
+}
+
+function Get-ChannelVersionInfo {
+    param(
+        [string]$DownloadsDir,
+        [string]$AppId,
+        [string]$ApkFileName,
+        [string]$PagesBaseUrl,
+        [ValidateSet('live', 'beta')]
+        [string]$Channel
+    )
+
+    $base = $PagesBaseUrl.TrimEnd('/')
+    $apkUrl = "$base/downloads/$ApkFileName"
+    $updateCheckUrl = if ($Channel -eq 'beta') {
+        "$base/downloads/$AppId/beta/mobile-version.json"
+    } else {
+        "$base/downloads/$AppId/mobile-version.json"
+    }
+
+    $versionPath = if ($Channel -eq 'beta') {
+        Join-Path $DownloadsDir "$AppId/beta/mobile-version.json"
+    } else {
+        Join-Path $DownloadsDir "$AppId/mobile-version.json"
+    }
+
+    $versionName = $null
+    $buildNumber = $null
+    $releaseNotes = $null
+    if (Test-Path $versionPath) {
+        $ver = Read-Json $versionPath
+        $versionName = $ver.version
+        $buildNumber = $ver.build
+        $releaseNotes = $ver.releaseNotes
+        if ($ver.apkUrl) { $apkUrl = $ver.apkUrl }
+    }
+
+    $apkPath = Join-Path $DownloadsDir $ApkFileName
+    $hasApk = Test-Path $apkPath
+    $sizeBytes = $null
+    $sizeLabel = $null
+    if ($hasApk) {
+        $sizeBytes = [long](Get-Item $apkPath).Length
+        $sizeLabel = Format-ApkSize $sizeBytes
+    }
+
+    return @{
+        apkUrl = $apkUrl
+        updateCheckUrl = $updateCheckUrl
+        version = $versionName
+        build = $buildNumber
+        releaseNotes = $releaseNotes
+        hasApk = $hasApk
+        apkPath = $apkPath
+        fileName = $ApkFileName
+        sizeBytes = $sizeBytes
+        sizeLabel = $sizeLabel
+    }
+}
+
+function Sync-AboutFromSettings {
+    param(
+        [string]$DataDir,
+        $Settings
+    )
+
+    $aboutPath = Join-Path $DataDir "about.json"
+    $blurb = if ($Settings.aboutBlurb) { $Settings.aboutBlurb } else {
+        "I build personal websites and Android apps. Reach out if you want to try a build or collaborate."
+    }
+    $skillBullets = [System.Collections.Generic.List[string]]::new()
+    if ($Settings.aboutSkills) {
+        foreach ($s in @($Settings.aboutSkills)) {
+            if ($s) { $skillBullets.Add([string]$s) }
+        }
+    }
+    $email = if ($Settings.contact -and $Settings.contact.email) { $Settings.contact.email } else { "" }
+    $github = if ($Settings.contact -and $Settings.contact.github) { $Settings.contact.github } else { "" }
+    $linkedin = if ($Settings.contact -and $Settings.contact.linkedin) { $Settings.contact.linkedin } else { "" }
+
+    $bullets = [System.Collections.Generic.List[string]]::new()
+    if ($github) { $bullets.Add("GitHub: $github") }
+    if ($linkedin) { $bullets.Add("LinkedIn: $linkedin") }
+
+    $contactContent = if ($email) { "Email: $email" } else { "Contact details are listed below." }
+
+    $searchKeywords = [System.Collections.Generic.List[string]]::new()
+    foreach ($k in @("email", "github", "linkedin", "contact")) { $searchKeywords.Add($k) }
+    foreach ($s in $skillBullets) { $searchKeywords.Add($s) }
+
+    $about = [ordered]@{
+        id = "about"
+        title = "About"
+        status = "live"
+        kind = "about"
+        tags = @("about", "contact")
+        searchKeywords = $searchKeywords.ToArray()
+        summary = "Who is behind The Fox's Den, and how to get in touch."
+        sidebarNote = "Password gate stays on until the site is fully public."
+        contact = @{
+            email = $email
+            github = $github
+            linkedin = $linkedin
+        }
+        blocks = @(
+            @{
+                id = "intro"
+                heading = "About me"
+                content = $blurb
+                bullets = $skillBullets.ToArray()
+            },
+            @{
+                id = "contact"
+                heading = "Contact"
+                content = $contactContent
+                bullets = $bullets.ToArray()
+            }
+        )
+    }
+    Write-JsonFile $aboutPath $about
+}
+
 function Sync-AppsFromManifest {
     param(
         [string]$DataDir,
         [string]$DownloadsDir,
-        [string]$PagesBaseUrl
+        [string]$PagesBaseUrl,
+        $Settings
     )
 
     $manifestPath = Join-Path $DataDir "apps-manifest.json"
@@ -169,14 +295,24 @@ function Sync-AppsFromManifest {
         return
     }
 
+    Sync-AboutFromSettings -DataDir $DataDir -Settings $Settings
+
     $manifest = Read-Json $manifestPath
     $navItems = [System.Collections.Generic.List[object]]::new()
     $num = 0
     $base = $PagesBaseUrl.TrimEnd('/')
 
     foreach ($app in $manifest.apps) {
+        $visible = $true
+        if ($null -ne $app.visible) { $visible = [bool]$app.visible }
+        if (-not $visible) {
+            Write-Host "Skipping hidden app: $($app.id)"
+            continue
+        }
+
         $num++
         $id = $app.id
+        $kind = if ($app.kind) { $app.kind } else { "mobile" }
         $repoPath = Resolve-RepoPath $DataDir $app.repoPath
         $readmeRel = if ($app.readme) { $app.readme } else { "README.md" }
         $readmePath = Join-Path $repoPath $readmeRel
@@ -194,48 +330,75 @@ function Sync-AppsFromManifest {
         $apkFileName = $app.apkFileName
         if (-not $apkFileName) { $apkFileName = "$id.apk" }
 
-        $versionName = $null
-        $buildNumber = $null
-        $releaseNotes = $null
-        $apkUrl = "$base/downloads/$apkFileName"
-        $updateCheckUrl = "$base/downloads/$id/mobile-version.json"
-
-        $versionPath = Join-Path $DownloadsDir "$id/mobile-version.json"
-        if (Test-Path $versionPath) {
-            $ver = Read-Json $versionPath
-            $versionName = $ver.version
-            $buildNumber = $ver.build
-            $releaseNotes = $ver.releaseNotes
-            if ($ver.apkUrl) { $apkUrl = $ver.apkUrl }
-        }
-
-        $apkPath = Join-Path $DownloadsDir $apkFileName
-        $hasApk = Test-Path $apkPath
-        if (-not $hasApk) {
-            Write-Warning "APK missing for $id at $apkPath (run publish-app-mobile.ps1)"
+        $live = Get-ChannelVersionInfo -DownloadsDir $DownloadsDir -AppId $id -ApkFileName $apkFileName -PagesBaseUrl $base -Channel live
+        if (-not $live.hasApk -and $kind -eq 'mobile') {
+            Write-Warning "APK missing for $id at $($live.apkPath) (run publish-app-mobile.ps1)"
         }
 
         $available = $true
         if ($null -ne $app.available) { $available = [bool]$app.available }
-        if (-not $hasApk -and -not $app.allowWithoutApk) { $available = $false }
+        $allowWithoutApk = [bool]$app.allowWithoutApk -or ($kind -eq 'website')
+        if ($kind -eq 'mobile' -and -not $live.hasApk -and -not $allowWithoutApk) { $available = $false }
 
         $section = [ordered]@{
             id = $id
             title = $app.title
             status = if ($app.status) { $app.status } else { "live" }
+            kind = $kind
             tags = @($app.tags)
             searchKeywords = @()
             summary = if ($app.summaryOverride) { $app.summaryOverride } else { $parsed.Summary }
             blocks = $parsed.Blocks
-            sidebarNote = if ($hasApk) { "Official APK is hosted on GitHub Pages." } else { "APK not published yet." }
-            version = $versionName
-            build = $buildNumber
-            releaseNotes = $releaseNotes
-            updateCheckUrl = $updateCheckUrl
-            apk = @{
-                downloadUrl = $apkUrl
+            sidebarNote = if ($kind -eq 'website') {
+                "Website project."
+            } elseif ($live.hasApk) {
+                "Official APK is hosted on GitHub Pages."
+            } else {
+                "APK not published yet."
+            }
+            version = $live.version
+            build = $live.build
+            releaseNotes = $live.releaseNotes
+            updateCheckUrl = $live.updateCheckUrl
+        }
+
+        if ($kind -eq 'website') {
+            if ($app.externalUrl) {
+                $section.externalUrl = $app.externalUrl
+            }
+        } else {
+            $section.apk = @{
+                downloadUrl = $live.apkUrl
                 fileName = $apkFileName
-                label = "Download APK"
+                label = "Download Live APK"
+                channel = "live"
+                version = $live.version
+                build = $live.build
+                sizeBytes = $live.sizeBytes
+                sizeLabel = $live.sizeLabel
+            }
+        }
+
+        if ($app.beta -and $kind -eq 'mobile') {
+            $betaFile = if ($app.beta.apkFileName) { $app.beta.apkFileName } else { "$id-beta.apk" }
+            $beta = Get-ChannelVersionInfo -DownloadsDir $DownloadsDir -AppId $id -ApkFileName $betaFile -PagesBaseUrl $base -Channel beta
+            if ($beta.hasApk -or $app.beta) {
+                $section.apkBeta = @{
+                    downloadUrl = $beta.apkUrl
+                    fileName = $betaFile
+                    label = "Download Beta APK"
+                    channel = "beta"
+                    version = $beta.version
+                    build = $beta.build
+                    releaseNotes = $beta.releaseNotes
+                    updateCheckUrl = $beta.updateCheckUrl
+                    available = $beta.hasApk
+                    sizeBytes = $beta.sizeBytes
+                    sizeLabel = $beta.sizeLabel
+                }
+            }
+            if (-not $beta.hasApk) {
+                Write-Warning "Beta APK missing for $id at $($beta.apkPath) (optional; publish with -Channel beta)"
             }
         }
 
@@ -247,11 +410,25 @@ function Sync-AppsFromManifest {
             file = "$id.html"
             label = $app.title
             available = $available
+            kind = $kind
+            status = $section.status
         })
     }
 
+    # Append fixed About after apps
+    $aboutNum = $num + 1
+    $navItems.Add([ordered]@{
+        id = "about"
+        num = $aboutNum
+        file = "about.html"
+        label = "About"
+        available = $true
+        kind = "about"
+        status = "live"
+    })
+
     Write-JsonFile (Join-Path $DataDir "nav.json") @{ items = $navItems.ToArray() }
-    Write-Host "Synced $($navItems.Count) app(s) from apps-manifest.json"
+    Write-Host "Synced $($navItems.Count) nav item(s) (apps + About) from apps-manifest.json"
 }
 
 function Get-SearchText($doc) {
@@ -280,17 +457,18 @@ if (-not $pagesBaseUrl) {
 }
 
 if (-not $SkipAppSync) {
-    Sync-AppsFromManifest -DataDir $dataDir -DownloadsDir $downloadsDir -PagesBaseUrl $pagesBaseUrl
+    Sync-AppsFromManifest -DataDir $dataDir -DownloadsDir $downloadsDir -PagesBaseUrl $pagesBaseUrl -Settings $settings
 }
 
 $nav = Read-Json (Join-Path $dataDir "nav.json")
 
-# Remove legacy section JSON not in nav
+# Remove legacy section JSON not in nav (keep about + hidden dedications)
 $navIds = @($nav.items | ForEach-Object { $_.id })
+$keepSectionIds = @($fixedNavIds) + @($hiddenSectionIds)
 Get-ChildItem $dataDir -Filter "*.json" | ForEach-Object {
     if ($_.Name -in $dataExclude) { return }
     $doc = Read-Json $_.FullName
-    if ($doc.id -and ($navIds -notcontains $doc.id)) {
+    if ($doc.id -and ($navIds -notcontains $doc.id) -and ($keepSectionIds -notcontains $doc.id)) {
         Remove-Item $_.FullName -Force
         Write-Host "Removed stale section data: $($_.Name)"
     }
@@ -305,6 +483,9 @@ Get-ChildItem $dataDir -Filter "*.json" | ForEach-Object {
     $id = $doc.id
     if (-not $id) { return }
     $sections[$id] = $doc
+
+    # Hidden dedications stay in portal-data / HTML but never in Fuse
+    if ($hiddenSectionIds -contains $id -or $doc.hidden) { return }
 
     $searchEntries += [ordered]@{
         id = $id
@@ -348,7 +529,7 @@ $navJson = ($nav | ConvertTo-Json -Depth 20 -Compress)
 $searchJson = ($searchEntries | ConvertTo-Json -Depth 10 -Compress)
 
 $portalName = $settings.portalName
-if (-not $portalName) { $portalName = "The Foxs Den - Apps" }
+if (-not $portalName) { $portalName = "The Foxs Den" }
 
 $portalDataJs = @"
 window.DELTACORE_PORTAL = {

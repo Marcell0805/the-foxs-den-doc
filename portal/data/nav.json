@@ -5,7 +5,27 @@
                       "num":  1,
                       "file":  "active-huntress.html",
                       "label":  "Active Huntress",
-                      "available":  true
+                      "available":  true,
+                      "kind":  "mobile",
+                      "status":  "live"
+                  },
+                  {
+                      "id":  "huntresscookbook-mobile",
+                      "num":  2,
+                      "file":  "huntresscookbook-mobile.html",
+                      "label":  "HuntressCookbook Mobile",
+                      "available":  false,
+                      "kind":  "mobile",
+                      "status":  "live"
+                  },
+                  {
+                      "id":  "about",
+                      "num":  3,
+                      "file":  "about.html",
+                      "label":  "About",
+                      "available":  true,
+                      "kind":  "about",
+                      "status":  "live"
                   }
               ]
 }

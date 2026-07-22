@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Fox's Den — Apps</title>
+  <title>The Fox's Den</title>
   <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
   <link rel="icon" type="image/png" sizes="192x192" href="assets/favicon-192.png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
@@ -17,25 +17,25 @@
 <body data-nav-scope="landing">
   <div class="landing">
     <img class="landing-logo" src="assets/logo.png" alt="The Fox's Den" onerror="this.onerror=null;this.src='assets/logo.svg';">
-    <h1 data-portal-title>The Fox's Den — Apps</h1>
-    <p class="subtitle" data-portal-tagline>Personal AppGen apps to browse, install, and test</p>
-
+    <h1 data-portal-title>The Fox's Den</h1>
+    <p class="subtitle" data-portal-tagline>Websites and mobile apps to browse, install, and try.</p>
 
     <div class="landing-search-wrap no-print">
-      <input type="search" id="landing-search" class="landing-search" placeholder="Search apps… (Ctrl+K)" readonly>
+      <input type="search" id="landing-search" class="landing-search" placeholder="Search projects… (Ctrl+K)" readonly>
     </div>
 
+    <div class="landing-nav-groups" data-portal-landing-nav></div>
 
-    <ol class="landing-nav" data-portal-landing-nav></ol>
+    <p class="landing-learn-more">
+      <a href="sections/about.html">Learn more</a>
+    </p>
 
-
+    <footer class="landing-footer" data-portal-contact-footer></footer>
   </div>
-
 
   <script src="js/vendor/fuse.min.js"></script>
   <script src="js/search-index.js"></script>
   <script src="js/search.js"></script>
-
   <script src="js/portal-data.js"></script>
   <script src="js/portal.js"></script>
 </body>

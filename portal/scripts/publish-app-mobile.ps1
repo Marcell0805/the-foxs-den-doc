@@ -1,6 +1,8 @@
 param(
     [Parameter(Mandatory = $true)]
     [string]$AppId,
+    [ValidateSet('live', 'beta')]
+    [string]$Channel = "live",
     [string]$MobileRoot = "",
     [string]$ApkPath = "",
     [string]$ReleaseNotes = "Mobile app update.",
@@ -63,12 +65,23 @@ if (-not $PagesBaseUrl) {
 }
 $PagesBaseUrl = $PagesBaseUrl.TrimEnd('/')
 
-$apkFileName = $app.apkFileName
-if (-not $apkFileName) { $apkFileName = "$AppId.apk" }
+if ($Channel -eq 'beta') {
+    if (-not $app.beta) {
+        throw "App '$AppId' has no beta block in apps-manifest.json"
+    }
+    $apkFileName = if ($app.beta.apkFileName) { $app.beta.apkFileName } else { "$AppId-beta.apk" }
+    $apkSourceRel = if ($app.beta.apkSource) { $app.beta.apkSource } elseif ($app.apkSource) { $app.apkSource } else { "build\app\outputs\flutter-apk\app-release.apk" }
+    $versionDir = Join-Path $downloadsDir "$AppId\beta"
+    $updateCheckUrl = "$PagesBaseUrl/downloads/$AppId/beta/mobile-version.json"
+} else {
+    $apkFileName = if ($app.apkFileName) { $app.apkFileName } else { "$AppId.apk" }
+    $apkSourceRel = if ($app.apkSource) { $app.apkSource } else { "build\app\outputs\flutter-apk\app-release.apk" }
+    $versionDir = Join-Path $downloadsDir $AppId
+    $updateCheckUrl = "$PagesBaseUrl/downloads/$AppId/mobile-version.json"
+}
 
 if (-not $ApkPath) {
-    $rel = if ($app.apkSource) { $app.apkSource } else { "build\app\outputs\flutter-apk\app-release.apk" }
-    $ApkPath = Join-Path $MobileRoot $rel
+    $ApkPath = Join-Path $MobileRoot $apkSourceRel
 }
 
 if (-not $SkipBuild) {
@@ -110,41 +123,55 @@ $versionName = $Matches[1]
 $buildNumber = [int]$Matches[2]
 
 New-Item -ItemType Directory -Force -Path $downloadsDir | Out-Null
-New-Item -ItemType Directory -Force -Path (Join-Path $downloadsDir $AppId) | Out-Null
+New-Item -ItemType Directory -Force -Path $versionDir | Out-Null
 
 $apkDest = Join-Path $downloadsDir $apkFileName
 Copy-Item $ApkPath $apkDest -Force
-Write-Host "Copied APK to $apkDest"
+Write-Host "Copied APK to $apkDest (channel: $Channel)"
+
+function Format-ApkSize([long]$Bytes) {
+    if ($Bytes -lt 1KB) { return "$Bytes B" }
+    if ($Bytes -lt 1MB) { return ("{0:N1} KB" -f ($Bytes / 1KB)) }
+    if ($Bytes -lt 1GB) { return ("{0:N1} MB" -f ($Bytes / 1MB)) }
+    return ("{0:N2} GB" -f ($Bytes / 1GB))
+}
+
+$sizeBytes = [long](Get-Item $apkDest).Length
+$sizeLabel = Format-ApkSize $sizeBytes
+Write-Host "APK size: $sizeLabel ($sizeBytes bytes)"
 
 $apkUrl = "$PagesBaseUrl/downloads/$apkFileName"
-$updateCheckUrl = "$PagesBaseUrl/downloads/$AppId/mobile-version.json"
 
 $versionManifest = @{
     version = $versionName
     build = $buildNumber
     apkUrl = $apkUrl
     releaseNotes = $ReleaseNotes
+    channel = $Channel
+    sizeBytes = $sizeBytes
+    sizeLabel = $sizeLabel
 }
-$versionPath = Join-Path $downloadsDir "$AppId/mobile-version.json"
+$versionPath = Join-Path $versionDir "mobile-version.json"
 Write-JsonFile $versionPath $versionManifest
-Write-Host "Wrote $versionPath (build $buildNumber, version $versionName)"
+Write-Host "Wrote $versionPath (build $buildNumber, version $versionName, $sizeLabel)"
 
 $mobileConfigPath = Join-Path $MobileRoot "assets/mobile_config.json"
 $config = @{
     appName = $app.title
     updateCheckUrl = $updateCheckUrl
+    channel = $Channel
 }
 if (Test-Path $mobileConfigPath) {
     $existing = Read-Json $mobileConfigPath
     foreach ($prop in $existing.PSObject.Properties) {
-        if ($prop.Name -notin @('appName', 'updateCheckUrl')) {
+        if ($prop.Name -notin @('appName', 'updateCheckUrl', 'channel')) {
             $config[$prop.Name] = $prop.Value
         }
     }
 }
 New-Item -ItemType Directory -Force -Path (Split-Path $mobileConfigPath -Parent) | Out-Null
 Write-JsonFile $mobileConfigPath $config
-Write-Host "Updated $mobileConfigPath"
+Write-Host "Updated $mobileConfigPath (updateCheckUrl → $Channel)"
 
 Write-Host ""
 Write-Host "Done. Run build-portal.ps1, then commit portal/downloads/ and push for GitHub Pages."

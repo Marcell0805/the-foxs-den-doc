@@ -1,0 +1,51 @@
+{
+  "id": "my-huntress",
+  "title": "To My Huntress",
+  "kind": "dedication",
+  "status": "live",
+  "hidden": true,
+  "greeting": "To My Huntress",
+  "closing": "With all my appreciation,",
+  "signoff": "Your Fox",
+  "epilogue": "If you've made it this far, then you've reached the end of a page that was never really meant for anyone else. I hope, in some small way, it reminds you just how much you've inspired me.",
+  "mark": {
+    "src": "../assets/cookbook-icon.png",
+    "alt": "Huntress Cookbook"
+  },
+  "photo": {
+    "src": "../assets/fox-and-huntress.png",
+    "caption": "The Fox & Huntress",
+    "alt": "The Fox and Huntress"
+  },
+  "paragraphs": [
+    "Every project you see throughout this portfolio tells a story.",
+    "Some were born from curiosity, some from late nights chasing an idea, and others from the simple desire to solve a problem. While they may all have different purposes, many of them share something in common that isn't immediately visible in the code—they were built during a chapter of my life where one incredible person quietly became one of my greatest sources of inspiration.",
+    "Bernice, my Huntress.",
+    "You probably don't realize how often you've lit a fire in me without ever intending to.",
+    "There have been countless evenings where I sat in front of my computer feeling tired, questioning whether I should keep working on a project or just call it a day. More often than you'll ever know, simply thinking about our conversations, your dreams, your determination, and the passion you have for the things you love was enough to remind me why I wanted to keep creating.",
+    "You inspired me simply by being yourself.",
+    "Your curiosity encourages me to learn.",
+    "Your determination reminds me to keep pushing.",
+    "Your kindness reminds me that the things we build should always make someone's life a little better.",
+    "When I see the effort you pour into your books, your fitness, your goals, and the people you care about, it makes me want to become a better developer, a better creator, and above all, a better man.",
+    "There are projects in this portfolio that exist because an idea excited me.",
+    "But there are also projects that exist because they reminded me of you.",
+    "The Cookbook.",
+    "Active Huntress.",
+    "And many little ideas that may never be seen by anyone else.",
+    "They weren't built because I had to build them.",
+    "They were built because creating something that could make you smile became one of my favourite reasons to open Visual Studio.",
+    "I don't think I've ever properly thanked you for that.",
+    "You have supported me in ways you probably never realized. Sometimes it was through encouragement, sometimes through a simple conversation, and sometimes just by sharing your own excitement for something you were working on. Every one of those moments mattered more than you know.",
+    "This page isn't here because I expect anyone else to read it.",
+    "In fact, almost nobody ever will.",
+    "It's hidden away because some things aren't meant to be displayed on the front page of a portfolio. Some things are simply too personal, too meaningful, and too important to reduce to a single line in an \"About Me\" section.",
+    "So this page exists for one reason.",
+    "To say thank you.",
+    "Thank you for believing in me.",
+    "Thank you for encouraging me.",
+    "Thank you for inspiring me.",
+    "Thank you for unknowingly lighting a fire that has pushed me to build more than I ever thought I would.",
+    "No matter where life takes us, I hope that every time I look back at these projects I'll remember not only what I built, but also the person who inspired so many of them."
+  ]
+}

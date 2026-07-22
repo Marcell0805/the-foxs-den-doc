@@ -3,13 +3,43 @@
     {
       "id": "active-huntress",
       "title": "Active Huntress",
-      "repoPath": "C:\\Users\\TheSlyFox\\source\\repos\\Active_Huntress-Mobile",
-      "mobileRoot": "C:\\Users\\TheSlyFox\\source\\repos\\Active_Huntress-Mobile",
+      "kind": "mobile",
+      "visible": true,
+      "repoPath": "D:\\repos\\Active_Huntress Mobile",
+      "mobileRoot": "D:\\repos\\Active_Huntress Mobile",
       "readme": "README.md",
       "apkSource": "build\\app\\outputs\\flutter-apk\\app-release.apk",
       "apkFileName": "active-huntress.apk",
       "status": "live",
-      "tags": ["flutter", "android", "workout"]
+      "tags": [
+        "flutter",
+        "android",
+        "workout"
+      ],
+      "beta": {
+        "apkFileName": "active-huntress-beta.apk",
+        "apkSource": "build\\app\\outputs\\flutter-apk\\app-release.apk"
+      }
+    },
+    {
+      "id": "huntresscookbook-mobile",
+      "title": "HuntressCookbook Mobile",
+      "kind": "mobile",
+      "visible": true,
+      "repoPath": "C:\\Users\\msvn\\source\\repos\\HuntressCookbook-Mobile",
+      "mobileRoot": "C:\\Users\\msvn\\source\\repos\\HuntressCookbook-Mobile",
+      "readme": "README.md",
+      "apkSource": "build\\app\\outputs\\flutter-apk\\app-debug.apk",
+      "apkFileName": "huntresscookbook-mobile.apk",
+      "status": "live",
+      "tags": [
+        "flutter",
+        "android"
+      ],
+      "beta": {
+        "apkFileName": "huntresscookbook-mobile-beta.apk",
+        "apkSource": "build\\app\\outputs\\flutter-apk\\app-debug.apk"
+      }
     }
   ]
 }

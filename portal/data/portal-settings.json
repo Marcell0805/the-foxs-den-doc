@@ -1,8 +1,24 @@
 {
-  "portalName": "The Fox's Den — Apps",
-  "tagline": "Personal AppGen apps to browse, install, and test",
+  "portalName": "The Fox's Den",
+  "tagline": "Websites and mobile apps to browse, install, and try.",
   "version": "1.0",
   "pagesBaseUrl": "https://marcell0805.github.io/the-foxs-den-doc",
+  "aboutBlurb": "I build personal websites and Android apps—tools for home, health, and family. Reach out if you want to try a build or collaborate.",
+  "aboutSkills": [
+    "Full-stack developer",
+    "C#",
+    "Flutter",
+    "Web & JavaScript",
+    "RESTful services",
+    "Oracle",
+    "SQL Server",
+    "T-SQL"
+  ],
+  "contact": {
+    "email": "marcellvanniekerk@gmail.com",
+    "github": "https://github.com/Marcell0805",
+    "linkedin": "https://www.linkedin.com/in/marcell-van-niekerk-764649163/"
+  },
   "auth": {
     "password": "the_fox_s_den",
     "storageKey": "the_fox_s_den_portal_auth"

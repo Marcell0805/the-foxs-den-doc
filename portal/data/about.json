@@ -1,0 +1,57 @@
+{
+    "id":  "about",
+    "title":  "About",
+    "status":  "live",
+    "kind":  "about",
+    "tags":  [
+                 "about",
+                 "contact"
+             ],
+    "searchKeywords":  [
+                           "email",
+                           "github",
+                           "linkedin",
+                           "contact",
+                           "Full-stack developer",
+                           "C#",
+                           "Flutter",
+                           "Web \u0026 JavaScript",
+                           "RESTful services",
+                           "Oracle",
+                           "SQL Server",
+                           "T-SQL"
+                       ],
+    "summary":  "Who is behind The Fox\u0027s Den, and how to get in touch.",
+    "sidebarNote":  "Password gate stays on until the site is fully public.",
+    "contact":  {
+                    "email":  "marcellvanniekerk@gmail.com",
+                    "linkedin":  "https://www.linkedin.com/in/marcell-van-niekerk-764649163/",
+                    "github":  "https://github.com/Marcell0805"
+                },
+    "blocks":  [
+                   {
+                       "content":  "I build personal websites and Android apps—tools for home, health, and family. Reach out if you want to try a build or collaborate.",
+                       "heading":  "About me",
+                       "bullets":  [
+                                       "Full-stack developer",
+                                       "C#",
+                                       "Flutter",
+                                       "Web \u0026 JavaScript",
+                                       "RESTful services",
+                                       "Oracle",
+                                       "SQL Server",
+                                       "T-SQL"
+                                   ],
+                       "id":  "intro"
+                   },
+                   {
+                       "content":  "Email: marcellvanniekerk@gmail.com",
+                       "heading":  "Contact",
+                       "bullets":  [
+                                       "GitHub: https://github.com/Marcell0805",
+                                       "LinkedIn: https://www.linkedin.com/in/marcell-van-niekerk-764649163/"
+                                   ],
+                       "id":  "contact"
+                   }
+               ]
+}
