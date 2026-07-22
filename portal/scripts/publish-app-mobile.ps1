@@ -95,6 +95,39 @@ if ($ApkPath -match '(?i)debug') {
     $ApkPath = $releaseFallback
 }
 
+$pubspecPath = Join-Path $MobileRoot "pubspec.yaml"
+if (-not (Test-Path $pubspecPath)) {
+    throw "Missing pubspec.yaml at $MobileRoot"
+}
+
+$versionLine = (Get-Content $pubspecPath | Where-Object { $_ -match '^version:\s*' } | Select-Object -First 1)
+if ($versionLine -notmatch 'version:\s*([0-9.]+)\+(\d+)') {
+    throw "Could not parse version from pubspec.yaml (expected format: 1.0.0+1)"
+}
+$versionName = $Matches[1]
+$buildNumber = [int]$Matches[2]
+
+# Write mobile_config BEFORE flutter build so channel / enableDemoData ship inside the APK.
+$mobileConfigPath = Join-Path $MobileRoot "assets/mobile_config.json"
+$enableDemoData = ($Channel -eq 'beta')
+$config = @{
+    appName = $app.title
+    updateCheckUrl = $updateCheckUrl
+    channel = $Channel
+    enableDemoData = $enableDemoData
+}
+if (Test-Path $mobileConfigPath) {
+    $existing = Read-Json $mobileConfigPath
+    foreach ($prop in $existing.PSObject.Properties) {
+        if ($prop.Name -notin @('appName', 'updateCheckUrl', 'channel', 'enableDemoData')) {
+            $config[$prop.Name] = $prop.Value
+        }
+    }
+}
+New-Item -ItemType Directory -Force -Path (Split-Path $mobileConfigPath -Parent) | Out-Null
+Write-JsonFile $mobileConfigPath $config
+Write-Host ("Updated {0} (channel={1}, enableDemoData={2}) - baked into APK on next build" -f $mobileConfigPath, $Channel, $enableDemoData)
+
 if (-not $SkipBuild) {
     Push-Location $MobileRoot
     try {
@@ -108,6 +141,8 @@ if (-not $SkipBuild) {
     finally {
         Pop-Location
     }
+} else {
+    Write-Warning "SkipBuild: ensure assets/mobile_config.json was present when this APK was built (channel=$Channel)."
 }
 
 if (-not (Test-Path $ApkPath)) {
@@ -125,18 +160,6 @@ try {
     }
 } catch { }
 
-$pubspecPath = Join-Path $MobileRoot "pubspec.yaml"
-if (-not (Test-Path $pubspecPath)) {
-    throw "Missing pubspec.yaml at $MobileRoot"
-}
-
-$versionLine = (Get-Content $pubspecPath | Where-Object { $_ -match '^version:\s*' } | Select-Object -First 1)
-if ($versionLine -notmatch 'version:\s*([0-9.]+)\+(\d+)') {
-    throw "Could not parse version from pubspec.yaml (expected format: 1.0.0+1)"
-}
-$versionName = $Matches[1]
-$buildNumber = [int]$Matches[2]
-
 New-Item -ItemType Directory -Force -Path $downloadsDir | Out-Null
 New-Item -ItemType Directory -Force -Path $versionDir | Out-Null
 
@@ -153,7 +176,7 @@ function Format-ApkSize([long]$Bytes) {
 
 $sizeBytes = [long](Get-Item $apkDest).Length
 $sizeLabel = Format-ApkSize $sizeBytes
-Write-Host "APK size: $sizeLabel ($sizeBytes bytes)"
+Write-Host ('APK size: {0} ({1} bytes)' -f $sizeLabel, $sizeBytes)
 
 $apkUrl = "$PagesBaseUrl/downloads/$apkFileName"
 
@@ -219,23 +242,6 @@ $versionPath = Join-Path $versionDir "mobile-version.json"
 Write-JsonFile $versionPath $versionManifest
 Write-Host "Wrote $versionPath (build $buildNumber, version $versionName, $sizeLabel)"
 
-$mobileConfigPath = Join-Path $MobileRoot "assets/mobile_config.json"
-$config = @{
-    appName = $app.title
-    updateCheckUrl = $updateCheckUrl
-    channel = $Channel
-}
-if (Test-Path $mobileConfigPath) {
-    $existing = Read-Json $mobileConfigPath
-    foreach ($prop in $existing.PSObject.Properties) {
-        if ($prop.Name -notin @('appName', 'updateCheckUrl', 'channel')) {
-            $config[$prop.Name] = $prop.Value
-        }
-    }
-}
-New-Item -ItemType Directory -Force -Path (Split-Path $mobileConfigPath -Parent) | Out-Null
-Write-JsonFile $mobileConfigPath $config
-Write-Host "Updated $mobileConfigPath (updateCheckUrl → $Channel)"
-
 Write-Host ""
 Write-Host "Done. Run build-portal.ps1, then commit portal/downloads/ and push for GitHub Pages."
+Write-Host "  channel=$Channel enableDemoData=$enableDemoData"

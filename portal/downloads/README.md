@@ -37,6 +37,16 @@ cd portal\scripts
 .\build-portal.ps1
 ```
 
+**Active Huntress beta** (Chart preview / demo data on Trends):
+
+```powershell
+cd portal\scripts
+.\publish-app-mobile.ps1 -AppId active-huntress -Channel beta -ReleaseNotes "Beta — Trends demo data"
+.\build-portal.ps1
+```
+
+`-Channel beta` sets `assets/mobile_config.json` → `enableDemoData: true` **before** the release build so it is baked into `active-huntress-beta.apk`. Live (`-Channel live`, default) sets `enableDemoData: false`.
+
 For apps with recipe/content OTA, set optional `contentOta` on the mobile entry in `data/apps-manifest.json`:
 
 ```json
