@@ -546,14 +546,36 @@ window.DELTACORE_SEARCH_INDEX = $searchJson;
 [IO.File]::WriteAllText((Join-Path $jsDir "portal-data.js"), $portalDataJs, $utf8)
 [IO.File]::WriteAllText((Join-Path $jsDir "search-index.js"), $searchIndexJs, $utf8)
 
+# Cache-bust data scripts so GitHub Pages / browsers don't keep showing stale "coming soon" nav.
+$portalDataBytes = [IO.File]::ReadAllBytes((Join-Path $jsDir "portal-data.js"))
+$searchBytes = [IO.File]::ReadAllBytes((Join-Path $jsDir "search-index.js"))
+$sha = [System.Security.Cryptography.SHA256]::Create()
+try {
+    $hashBytes = $sha.ComputeHash($portalDataBytes + $searchBytes)
+} finally {
+    $sha.Dispose()
+}
+$cacheBust = ([BitConverter]::ToString($hashBytes) -replace '-', '').Substring(0, 12).ToLowerInvariant()
+
 $sectionTemplatePath = Join-Path $PSScriptRoot "section-shell.html"
 $sectionTemplate = [IO.File]::ReadAllText($sectionTemplatePath, $utf8)
 $sectionTemplate = $sectionTemplate -replace '\{\{PORTAL_NAME\}\}', ($portalName -replace '&', '&amp;')
+$sectionTemplate = $sectionTemplate -replace 'portal-data\.js(\?v=[^"]*)?', "portal-data.js?v=$cacheBust"
+$sectionTemplate = $sectionTemplate -replace 'search-index\.js(\?v=[^"]*)?', "search-index.js?v=$cacheBust"
 
 foreach ($key in $sections.Keys) {
     $doc = $sections[$key]
     $html = $sectionTemplate -replace '\{\{ID\}\}', $doc.id -replace '\{\{TITLE\}\}', ($doc.title -replace '&', '&amp;')
     [IO.File]::WriteAllText((Join-Path $sectionsDir "$($doc.id).html"), $html, $utf8)
+}
+
+# Keep index.html in sync with the same cache buster
+$indexPath = Join-Path $PortalRoot "index.html"
+if (Test-Path $indexPath) {
+    $indexHtml = [IO.File]::ReadAllText($indexPath, $utf8)
+    $indexHtml = $indexHtml -replace 'portal-data\.js(\?v=[^"]*)?', "portal-data.js?v=$cacheBust"
+    $indexHtml = $indexHtml -replace 'search-index\.js(\?v=[^"]*)?', "search-index.js?v=$cacheBust"
+    [IO.File]::WriteAllText($indexPath, $indexHtml, $utf8)
 }
 
 # Remove stale section HTML
@@ -567,4 +589,5 @@ Get-ChildItem $sectionsDir -Filter "*.html" | ForEach-Object {
 
 Write-Host "Built portal-data.js ($($sections.Count) sections)"
 Write-Host "Built search-index.js ($($searchEntries.Count) entries)"
+Write-Host "Cache-bust query: v=$cacheBust"
 Write-Host "Generated $($sections.Count) section HTML files"
