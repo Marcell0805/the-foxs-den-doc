@@ -223,50 +223,160 @@
     obs.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
   }
 
-  function playDedicationUnlock(letter) {
+  function playDedicationUnlock(letter, section) {
     if (!letter) return;
 
-    function revealNow() {
+    var unlock = (section && section.unlock) || {};
+    var code = String(unlock.code || '0657');
+    var storageKey = unlock.storageKey || 'the_fox_s_den_dedication_unlock';
+    var prompt = unlock.prompt || 'The time the fox and huntress met on a quest and formed a bond that won\'t be broken…';
+    var hint = unlock.hint || 'Four digits · MMdd';
+    var successLines = unlock.successLines || [
+      'The code to the hearts has been found…',
+      'You are the one the heart has chosen.'
+    ];
+    var searchLines = unlock.searchLines || [
+      'Searching…',
+      'One hidden page found.',
+      'Opening dedication…'
+    ];
+    var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function revealLetter() {
+      letter.classList.remove('is-waiting');
       letter.classList.add('is-revealed');
+      document.body.classList.remove('dedication-revealing');
     }
 
-    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      revealNow();
-      return;
+    function createUnlockOverlay(withHeart) {
+      var overlay = document.createElement('div');
+      overlay.className = 'dedication-unlock';
+      overlay.setAttribute('role', 'status');
+      overlay.setAttribute('aria-live', 'polite');
+      overlay.innerHTML =
+        '<div class="dedication-unlock-inner">' +
+          '<p class="dedication-unlock-msg"></p>' +
+          (withHeart ? '<div class="dedication-unlock-heart" hidden aria-hidden="true">♥</div>' : '') +
+        '</div>';
+      document.body.appendChild(overlay);
+      document.body.classList.add('dedication-revealing');
+      return overlay;
     }
 
-    letter.classList.add('is-waiting');
-    document.body.classList.add('dedication-revealing');
+    function playTimedMessages(lines, opts, done) {
+      opts = opts || {};
+      if (reduceMotion) {
+        done();
+        return;
+      }
 
-    var overlay = document.createElement('div');
-    overlay.className = 'dedication-unlock';
-    overlay.setAttribute('role', 'status');
-    overlay.setAttribute('aria-live', 'polite');
-    overlay.innerHTML = '<p class="dedication-unlock-msg"></p>';
-    document.body.appendChild(overlay);
-    var msg = overlay.querySelector('.dedication-unlock-msg');
+      var perMsg = opts.perMsg != null ? opts.perMsg : 2000;
+      var lastHold = opts.lastHold != null ? opts.lastHold : perMsg;
+      var showHeartOnLast = !!opts.showHeartOnLast;
+      var overlay = createUnlockOverlay(showHeartOnLast);
+      var msg = overlay.querySelector('.dedication-unlock-msg');
+      var heart = overlay.querySelector('.dedication-unlock-heart');
 
-    function setMsg(text) {
-      msg.classList.remove('is-visible');
+      function setMsg(text, showHeart) {
+        msg.classList.remove('is-visible');
+        if (heart) {
+          heart.hidden = true;
+          heart.classList.remove('is-visible');
+        }
+        window.setTimeout(function () {
+          msg.textContent = text;
+          msg.classList.add('is-visible');
+          if (showHeart && heart) {
+            heart.hidden = false;
+            window.setTimeout(function () { heart.classList.add('is-visible'); }, 120);
+          }
+        }, 80);
+      }
+
+      var total = 0;
+      lines.forEach(function (line, i) {
+        var at = i * perMsg;
+        var isLast = i === lines.length - 1;
+        window.setTimeout(function () {
+          setMsg(line, showHeartOnLast && isLast);
+        }, at);
+        if (isLast) total = at + lastHold;
+      });
+
       window.setTimeout(function () {
-        msg.textContent = text;
-        msg.classList.add('is-visible');
-      }, 80);
+        overlay.classList.add('is-leaving');
+        window.setTimeout(function () {
+          if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+          done();
+        }, 700);
+      }, total);
+    }
+
+    function playSearchSequence(done) {
+      playTimedMessages(searchLines, { perMsg: 2000, lastHold: 2000, showHeartOnLast: false }, done);
+    }
+
+    function playHeartSequence(done) {
+      playTimedMessages(successLines, { perMsg: 2000, lastHold: 3000, showHeartOnLast: true }, done);
+    }
+
+    function showCodeGate() {
+      letter.classList.add('is-waiting');
+      document.body.classList.add('dedication-revealing');
+
+      var gate = document.createElement('div');
+      gate.className = 'dedication-code-gate';
+      gate.innerHTML =
+        '<div class="dedication-code-panel">' +
+          '<p class="dedication-code-prompt">' + esc(prompt) + '</p>' +
+          '<form class="dedication-code-form" autocomplete="off">' +
+            '<label class="dedication-code-label" for="dedication-code-input">' + esc(hint) + '</label>' +
+            '<input id="dedication-code-input" class="dedication-code-input" type="password" inputmode="numeric" ' +
+              'pattern="[0-9]*" maxlength="4" placeholder="····" aria-label="Four digit code">' +
+            '<p class="dedication-code-error" hidden>That isn\'t the day the quest began.</p>' +
+            '<button type="submit" class="dedication-code-submit">Open</button>' +
+          '</form>' +
+        '</div>';
+      document.body.appendChild(gate);
+
+      var input = gate.querySelector('#dedication-code-input');
+      var error = gate.querySelector('.dedication-code-error');
+      var form = gate.querySelector('.dedication-code-form');
+
+      window.setTimeout(function () { input.focus(); }, 50);
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var entered = String(input.value || '').replace(/\D/g, '');
+        if (entered === code) {
+          try { sessionStorage.setItem(storageKey, '1'); } catch (err) { /* ignore */ }
+          gate.classList.add('is-leaving');
+          window.setTimeout(function () {
+            if (gate.parentNode) gate.parentNode.removeChild(gate);
+            playHeartSequence(revealLetter);
+          }, reduceMotion ? 0 : 450);
+        } else {
+          error.hidden = false;
+          input.value = '';
+          input.focus();
+        }
+      });
     }
 
     whenAuthOk(function () {
-      setMsg('Searching…');
-      window.setTimeout(function () { setMsg('One hidden page found.'); }, 2000);
-      window.setTimeout(function () { setMsg('Opening dedication…'); }, 4000);
-      window.setTimeout(function () {
-        overlay.classList.add('is-leaving');
-        letter.classList.remove('is-waiting');
-        letter.classList.add('is-revealed');
-        document.body.classList.remove('dedication-revealing');
-        window.setTimeout(function () {
-          if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
-        }, 700);
-      }, 6000);
+      var already = false;
+      try { already = sessionStorage.getItem(storageKey) === '1'; } catch (err) { already = false; }
+
+      letter.classList.add('is-waiting');
+      document.body.classList.add('dedication-revealing');
+
+      playSearchSequence(function () {
+        if (already) {
+          revealLetter();
+          return;
+        }
+        showCodeGate();
+      });
     });
   }
 
@@ -318,7 +428,7 @@
       document.body.setAttribute('data-section-id', 'my-huntress');
       mount.innerHTML = renderDedication(section);
       var letter = mount.querySelector('.dedication-letter');
-      if (letter) playDedicationUnlock(letter);
+      if (letter) playDedicationUnlock(letter, section);
       return;
     }
 

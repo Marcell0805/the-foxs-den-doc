@@ -545,6 +545,93 @@ body.dedication-page .main {
 }
 
 /* Dedication unlock sequence */
+.dedication-code-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 820;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 35%, color-mix(in srgb, #c45c6a 10%, transparent), transparent),
+    radial-gradient(ellipse 70% 45% at 50% 80%, color-mix(in srgb, var(--orange) 12%, transparent), transparent),
+    linear-gradient(165deg, #f7f0e6 0%, #efe6d8 45%, #e8dfd0 100%);
+  transition: opacity 0.45s ease;
+}
+.dedication-code-gate.is-leaving {
+  opacity: 0;
+  pointer-events: none;
+}
+.dedication-code-panel {
+  max-width: 26rem;
+  width: 100%;
+  text-align: center;
+  padding: 0.5rem;
+}
+.dedication-code-prompt {
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 3.4vw, 1.3rem);
+  line-height: 1.65;
+  font-style: italic;
+  color: var(--heading);
+  margin-bottom: 1.75rem;
+}
+.dedication-code-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.65rem;
+}
+.dedication-code-label {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.dedication-code-input {
+  width: 8.5rem;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 1.55rem;
+  letter-spacing: 0.35em;
+  padding: 0.7rem 0.5rem 0.7rem 0.85rem;
+  border: 1px solid color-mix(in srgb, var(--border) 70%, #c45c6a);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--surface) 88%, #fff);
+  color: var(--heading);
+  min-height: 52px;
+}
+.dedication-code-input:focus {
+  outline: none;
+  border-color: #c45c6a;
+  box-shadow: 0 0 0 3px color-mix(in srgb, #c45c6a 22%, transparent);
+}
+.dedication-code-error {
+  color: #a33d4a;
+  font-size: 0.88rem;
+  font-family: var(--font-display);
+  font-style: italic;
+  min-height: 1.25rem;
+}
+.dedication-code-submit {
+  margin-top: 0.35rem;
+  min-height: 44px;
+  padding: 0.55rem 1.5rem;
+  border: none;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--navy) 88%, #c45c6a);
+  color: #fff;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.dedication-code-submit:hover {
+  background: var(--navy);
+}
+
 .dedication-unlock {
   position: fixed;
   inset: 0;
@@ -554,6 +641,7 @@ body.dedication-page .main {
   justify-content: center;
   padding: 1.5rem;
   background:
+    radial-gradient(ellipse 70% 45% at 50% 40%, color-mix(in srgb, #c45c6a 14%, transparent), transparent),
     radial-gradient(ellipse 70% 45% at 50% 40%, color-mix(in srgb, var(--orange) 12%, transparent), transparent),
     linear-gradient(180deg, #f3eee3 0%, #ebe4d6 55%, #e6dfd0 100%);
   transition: opacity 0.65s ease;
@@ -564,12 +652,22 @@ body.dedication-page .main {
   pointer-events: none;
 }
 
+.dedication-unlock-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  max-width: 28rem;
+  text-align: center;
+}
+
 .dedication-unlock-msg {
   font-family: var(--font-display);
   font-size: clamp(1.05rem, 3.5vw, 1.35rem);
   color: var(--heading);
   text-align: center;
   letter-spacing: 0.02em;
+  line-height: 1.55;
   opacity: 0;
   transform: translateY(6px);
   transition: opacity 0.35s ease, transform 0.35s ease;
@@ -578,6 +676,27 @@ body.dedication-page .main {
 .dedication-unlock-msg.is-visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+.dedication-unlock-heart {
+  font-size: clamp(3.5rem, 12vw, 5.5rem);
+  line-height: 1;
+  color: #c45c6a;
+  opacity: 0;
+  transform: scale(0.7);
+  transition: opacity 0.45s ease, transform 0.45s ease;
+  animation: dedication-heart-pulse 1.4s ease-in-out infinite;
+  filter: drop-shadow(0 6px 18px color-mix(in srgb, #c45c6a 35%, transparent));
+}
+
+.dedication-unlock-heart.is-visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+@keyframes dedication-heart-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.12); }
 }
 
 .dedication-letter.is-waiting {

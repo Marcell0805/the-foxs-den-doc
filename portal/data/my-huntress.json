@@ -8,6 +8,21 @@
   "closing": "With all my appreciation,",
   "signoff": "Your Fox",
   "epilogue": "If you've made it this far, then you've reached the end of a page that was never really meant for anyone else. I hope, in some small way, it reminds you just how much you've inspired me.",
+  "unlock": {
+    "code": "0657",
+    "storageKey": "the_fox_s_den_dedication_unlock",
+    "prompt": "The time the fox and huntress met on a quest and formed a bond that won't be broken…",
+    "hint": "Four digits · MMdd",
+    "searchLines": [
+      "Searching…",
+      "One hidden page found.",
+      "Opening dedication…"
+    ],
+    "successLines": [
+      "The code to the hearts has been found…",
+      "You are the one the heart has chosen."
+    ]
+  },
   "mark": {
     "src": "../assets/cookbook-icon.png",
     "alt": "Huntress Cookbook"

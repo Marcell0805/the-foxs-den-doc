@@ -47,10 +47,10 @@ cd portal\scripts
 .\build-portal.ps1
 ```
 
-- **Live:** `downloads/<apkFileName>` + `downloads/<id>/mobile-version.json`
-- **Beta:** `downloads/<beta.apkFileName>` + `downloads/<id>/beta/mobile-version.json`
-- Bump **`version:` in `pubspec.yaml`** (`1.0.0+2` — the **`+N` build** must increase every publish).
-- Refreshes Flutter `assets/mobile_config.json` **`updateCheckUrl`** for that channel.
+- **Live:** `downloads/<apkFileName>` + `downloads/<id>/mobile-version.json` — sets `enableDemoData: false`
+- **Beta:** `downloads/<beta.apkFileName>` + `downloads/<id>/beta/mobile-version.json` — sets `enableDemoData: true` (Active Huntress Chart preview)
+- Writes Flutter `assets/mobile_config.json` **before** the release build so `channel` / `enableDemoData` / `updateCheckUrl` are inside the APK
+- Bump **`version:` in `pubspec.yaml`** (`1.0.0+2` — the **`+N` build** must increase every publish)
 
 ## AppGen round-trip
 
@@ -65,7 +65,7 @@ Use AppGen **Import from portal folder** after editing JSON, or edit `appgen.jso
 
 ### Hidden pages (maintainers)
 
-- Search phrase **`my huntress`** (Enter in Ctrl+K / landing search) → `portal/data/my-huntress.json` / `sections/my-huntress.html` (not in nav or Fuse).
+- Search phrase **`my huntress`** (Enter in Ctrl+K / landing search) → `portal/data/my-huntress.json` / `sections/my-huntress.html` (not in nav or Fuse). Page also asks for a private date code (`unlock` in that JSON).
 
 ## Commit and publish to GitHub
 
