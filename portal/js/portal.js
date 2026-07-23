@@ -91,15 +91,17 @@
   function partitionNav() {
     var mobile = [];
     var websites = [];
+    var tools = [];
     var about = [];
     var other = [];
     getNav().forEach(function (item) {
       if (item.kind === 'about') about.push(item);
       else if (item.kind === 'website') websites.push(item);
+      else if (item.kind === 'tool') tools.push(item);
       else if (item.kind === 'mobile' || !item.kind) mobile.push(item);
       else other.push(item);
     });
-    return { mobile: mobile, websites: websites, about: about, other: other };
+    return { mobile: mobile, websites: websites, tools: tools, about: about, other: other };
   }
 
   function renderSidebarGroup(title, items, active, prefix) {
@@ -156,6 +158,7 @@
     html += '<nav class="sidebar-nav">';
     html += renderSidebarGroup('Mobile apps', groups.mobile, active, prefix);
     html += renderSidebarGroup('Websites', groups.websites, active, prefix);
+    html += renderSidebarGroup('Tools', groups.tools, active, prefix);
     html += renderSidebarGroup('More', groups.other, active, prefix);
     html += '</nav>';
     var section = getSection(active);
@@ -449,6 +452,18 @@
       if (siteMeta.length) {
         html += '<p class="app-channel-meta">' + esc(siteMeta.join(' · ')) + '</p>';
       }
+    } else if (section.kind === 'tool' && section.package) {
+      html += '<div class="app-download-wrap">';
+      html += renderDownloadChannel(section.package, null);
+      html += '</div>';
+      var toolMeta = [];
+      if (section.publishedAt) toolMeta.push('Published ' + String(section.publishedAt));
+      if (section.note) toolMeta.push(String(section.note));
+      else if (section.releaseNotes) toolMeta.push(String(section.releaseNotes));
+      if (toolMeta.length) {
+        html += '<p class="app-channel-meta">' + esc(toolMeta.join(' · ')) + '</p>';
+      }
+      html += '<p class="section-summary">Extract the zip and run the .exe. No installer required.</p>';
     } else if (section.apk || section.apkBeta) {
       html += '<div class="app-download-wrap">';
       if (section.apk) html += renderDownloadChannel(section.apk, '../downloads/README.md');
@@ -531,6 +546,7 @@
     var html = '';
     html += renderNavGroup('Mobile apps', groups.mobile);
     html += renderNavGroup('Websites', groups.websites);
+    html += renderNavGroup('Tools', groups.tools);
     html += renderNavGroup('More', groups.other);
     if (!html) html = '<p class="landing-empty">No projects listed yet.</p>';
     mount.innerHTML = html;

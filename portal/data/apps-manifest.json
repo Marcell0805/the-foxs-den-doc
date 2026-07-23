@@ -62,6 +62,20 @@
         "recipes",
         "cookbook"
       ]
+    },
+    {
+      "id": "streamforge",
+      "title": "StreamForge",
+      "kind": "tool",
+      "visible": true,
+      "repoPath": "D:\\repos\\StreamForge",
+      "projectPath": "D:\\repos\\StreamForge\\Forms\\SteamForge_UI\\SteamForge_UI.csproj",
+      "readme": "README.md",
+      "packageFileName": "streamforge-win-x64.zip",
+      "note": "Stream schedule builder with Steam/RAWG search and Discord announcements. Extract the zip and run — no installer.",
+      "publishedAt": "2026-07-23",
+      "status": "live",
+      "tags": ["tool", "windows", "discord", "streaming"]
     }
   ]
 }

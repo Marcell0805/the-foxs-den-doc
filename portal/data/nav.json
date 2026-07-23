@@ -28,8 +28,17 @@
                       "status":  "live"
                   },
                   {
-                      "id":  "about",
+                      "id":  "streamforge",
                       "num":  4,
+                      "file":  "streamforge.html",
+                      "label":  "StreamForge",
+                      "available":  false,
+                      "kind":  "tool",
+                      "status":  "live"
+                  },
+                  {
+                      "id":  "about",
+                      "num":  5,
                       "file":  "about.html",
                       "label":  "About",
                       "available":  true,

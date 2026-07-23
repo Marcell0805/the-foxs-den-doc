@@ -328,7 +328,7 @@ function Sync-AppsFromManifest {
         if ($readmePath -and (Test-Path $readmePath)) {
             $readmeText = [IO.File]::ReadAllText($readmePath, $utf8)
             $parsed = Parse-ReadmeContent $readmeText
-        } elseif ($kind -eq 'website' -and $app.note) {
+        } elseif (($kind -eq 'website' -or $kind -eq 'tool') -and $app.note) {
             $parsed = @{
                 Summary = if ($app.summaryOverride) { $app.summaryOverride } else { $app.note }
                 Blocks = @(@{
@@ -345,9 +345,37 @@ function Sync-AppsFromManifest {
         $apkFileName = $app.apkFileName
         if (-not $apkFileName) { $apkFileName = "$id.apk" }
 
+        $packageFileName = if ($app.packageFileName) { $app.packageFileName } else { "$id-win-x64.zip" }
+        $packagePath = Join-Path $DownloadsDir $packageFileName
+        $hasPackage = Test-Path $packagePath
+        $toolVersionPath = Join-Path $DownloadsDir "$id/tool-version.json"
+        $toolVersion = $null
+        $toolBuild = $null
+        $toolNotes = $null
+        $toolSizeBytes = $null
+        $toolSizeLabel = $null
+        $toolPublishedAt = $null
+        if ($kind -eq 'tool' -and (Test-Path $toolVersionPath)) {
+            $tv = Read-Json $toolVersionPath
+            $toolVersion = $tv.version
+            $toolBuild = $tv.build
+            $toolNotes = $tv.releaseNotes
+            $toolSizeBytes = $tv.sizeBytes
+            $toolSizeLabel = $tv.sizeLabel
+            $toolPublishedAt = $tv.publishedAt
+            if ($tv.packageUrl) { }
+        }
+        if ($hasPackage -and -not $toolSizeBytes) {
+            $toolSizeBytes = [long](Get-Item $packagePath).Length
+            $toolSizeLabel = Format-ApkSize $toolSizeBytes
+        }
+
         $live = Get-ChannelVersionInfo -DownloadsDir $DownloadsDir -AppId $id -ApkFileName $apkFileName -PagesBaseUrl $base -Channel live
         if (-not $live.hasApk -and $kind -eq 'mobile') {
             Write-Warning "APK missing for $id at $($live.apkPath) (run publish-app-mobile.ps1)"
+        }
+        if ($kind -eq 'tool' -and -not $hasPackage) {
+            Write-Warning "Tool package missing for $id at $packagePath (run publish-app-tool.ps1)"
         }
 
         $available = $true
@@ -355,9 +383,11 @@ function Sync-AppsFromManifest {
         $allowWithoutApk = [bool]$app.allowWithoutApk -or ($kind -eq 'website')
         if ($kind -eq 'mobile' -and -not $live.hasApk -and -not $allowWithoutApk) { $available = $false }
         if ($kind -eq 'website' -and -not $app.externalUrl) { $available = $false }
+        if ($kind -eq 'tool' -and -not $hasPackage) { $available = $false }
 
         $websiteNote = if ($app.note) { [string]$app.note } else { "Website project." }
-        $publishedAt = if ($app.publishedAt) { [string]$app.publishedAt } else { $null }
+        $toolNote = if ($app.note) { [string]$app.note } elseif ($toolNotes) { [string]$toolNotes } else { "Windows tool package." }
+        $publishedAt = if ($app.publishedAt) { [string]$app.publishedAt } elseif ($toolPublishedAt) { [string]$toolPublishedAt } else { $null }
 
         $section = [ordered]@{
             id = $id
@@ -370,15 +400,17 @@ function Sync-AppsFromManifest {
             blocks = $parsed.Blocks
             sidebarNote = if ($kind -eq 'website') {
                 $websiteNote
+            } elseif ($kind -eq 'tool') {
+                if ($hasPackage) { "Download the zip, extract, and run." } else { "Package not published yet." }
             } elseif ($live.hasApk) {
                 "Official APK is hosted on GitHub Pages."
             } else {
                 "APK not published yet."
             }
-            version = $live.version
-            build = $live.build
-            releaseNotes = if ($kind -eq 'website') { $websiteNote } else { $live.releaseNotes }
-            updateCheckUrl = $live.updateCheckUrl
+            version = if ($kind -eq 'tool') { $toolVersion } else { $live.version }
+            build = if ($kind -eq 'tool') { $toolBuild } else { $live.build }
+            releaseNotes = if ($kind -eq 'website') { $websiteNote } elseif ($kind -eq 'tool') { $toolNote } else { $live.releaseNotes }
+            updateCheckUrl = if ($kind -eq 'tool') { "$base/downloads/$id/tool-version.json" } else { $live.updateCheckUrl }
         }
 
         if ($kind -eq 'website') {
@@ -389,6 +421,20 @@ function Sync-AppsFromManifest {
                 $section.publishedAt = $publishedAt
             }
             $section.note = $websiteNote
+        } elseif ($kind -eq 'tool') {
+            $section.package = @{
+                downloadUrl = "$base/downloads/$packageFileName"
+                fileName = $packageFileName
+                label = "Download zip"
+                channel = "tool"
+                version = $toolVersion
+                build = $toolBuild
+                sizeBytes = $toolSizeBytes
+                sizeLabel = $toolSizeLabel
+                available = $hasPackage
+            }
+            if ($publishedAt) { $section.publishedAt = $publishedAt }
+            $section.note = $toolNote
         } else {
             $section.apk = @{
                 downloadUrl = $live.apkUrl
@@ -461,6 +507,7 @@ function Sync-AppsFromManifest {
     if ($doc.note) { $parts.Add($doc.note) }
     if ($doc.publishedAt) { $parts.Add($doc.publishedAt) }
     if ($doc.externalUrl) { $parts.Add($doc.externalUrl) }
+    if ($doc.package -and $doc.package.fileName) { $parts.Add($doc.package.fileName) }
     if ($doc.searchKeywords) { foreach ($k in $doc.searchKeywords) { $parts.Add($k) } }
     if ($doc.tags) { foreach ($t in $doc.tags) { $parts.Add($t) } }
     if ($doc.version) { $parts.Add($doc.version) }
