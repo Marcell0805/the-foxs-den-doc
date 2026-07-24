@@ -493,6 +493,11 @@
 
     (section.blocks || []).forEach(function (b) {
       if (id === 'about' && b.id === 'contact') return;
+      var blockText = (b.content || '').trim();
+      var summaryText = (section.summary || '').trim();
+      var onlyDupSummary = blockText && summaryText && blockText === summaryText &&
+        !(b.bullets && b.bullets.length);
+      if (onlyDupSummary) return;
       html += '<section class="content-block" id="' + esc(b.id || '') + '">';
       if (b.heading) html += '<h2>' + esc(b.heading) + '</h2>';
       if (b.content) {

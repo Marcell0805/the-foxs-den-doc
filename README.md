@@ -24,7 +24,8 @@ Edit [`portal/data/apps-manifest.json`](portal/data/apps-manifest.json). Each en
 | `kind` | `mobile` (default) or `website` — groups the landing list |
 | `visible` | Default `true`. Set `false` to hide from nav, landing, and search |
 | `available` | Clickable vs “coming soon” (also false when Live APK missing unless `allowWithoutApk`) |
-| `status` | Badge: `live`, `beta`, `in_progress`, `planned` |
+| `status` | Badge: `live`, `beta`, `in_progress`, `planned` — set in manifest or via publish `-Status` / Fox Publish **Portal status** |
+| `summaryOverride` | Optional clean About blurb (preferred over raw README text) |
 | `repoPath` / `mobileRoot` | Paths for README + publish |
 | `apkFileName` | Live APK under `portal/downloads/` |
 | `beta` | Optional `{ apkFileName, apkSource }` for a Beta download channel |
@@ -41,14 +42,15 @@ Set **`pagesBaseUrl`** in `portal-settings.json` to your GitHub Pages base (no t
 
 ```powershell
 cd portal\scripts
-.\publish-app-mobile.ps1 -AppId active-huntress -Channel live -ReleaseNotes "Describe changes"
+.\publish-app-mobile.ps1 -AppId active-huntress -Channel live -Status live -ReleaseNotes "Describe changes"
 # or
-.\publish-app-mobile.ps1 -AppId active-huntress -Channel beta -ReleaseNotes "Beta: try X"
+.\publish-app-mobile.ps1 -AppId active-huntress -Channel beta -Status beta -ReleaseNotes "Beta: try X"
 .\build-portal.ps1
 ```
 
 - **Live:** `downloads/<apkFileName>` + `downloads/<id>/mobile-version.json` — sets `enableDemoData: false`
 - **Beta:** `downloads/<beta.apkFileName>` + `downloads/<id>/beta/mobile-version.json` — sets `enableDemoData: true` (Active Huntress Chart preview)
+- Optional **`-Status`** updates the portal badge (`live` / `beta` / `in_progress` / `planned`) in `apps-manifest.json` (also available in Fox Publish)
 - Writes Flutter `assets/mobile_config.json` **before** the release build so `channel` / `enableDemoData` / `updateCheckUrl` are inside the APK
 - Bump **`version:` in `pubspec.yaml`** (`1.0.0+2` — the **`+N` build** must increase every publish)
 

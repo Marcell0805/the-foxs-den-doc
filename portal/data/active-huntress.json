@@ -14,12 +14,12 @@
     "summary":  "Offline workout checklist with history, trends, and backup. No Web API needed for daily use.",
     "blocks":  [
                    {
-                       "content":  "Offline workout checklist with history, trends, and backup. No Web API needed for daily use.",
+                       "content":  "Offline workout checklist, history, trends, and backup. No Web API required for daily use. Operator docs: see PHASE1_README.md (OAuth, seeding, smoke tests).",
                        "heading":  "About",
                        "bullets":  [
 
                                    ],
-                       "id":  "about"
+                       "id":  "readme-1"
                    }
                ],
     "sidebarNote":  "Official APK is hosted on GitHub Pages.",

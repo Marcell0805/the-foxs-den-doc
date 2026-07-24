@@ -78,7 +78,7 @@ function Parse-ReadmeContent([string]$readmeText) {
         $paragraph = [System.Collections.Generic.List[string]]::new()
         $started = $false
         foreach ($line in $lines) {
-            if (-not $skippedTitle -and $line -match '^\s*#\s+') { continue }
+            if ($line -match '^\s*#\s+') { continue }
             if ($line -match '^\s*##\s+') {
                 if ($started) { break }
                 continue
@@ -354,16 +354,7 @@ function Sync-AppsFromManifest {
         }
 
         if ($app.summaryOverride) {
-            $override = [string]$app.summaryOverride
-            $parsed = @{
-                Summary = $override
-                Blocks = @(@{
-                    id = "about"
-                    heading = "About"
-                    content = $override
-                    bullets = @()
-                })
-            }
+            $parsed.Summary = [string]$app.summaryOverride
         }
 
         $apkFileName = $app.apkFileName

@@ -15,12 +15,12 @@
     "summary":  "Windows stream schedule builder with Steam/RAWG search and Discord announcements. Download the zip, extract, and run — no installer.",
     "blocks":  [
                    {
-                       "content":  "Windows stream schedule builder with Steam/RAWG search and Discord announcements. Download the zip, extract, and run — no installer.",
+                       "content":  "StreamForge is a sleek, all-in-one WinForms application built for streamers who want to simplify their weekly Twitch announcements. It helps you search games directly from Steam, build a clean stream schedule, and automatically post professional announcements to your Discord server — all with one click. ---",
                        "heading":  "About",
                        "bullets":  [
 
                                    ],
-                       "id":  "about"
+                       "id":  "readme-1"
                    }
                ],
     "sidebarNote":  "Download the zip, extract, and run.",
