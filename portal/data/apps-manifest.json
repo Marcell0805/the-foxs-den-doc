@@ -54,7 +54,7 @@
       "repoPath": "C:\\Users\\msvn\\source\\repos\\huntress-cookbook",
       "readme": "README.md",
       "externalUrl": "https://marcell0805.github.io/huntress-cookbook/",
-      "note": "Gluten-free, onion-free, IBS-conscious recipes for the Huntress \u2014 browse chapters online.",
+      "note": "Gluten-free, onion-free, IBS-conscious recipes for the Huntress — browse chapters online.",
       "publishedAt": "2026-07-22",
       "status": "live",
       "tags": [
@@ -72,8 +72,8 @@
       "projectPath": "D:\\repos\\StreamForge\\Forms\\SteamForge_UI\\SteamForge_UI.csproj",
       "readme": "README.md",
       "packageFileName": "streamforge-win-x64.zip",
-      "note": "Stream schedule builder with Steam/RAWG search and Discord announcements. Extract the zip and run \u2014 no installer.",
-      "publishedAt": "2026-07-24",
+      "note": "Stream schedule builder with Steam/RAWG search and Discord announcements.",
+      "publishedAt": "",
       "status": "live",
       "tags": [
         "tool",

@@ -32,7 +32,7 @@
                       "num":  4,
                       "file":  "streamforge.html",
                       "label":  "StreamForge",
-                      "available":  true,
+                      "available":  false,
                       "kind":  "tool",
                       "status":  "live"
                   },
