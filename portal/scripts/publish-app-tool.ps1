@@ -56,7 +56,7 @@ if (-not $app) {
     throw "App id '$AppId' not found in apps-manifest.json"
 }
 if ($app.kind -ne 'tool') {
-    throw "App '$AppId' kind is '$($app.kind)' — expected 'tool'"
+    throw "App '$AppId' kind is '$($app.kind)' - expected 'tool'"
 }
 
 $settingsPath = Join-Path $dataDir "portal-settings.json"

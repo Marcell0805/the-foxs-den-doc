@@ -23,22 +23,22 @@
                        "id":  "readme-1"
                    }
                ],
-    "sidebarNote":  "Package not published yet.",
-    "version":  null,
-    "build":  null,
+    "sidebarNote":  "Download the zip, extract, and run.",
+    "version":  "1.0.0",
+    "build":  1,
     "releaseNotes":  "Stream schedule builder with Steam/RAWG search and Discord announcements. Extract the zip and run — no installer.",
     "updateCheckUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/streamforge/tool-version.json",
     "package":  {
                     "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/streamforge-win-x64.zip",
-                    "build":  null,
+                    "build":  1,
                     "fileName":  "streamforge-win-x64.zip",
-                    "version":  null,
+                    "version":  "1.0.0",
                     "label":  "Download zip",
-                    "available":  false,
+                    "available":  true,
                     "channel":  "tool",
-                    "sizeLabel":  null,
-                    "sizeBytes":  null
+                    "sizeLabel":  "81.4 MB",
+                    "sizeBytes":  85348456
                 },
-    "publishedAt":  "2026-07-23",
+    "publishedAt":  "2026-07-24",
     "note":  "Stream schedule builder with Steam/RAWG search and Discord announcements. Extract the zip and run — no installer."
 }

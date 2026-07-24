@@ -72,10 +72,15 @@
       "projectPath": "D:\\repos\\StreamForge\\Forms\\SteamForge_UI\\SteamForge_UI.csproj",
       "readme": "README.md",
       "packageFileName": "streamforge-win-x64.zip",
-      "note": "Stream schedule builder with Steam/RAWG search and Discord announcements. Extract the zip and run — no installer.",
-      "publishedAt": "2026-07-23",
+      "note": "Stream schedule builder with Steam/RAWG search and Discord announcements. Extract the zip and run \u2014 no installer.",
+      "publishedAt": "2026-07-24",
       "status": "live",
-      "tags": ["tool", "windows", "discord", "streaming"]
+      "tags": [
+        "tool",
+        "windows",
+        "discord",
+        "streaming"
+      ]
     }
   ]
 }
