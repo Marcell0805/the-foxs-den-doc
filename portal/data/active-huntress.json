@@ -11,15 +11,15 @@
     "searchKeywords":  [
 
                        ],
-    "summary":  "# Huntress Home (Active Huntress Mobile)",
+    "summary":  "Offline workout checklist with history, trends, and backup. No Web API needed for daily use.",
     "blocks":  [
                    {
-                       "content":  "# Huntress Home (Active Huntress Mobile) Offline workout checklist, history, trends, and backup. No Web API required for daily use. **Operator docs:** see [`PHASE1_README.md`](PHASE1_README.md) (OAuth, seeding, smoke tests).",
+                       "content":  "Offline workout checklist with history, trends, and backup. No Web API needed for daily use.",
                        "heading":  "About",
                        "bullets":  [
 
                                    ],
-                       "id":  "readme-1"
+                       "id":  "about"
                    }
                ],
     "sidebarNote":  "Official APK is hosted on GitHub Pages.",

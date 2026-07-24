@@ -6,6 +6,8 @@ param(
     [string]$ReleaseNotes = "Tool update.",
     [string]$Version = "1.0.0",
     [int]$Build = 1,
+    [ValidateSet('live', 'beta', 'in_progress', 'planned')]
+    [string]$Status,
     [string]$PagesBaseUrl = "",
     [string]$PortalRoot = ""
 )
@@ -103,3 +105,16 @@ Write-Host "Wrote $versionPath (build $Build, version $Version, $sizeLabel)"
 
 Write-Host ""
 Write-Host "Done. Run build-portal.ps1, then commit portal/downloads/ and push for GitHub Pages."
+
+if ($Status) {
+    $updatedApps = @()
+    foreach ($entry in $manifest.apps) {
+        if ($entry.id -eq $AppId) {
+            $entry.status = $Status
+        }
+        $updatedApps += $entry
+    }
+    $manifest.apps = $updatedApps
+    Write-JsonFile $manifestPath $manifest
+    Write-Host "Updated apps-manifest.json status for $AppId -> $Status"
+}

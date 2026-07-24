@@ -3,6 +3,8 @@ param(
     [string]$AppId,
     [ValidateSet('live', 'beta')]
     [string]$Channel = "live",
+    [ValidateSet('live', 'beta', 'in_progress', 'planned')]
+    [string]$Status,
     [string]$MobileRoot = "",
     [string]$ApkPath = "",
     [string]$ReleaseNotes = "Mobile app update.",
@@ -245,3 +247,17 @@ Write-Host "Wrote $versionPath (build $buildNumber, version $versionName, $sizeL
 Write-Host ""
 Write-Host "Done. Run build-portal.ps1, then commit portal/downloads/ and push for GitHub Pages."
 Write-Host "  channel=$Channel enableDemoData=$enableDemoData"
+
+if ($Status) {
+    $app.status = $Status
+    $updatedApps = @()
+    foreach ($entry in $manifest.apps) {
+        if ($entry.id -eq $AppId) {
+            $entry.status = $Status
+        }
+        $updatedApps += $entry
+    }
+    $manifest.apps = $updatedApps
+    Write-JsonFile $manifestPath $manifest
+    Write-Host "Updated apps-manifest.json status for $AppId -> $Status"
+}

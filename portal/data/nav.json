@@ -13,7 +13,7 @@
                       "id":  "huntresscookbook-mobile",
                       "num":  2,
                       "file":  "huntresscookbook-mobile.html",
-                      "label":  "HuntressCookbook Mobile",
+                      "label":  "Huntress Cookbook Mobile",
                       "available":  true,
                       "kind":  "mobile",
                       "status":  "live"
@@ -34,7 +34,7 @@
                       "label":  "StreamForge",
                       "available":  true,
                       "kind":  "tool",
-                      "status":  "live"
+                      "status":  "in_progress"
                   },
                   {
                       "id":  "about",

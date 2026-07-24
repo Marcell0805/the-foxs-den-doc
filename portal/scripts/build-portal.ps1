@@ -36,6 +36,16 @@ function Resolve-RepoPath([string]$baseDir, [string]$path) {
     return [System.IO.Path]::GetFullPath((Join-Path $baseDir $path))
 }
 
+function Strip-MarkdownLight([string]$text) {
+    if (-not $text) { return $text }
+    $t = [string]$text
+    $t = [regex]::Replace($t, '\[([^\]]+)\]\([^)]+\)', '$1')
+    $t = [regex]::Replace($t, '\*\*([^*]+)\*\*', '$1')
+    $t = [regex]::Replace($t, '`([^`]+)`', '$1')
+    $t = [regex]::Replace($t, '^\s*#+\s*', '')
+    return $t.Trim()
+}
+
 function Parse-ReadmeContent([string]$readmeText) {
     $lines = $readmeText -split "`r?`n"
     $summary = ""
@@ -104,7 +114,7 @@ function Parse-ReadmeContent([string]$readmeText) {
                 $blocks += @{
                     id = "readme-$blockId"
                     heading = if ($blockId -eq 1) { "About" } else { $null }
-                    content = ($current -join " ").Trim()
+                    content = (Strip-MarkdownLight ($current -join " "))
                     bullets = @()
                 }
                 $current.Clear()
@@ -117,7 +127,7 @@ function Parse-ReadmeContent([string]$readmeText) {
                 $blocks += @{
                     id = "readme-$blockId"
                     heading = if ($blockId -eq 1) { "About" } else { $null }
-                    content = ($current -join " ").Trim()
+                    content = (Strip-MarkdownLight ($current -join " "))
                     bullets = @()
                 }
                 $current.Clear()
@@ -127,7 +137,7 @@ function Parse-ReadmeContent([string]$readmeText) {
                 id = "readme-$blockId"
                 heading = $null
                 content = $null
-                bullets = @($Matches[1].Trim())
+                bullets = @((Strip-MarkdownLight $Matches[1].Trim()))
             }
             continue
         }
@@ -138,7 +148,7 @@ function Parse-ReadmeContent([string]$readmeText) {
         $blocks += @{
             id = "readme-$blockId"
             heading = if ($blocks.Count -eq 0) { "About" } else { $null }
-            content = ($current -join " ").Trim()
+            content = (Strip-MarkdownLight ($current -join " "))
             bullets = @()
         }
     }
@@ -146,11 +156,12 @@ function Parse-ReadmeContent([string]$readmeText) {
         $blocks += @{
             id = "readme-1"
             heading = "About"
-            content = $summary
+            content = (Strip-MarkdownLight $summary)
             bullets = @()
         }
     }
 
+    $summary = Strip-MarkdownLight $summary
     return @{ Summary = $summary; Blocks = $blocks }
 }
 
@@ -340,6 +351,19 @@ function Sync-AppsFromManifest {
             }
         } elseif ($readmePath) {
             Write-Warning "README not found for $id at $readmePath"
+        }
+
+        if ($app.summaryOverride) {
+            $override = [string]$app.summaryOverride
+            $parsed = @{
+                Summary = $override
+                Blocks = @(@{
+                    id = "about"
+                    heading = "About"
+                    content = $override
+                    bullets = @()
+                })
+            }
         }
 
         $apkFileName = $app.apkFileName

@@ -1,6 +1,6 @@
 {
     "id":  "huntresscookbook-mobile",
-    "title":  "HuntressCookbook Mobile",
+    "title":  "Huntress Cookbook Mobile",
     "status":  "live",
     "kind":  "mobile",
     "tags":  [
@@ -10,15 +10,15 @@
     "searchKeywords":  [
 
                        ],
-    "summary":  "# The Huntress Cookbook — Mobile",
+    "summary":  "Offline Flutter cookbook: browse chapters, read recipes with photos, search ingredients, edit locally, and view dietary guides—no network required after install.",
     "blocks":  [
                    {
-                       "content":  "# The Huntress Cookbook — Mobile Offline Flutter client for the Huntress Cookbook. Browse chapters, read recipes with photos, search ingredients, edit recipes locally, and view dietary guides — no network required after install.",
+                       "content":  "Offline Flutter cookbook: browse chapters, read recipes with photos, search ingredients, edit locally, and view dietary guides—no network required after install.",
                        "heading":  "About",
                        "bullets":  [
 
                                    ],
-                       "id":  "readme-1"
+                       "id":  "about"
                    }
                ],
     "sidebarNote":  "Official APK is hosted on GitHub Pages.",
