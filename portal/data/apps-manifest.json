@@ -75,7 +75,7 @@
                      "projectPath":  "D:\\repos\\StreamForge\\Forms\\SteamForge_UI\\SteamForge_UI.csproj",
                      "readme":  "README.md",
                      "packageFileName":  "streamforge-win-x64.zip",
-                     "note":  "Gluten-free, onion-free, IBS-conscious recipes for the Huntress — browse chapters online.",
+                     "note":  "Streamer app to post stream schedules to Discord channel",
                      "summaryOverride":  "Windows stream schedule builder with Steam/RAWG search and Discord announcements. Download the zip, extract, and run — no installer.",
                      "publishedAt":  "2026-07-24",
                      "status":  "in_progress",

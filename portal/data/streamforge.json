@@ -25,20 +25,20 @@
                ],
     "sidebarNote":  "Download the zip, extract, and run.",
     "version":  "1.0.0",
-    "build":  4,
-    "releaseNotes":  "Gluten-free, onion-free, IBS-conscious recipes for the Huntress — browse chapters online.",
+    "build":  5,
+    "releaseNotes":  "Streamer app to post stream schedules to Discord channel",
     "updateCheckUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/streamforge/tool-version.json",
     "package":  {
                     "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/streamforge-win-x64.zip",
-                    "build":  4,
+                    "build":  5,
                     "fileName":  "streamforge-win-x64.zip",
                     "version":  "1.0.0",
                     "label":  "Download zip",
                     "available":  true,
                     "channel":  "tool",
                     "sizeLabel":  "81.4 MB",
-                    "sizeBytes":  85362192
+                    "sizeBytes":  85362147
                 },
     "publishedAt":  "2026-07-24",
-    "note":  "Gluten-free, onion-free, IBS-conscious recipes for the Huntress — browse chapters online."
+    "note":  "Streamer app to post stream schedules to Discord channel"
 }
