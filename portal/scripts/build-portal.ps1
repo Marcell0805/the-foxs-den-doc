@@ -237,6 +237,26 @@ function Sync-AboutFromSettings {
     )
 
     $aboutPath = Join-Path $DataDir "about.json"
+    $showAbout = $true
+    if ($null -ne $Settings.showAbout) { $showAbout = [bool]$Settings.showAbout }
+    if (-not $showAbout) {
+        $about = [ordered]@{
+            id = "about"
+            title = "About"
+            status = "planned"
+            kind = "about"
+            hidden = $true
+            tags = @("about")
+            searchKeywords = @()
+            summary = "About is temporarily hidden."
+            sidebarNote = ""
+            contact = @{}
+            blocks = @()
+        }
+        Write-JsonFile $aboutPath $about
+        Write-Host "About section hidden (showAbout=false)"
+        return
+    }
     $blurb = if ($Settings.aboutBlurb) { $Settings.aboutBlurb } else {
         "I build personal websites and Android apps. Reach out if you want to try a build or collaborate."
     }
@@ -499,20 +519,28 @@ function Sync-AppsFromManifest {
         })
     }
 
-    # Append fixed About after apps
-    $aboutNum = $num + 1
-    $navItems.Add([ordered]@{
-        id = "about"
-        num = $aboutNum
-        file = "about.html"
-        label = "About"
-        available = $true
-        kind = "about"
-        status = "live"
-    })
+    # Append fixed About after apps (unless temporarily hidden)
+    $showAbout = $true
+    if ($null -ne $Settings.showAbout) { $showAbout = [bool]$Settings.showAbout }
+    if ($showAbout) {
+        $aboutNum = $num + 1
+        $navItems.Add([ordered]@{
+            id = "about"
+            num = $aboutNum
+            file = "about.html"
+            label = "About"
+            available = $true
+            kind = "about"
+            status = "live"
+        })
+    }
 
     Write-JsonFile (Join-Path $DataDir "nav.json") @{ items = $navItems.ToArray() }
-    Write-Host "Synced $($navItems.Count) nav item(s) (apps + About) from apps-manifest.json"
+    if ($showAbout) {
+        Write-Host "Synced $($navItems.Count) nav item(s) (apps + About) from apps-manifest.json"
+    } else {
+        Write-Host "Synced $($navItems.Count) nav item(s) from apps-manifest.json (About hidden)"
+    }
 }
 
   function Get-SearchText($doc) {
@@ -613,6 +641,22 @@ foreach ($key in ($sections.Keys | Sort-Object)) {
 $sectionsJsObject = '{' + ($sectionParts -join ',') + '}'
 
 $settingsJson = ($settings | ConvertTo-Json -Depth 20 -Compress)
+# When About is hidden, strip personal contact fields from the public portal-data bundle
+$showAboutEmit = $true
+if ($null -ne $settings.showAbout) { $showAboutEmit = [bool]$settings.showAbout }
+if (-not $showAboutEmit) {
+    $settingsEmit = $settings | ConvertTo-Json -Depth 20 | ConvertFrom-Json
+    if ($settingsEmit.PSObject.Properties['contact']) {
+        $settingsEmit.PSObject.Properties.Remove('contact')
+    }
+    if ($settingsEmit.PSObject.Properties['aboutBlurb']) {
+        $settingsEmit.PSObject.Properties.Remove('aboutBlurb')
+    }
+    if ($settingsEmit.PSObject.Properties['aboutSkills']) {
+        $settingsEmit.PSObject.Properties.Remove('aboutSkills')
+    }
+    $settingsJson = ($settingsEmit | ConvertTo-Json -Depth 20 -Compress)
+}
 $navJson = ($nav | ConvertTo-Json -Depth 20 -Compress)
 $searchJson = ($searchEntries | ConvertTo-Json -Depth 10 -Compress)
 

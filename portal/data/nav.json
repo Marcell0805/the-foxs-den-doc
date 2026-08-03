@@ -35,15 +35,6 @@
                       "available":  true,
                       "kind":  "tool",
                       "status":  "in_progress"
-                  },
-                  {
-                      "id":  "about",
-                      "num":  5,
-                      "file":  "about.html",
-                      "label":  "About",
-                      "available":  true,
-                      "kind":  "about",
-                      "status":  "live"
                   }
               ]
 }

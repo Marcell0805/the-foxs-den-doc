@@ -3,6 +3,7 @@
   "tagline": "Websites and mobile apps to browse, install, and try.",
   "version": "1.0",
   "pagesBaseUrl": "https://marcell0805.github.io/the-foxs-den-doc",
+  "showAbout": false,
   "aboutBlurb": "I build personal websites and Android apps—tools for home, health, and family. Reach out if you want to try a build or collaborate.",
   "aboutSkills": [
     "Full-stack developer",

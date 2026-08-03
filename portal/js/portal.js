@@ -18,6 +18,10 @@
     return (window.DELTACORE_PORTAL && DELTACORE_PORTAL.settings) || {};
   }
 
+  function isAboutVisible() {
+    return getSettings().showAbout !== false;
+  }
+
   function getNav() {
     return (window.DELTACORE_PORTAL && DELTACORE_PORTAL.nav && DELTACORE_PORTAL.nav.items) || [];
   }
@@ -166,7 +170,7 @@
       html += '<div class="sidebar-note"><strong>Note</strong><p>' + esc(section.sidebarNote) + '</p></div>';
     }
     html += '</div>';
-    html += renderSidebarAbout(groups.about, active, prefix);
+    if (isAboutVisible()) html += renderSidebarAbout(groups.about, active, prefix);
     aside.innerHTML = html;
     aside.querySelectorAll('a').forEach(function (a) {
       a.addEventListener('click', closeSidebar);
@@ -475,6 +479,12 @@
       html += '</p>';
     }
 
+    if (id === 'about' && !isAboutVisible()) {
+      html += '<p class="section-summary">About is temporarily hidden.</p>';
+      mount.innerHTML = html;
+      return;
+    }
+
     if (id === 'about') {
       var settings = getSettings();
       var c = settings.contact || section.contact || {};
@@ -573,12 +583,24 @@
   function renderContactFooter() {
     var mount = document.querySelector('[data-portal-contact-footer]');
     if (!mount) return;
+    if (!isAboutVisible()) {
+      mount.innerHTML = '';
+      mount.hidden = true;
+      return;
+    }
+    mount.hidden = false;
     var c = getSettings().contact || {};
     var parts = [];
     if (c.email) parts.push('<a href="mailto:' + esc(c.email) + '">' + esc(c.email) + '</a>');
     if (c.github) parts.push('<a href="' + esc(c.github) + '" target="_blank" rel="noopener">GitHub</a>');
     if (c.linkedin) parts.push('<a href="' + esc(c.linkedin) + '" target="_blank" rel="noopener">LinkedIn</a>');
     mount.innerHTML = parts.length ? parts.join('<span class="landing-footer-sep" aria-hidden="true">·</span>') : '';
+  }
+
+  function renderLearnMore() {
+    var el = document.querySelector('.landing-learn-more');
+    if (!el) return;
+    el.hidden = !isAboutVisible();
   }
 
   function init() {
@@ -588,6 +610,7 @@
     renderSection();
     renderLandingNav();
     renderContactFooter();
+    renderLearnMore();
     var settings = getSettings();
     var tagline = document.querySelector('[data-portal-tagline]');
     if (tagline && settings.tagline) tagline.textContent = settings.tagline;
