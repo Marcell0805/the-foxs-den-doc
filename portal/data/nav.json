@@ -7,7 +7,7 @@
                       "label":  "Active Huntress",
                       "available":  true,
                       "kind":  "mobile",
-                      "status":  "live"
+                      "status":  "beta"
                   },
                   {
                       "id":  "huntresscookbook-mobile",

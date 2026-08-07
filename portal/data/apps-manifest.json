@@ -10,7 +10,7 @@
                      "readme":  "README.md",
                      "apkSource":  "build\\app\\outputs\\flutter-apk\\app-release.apk",
                      "apkFileName":  "active-huntress.apk",
-                     "status":  "live",
+                     "status":  "beta",
                      "summaryOverride":  "Offline workout checklist with history, trends, and backup. No Web API needed for daily use.",
                      "tags":  [
                                   "flutter",

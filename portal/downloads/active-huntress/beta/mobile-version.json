@@ -1,8 +1,8 @@
 {
-    "build":  3,
+    "build":  4,
     "version":  "1.0.0",
     "sizeLabel":  "55.3 MB",
-    "releaseNotes":  "Beta — Trends chart preview",
+    "releaseNotes":  "Beta",
     "channel":  "beta",
     "sizeBytes":  58023145,
     "apkUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/active-huntress-beta.apk"

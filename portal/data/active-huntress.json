@@ -1,7 +1,7 @@
 {
     "id":  "active-huntress",
     "title":  "Active Huntress",
-    "status":  "live",
+    "status":  "beta",
     "kind":  "mobile",
     "tags":  [
                  "flutter",
@@ -39,14 +39,14 @@
             },
     "apkBeta":  {
                     "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/active-huntress-beta.apk",
-                    "build":  3,
+                    "build":  4,
                     "fileName":  "active-huntress-beta.apk",
                     "version":  "1.0.0",
                     "label":  "Download Beta APK",
                     "available":  true,
                     "sizeLabel":  "55.3 MB",
                     "channel":  "beta",
-                    "releaseNotes":  "Beta — Trends chart preview",
+                    "releaseNotes":  "Beta",
                     "sizeBytes":  58023145,
                     "updateCheckUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/active-huntress/beta/mobile-version.json"
                 }
