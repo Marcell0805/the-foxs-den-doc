@@ -1,6 +1,6 @@
 {
     "channel":  "live",
-    "contentVersion":  "b2a40f4cadf7a957f2fbd7470bbdcdbb182c35ea1cb9b3412accf36c1d0723e7",
+    "contentVersion":  "a10d76ccc46b899a850bae35e10f4c628d77aa334abff8b15ff0befda3f63844",
     "releaseNotes":  "All family members can add recipes\nOnly the person who added a recipe can edit or delete it\nBundled cookbook recipes stay MasterChef / Huntress editable\nIn-app update check is more reliable on real phones\nSafer APK download with timeout and cleaner retry",
     "sizeLabel":  "63,8 MB",
     "build":  18,
