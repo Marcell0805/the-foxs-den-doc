@@ -1,6 +1,9 @@
 {
+    "build":  3,
     "version":  "1.0.0",
-    "build":  2,
-    "apkUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/active-huntress.apk",
-    "releaseNotes":  "Huntress Home v1 - trends, backup, weekly plan"
+    "sizeLabel":  "55,3 MB",
+    "releaseNotes":  "Anyone can add recipes; only you can edit ones you added. More reliable in-app update download.",
+    "channel":  "live",
+    "sizeBytes":  58008177,
+    "apkUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/active-huntress.apk"
 }
