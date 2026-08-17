@@ -461,7 +461,7 @@ function Sync-AppsFromManifest {
                 downloadUrl = "$base/downloads/$packageFileName"
                 fileName = $packageFileName
                 label = "Download zip"
-                channel = "tool"
+                channel = "live"
                 version = $toolVersion
                 build = $toolBuild
                 sizeBytes = $toolSizeBytes
@@ -470,6 +470,49 @@ function Sync-AppsFromManifest {
             }
             if ($publishedAt) { $section.publishedAt = $publishedAt }
             $section.note = $toolNote
+
+            $betaPackageFile = $null
+            if ($app.beta) {
+                $betaPackageFile = if ($app.beta.packageFileName) { $app.beta.packageFileName } else {
+                    if ($packageFileName -match '\.zip$') { $packageFileName -replace '\.zip$', '-beta.zip' } else { "$packageFileName-beta.zip" }
+                }
+                $betaPackagePath = Join-Path $DownloadsDir $betaPackageFile
+                $hasBetaPackage = Test-Path $betaPackagePath
+                $betaVersionPath = Join-Path $DownloadsDir "$id/beta/tool-version.json"
+                $betaVersion = $null
+                $betaBuild = $null
+                $betaNotes = $null
+                $betaSizeBytes = $null
+                $betaSizeLabel = $null
+                if (Test-Path $betaVersionPath) {
+                    $bv = Read-Json $betaVersionPath
+                    $betaVersion = $bv.version
+                    $betaBuild = $bv.build
+                    $betaNotes = $bv.releaseNotes
+                    $betaSizeBytes = $bv.sizeBytes
+                    $betaSizeLabel = $bv.sizeLabel
+                }
+                if ($hasBetaPackage -and -not $betaSizeBytes) {
+                    $betaSizeBytes = [long](Get-Item $betaPackagePath).Length
+                    $betaSizeLabel = Format-ApkSize $betaSizeBytes
+                }
+                $section.packageBeta = @{
+                    downloadUrl = "$base/downloads/$betaPackageFile"
+                    fileName = $betaPackageFile
+                    label = "Download Beta zip"
+                    channel = "beta"
+                    version = $betaVersion
+                    build = $betaBuild
+                    releaseNotes = $betaNotes
+                    updateCheckUrl = "$base/downloads/$id/beta/tool-version.json"
+                    available = $hasBetaPackage
+                    sizeBytes = $betaSizeBytes
+                    sizeLabel = $betaSizeLabel
+                }
+                if (-not $hasBetaPackage) {
+                    Write-Warning "Beta tool package missing for $id at $betaPackagePath (optional; publish with -Channel beta)"
+                }
+            }
         } else {
             $section.apk = @{
                 downloadUrl = $live.apkUrl
@@ -551,6 +594,7 @@ function Sync-AppsFromManifest {
     if ($doc.publishedAt) { $parts.Add($doc.publishedAt) }
     if ($doc.externalUrl) { $parts.Add($doc.externalUrl) }
     if ($doc.package -and $doc.package.fileName) { $parts.Add($doc.package.fileName) }
+    if ($doc.packageBeta -and $doc.packageBeta.fileName) { $parts.Add($doc.packageBeta.fileName) }
     if ($doc.searchKeywords) { foreach ($k in $doc.searchKeywords) { $parts.Add($k) } }
     if ($doc.tags) { foreach ($t in $doc.tags) { $parts.Add($t) } }
     if ($doc.version) { $parts.Add($doc.version) }

@@ -456,9 +456,10 @@
       if (siteMeta.length) {
         html += '<p class="app-channel-meta">' + esc(siteMeta.join(' · ')) + '</p>';
       }
-    } else if (section.kind === 'tool' && section.package) {
+    } else if (section.kind === 'tool' && (section.package || section.packageBeta)) {
       html += '<div class="app-download-wrap">';
-      html += renderDownloadChannel(section.package, null);
+      if (section.package) html += renderDownloadChannel(section.package, null);
+      if (section.packageBeta) html += renderDownloadChannel(section.packageBeta, null);
       html += '</div>';
       var toolMeta = [];
       if (section.publishedAt) toolMeta.push('Published ' + String(section.publishedAt));
