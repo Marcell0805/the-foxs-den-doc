@@ -43,7 +43,7 @@
     "note":  "Service Diagnostics in Settings — see if Steam, RAWG, Discord, or updates are down, then Configure / Re-login / Retry from that row.\n• Guild emoji picker in announcements — insert :name: and they resolve when you send.\n• Tag roles and specific users in the Discord ping list.\n• More reliable Discord setup (fresh login, clearer bot-token errors).\n• UI polish: stream-day dropdown and diagnostics spacing.",
     "packageBeta":  {
                         "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/streamforge-win-x64-beta.zip",
-                        "build":  1,
+                        "build":  2,
                         "fileName":  "streamforge-win-x64-beta.zip",
                         "version":  "1.0.0",
                         "label":  "Download Beta zip",
@@ -51,7 +51,7 @@
                         "sizeLabel":  "81,4 MB",
                         "channel":  "beta",
                         "releaseNotes":  "Service Diagnostics in Settings — see if Steam, RAWG, Discord, or updates are down, then Configure / Re-login / Retry from that row.\n• Guild emoji picker in announcements — insert :name: and they resolve when you send.\n• Tag roles and specific users in the Discord ping list.\n• More reliable Discord setup (fresh login, clearer bot-token errors).\n• UI polish: stream-day dropdown and diagnostics spacing.",
-                        "sizeBytes":  85403393,
+                        "sizeBytes":  85403468,
                         "updateCheckUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/streamforge/beta/tool-version.json"
                     }
 }
