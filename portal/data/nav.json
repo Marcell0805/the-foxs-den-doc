@@ -37,8 +37,17 @@
                       "status":  "in_progress"
                   },
                   {
-                      "id":  "about",
+                      "id":  "wid",
                       "num":  5,
+                      "file":  "wid.html",
+                      "label":  "Title: What Was I Doing",
+                      "available":  true,
+                      "kind":  "tool",
+                      "status":  "live"
+                  },
+                  {
+                      "id":  "about",
+                      "num":  6,
                       "file":  "about.html",
                       "label":  "About",
                       "available":  true,

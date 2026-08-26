@@ -85,6 +85,25 @@
                                   "discord",
                                   "streaming"
                               ]
+                 },
+                 {
+                     "id":  "wid",
+                     "title":  "Title: What Was I Doing",
+                     "kind":  "tool",
+                     "visible":  true,
+                     "repoPath":  "D:\\repos\\wid\\Wid",
+                     "projectPath":  "D:\\repos\\wid\\Wid\\Wid.csproj",
+                     "readme":  "README.md",
+                     "apkSource":  "",
+                     "apkFileName":  "",
+                     "packageFileName":  "wid-win-x64.zip",
+                     "status":  "live",
+                     "tags":  [
+                                  "tool",
+                                  "windows"
+                              ],
+                     "note":  "Personal Windows time tracker — start/stop activities, manual entries, and daily/weekly reports. Data stays on your PC. Extract the zip and run WID.exe.",
+                     "publishedAt":  "2026-08-26"
                  }
              ]
 }
