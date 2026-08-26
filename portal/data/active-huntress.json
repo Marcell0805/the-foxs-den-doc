@@ -1,7 +1,7 @@
 {
     "id":  "active-huntress",
     "title":  "Active Huntress",
-    "status":  "beta",
+    "status":  "live",
     "kind":  "mobile",
     "tags":  [
                  "flutter",
@@ -24,18 +24,25 @@
                ],
     "sidebarNote":  "Official APK is hosted on GitHub Pages.",
     "version":  "1.0.0",
-    "build":  3,
-    "releaseNotes":  "Anyone can add recipes; only you can edit ones you added. More reliable in-app update download.",
+    "build":  5,
+    "releaseNotes":  "Removing duplicate listing",
     "updateCheckUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/active-huntress/mobile-version.json",
+    "codeProtected":  true,
+    "unlock":  {
+                   "hint":  "4-digit code",
+                   "code":  "0657",
+                   "prompt":  "Enter the 4-digit code to continue",
+                   "storageKey":  "the_fox_s_den_active-huntress_unlock"
+               },
     "apk":  {
                 "sizeLabel":  "55.3 MB",
                 "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/active-huntress.apk",
                 "channel":  "live",
                 "fileName":  "active-huntress.apk",
-                "build":  3,
+                "build":  5,
                 "version":  "1.0.0",
                 "label":  "Download Live APK",
-                "sizeBytes":  58008177
+                "sizeBytes":  58023145
             },
     "apkBeta":  {
                     "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/active-huntress-beta.apk",

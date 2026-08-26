@@ -10,7 +10,7 @@
       "readme": "README.md",
       "apkSource": "build\\app\\outputs\\flutter-apk\\app-release.apk",
       "apkFileName": "active-huntress.apk",
-      "status": "beta",
+      "status": "live",
       "summaryOverride": "Offline workout checklist with history, trends, and backup. No Web API needed for daily use.",
       "tags": [
         "flutter",
@@ -20,7 +20,9 @@
       "beta": {
         "apkFileName": "active-huntress-beta.apk",
         "apkSource": "build\\app\\outputs\\flutter-apk\\app-release.apk"
-      }
+      },
+      "codeProtected": true,
+      "unlockCode": "0657"
     },
     {
       "id": "huntresscookbook-mobile",
