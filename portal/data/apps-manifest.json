@@ -91,7 +91,7 @@
                  },
                  {
                      "id":  "wid",
-                     "title":  "Title: What Was I Doing",
+                     "title":  "What Was I Doing",
                      "kind":  "tool",
                      "visible":  true,
                      "repoPath":  "D:\\repos\\wid\\Wid",

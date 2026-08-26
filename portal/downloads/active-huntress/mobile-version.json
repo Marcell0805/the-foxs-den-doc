@@ -1,7 +1,7 @@
 {
     "build":  3,
     "version":  "1.0.0",
-    "sizeLabel":  "55,3 MB",
+    "sizeLabel":  "55.3 MB",
     "releaseNotes":  "Anyone can add recipes; only you can edit ones you added. More reliable in-app update download.",
     "channel":  "live",
     "sizeBytes":  58008177,

@@ -40,7 +40,7 @@
                       "id":  "wid",
                       "num":  5,
                       "file":  "wid.html",
-                      "label":  "Title: What Was I Doing",
+                      "label":  "What Was I Doing",
                       "available":  true,
                       "kind":  "tool",
                       "status":  "live"
