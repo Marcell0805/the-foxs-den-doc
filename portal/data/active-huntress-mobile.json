@@ -1,0 +1,59 @@
+{
+    "id":  "active-huntress-mobile",
+    "title":  "Active Huntress Mobile",
+    "status":  "live",
+    "kind":  "mobile",
+    "tags":  [
+                 "flutter",
+                 "android"
+             ],
+    "searchKeywords":  [
+
+                       ],
+    "summary":  "Offline workout checklist, history, trends, and backup. No Web API required for daily use.",
+    "blocks":  [
+                   {
+                       "content":  "Offline workout checklist, history, trends, and backup. No Web API required for daily use. Operator docs: see PHASE1_README.md (OAuth, seeding, smoke tests).",
+                       "heading":  "About",
+                       "bullets":  [
+
+                                   ],
+                       "id":  "readme-1"
+                   }
+               ],
+    "sidebarNote":  "APK not published yet.",
+    "version":  null,
+    "build":  null,
+    "releaseNotes":  null,
+    "updateCheckUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/active-huntress-mobile/mobile-version.json",
+    "codeProtected":  true,
+    "unlock":  {
+                   "hint":  "4-digit code",
+                   "code":  "0657",
+                   "prompt":  "Enter the 4-digit code to continue",
+                   "storageKey":  "the_fox_s_den_active-huntress-mobile_unlock"
+               },
+    "apk":  {
+                "sizeLabel":  null,
+                "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/active-huntress-mobile.apk",
+                "channel":  "live",
+                "fileName":  "active-huntress-mobile.apk",
+                "build":  null,
+                "version":  null,
+                "label":  "Download Live APK",
+                "sizeBytes":  null
+            },
+    "apkBeta":  {
+                    "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/active-huntress-mobile-beta.apk",
+                    "build":  4,
+                    "fileName":  "active-huntress-mobile-beta.apk",
+                    "version":  "1.0.0",
+                    "label":  "Download Beta APK",
+                    "available":  true,
+                    "sizeLabel":  "55.3 MB",
+                    "channel":  "beta",
+                    "releaseNotes":  "Implemented a code lock for the application",
+                    "sizeBytes":  58023153,
+                    "updateCheckUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/active-huntress-mobile/beta/mobile-version.json"
+                }
+}

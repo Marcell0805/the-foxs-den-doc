@@ -45,6 +45,16 @@
                       "available":  true,
                       "kind":  "tool",
                       "status":  "live"
+                  },
+                  {
+                      "id":  "active-huntress-mobile",
+                      "num":  6,
+                      "file":  "active-huntress-mobile.html",
+                      "label":  "Active Huntress Mobile",
+                      "available":  false,
+                      "kind":  "mobile",
+                      "status":  "live",
+                      "codeProtected":  true
                   }
               ]
 }
