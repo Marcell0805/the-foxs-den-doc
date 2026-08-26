@@ -1,116 +1,116 @@
 {
-  "apps": [
-    {
-      "id": "active-huntress",
-      "title": "Active Huntress",
-      "kind": "mobile",
-      "visible": true,
-      "repoPath": "D:\\repos\\Active_Huntress Mobile",
-      "mobileRoot": "D:\\repos\\Active_Huntress Mobile",
-      "readme": "README.md",
-      "apkSource": "build\\app\\outputs\\flutter-apk\\app-release.apk",
-      "apkFileName": "active-huntress.apk",
-      "status": "live",
-      "summaryOverride": "Offline workout checklist with history, trends, and backup. No Web API needed for daily use.",
-      "tags": [
-        "flutter",
-        "android",
-        "workout"
-      ],
-      "beta": {
-        "apkFileName": "active-huntress-beta.apk",
-        "apkSource": "build\\app\\outputs\\flutter-apk\\app-release.apk"
-      },
-      "codeProtected": true,
-      "unlockCode": "0657"
-    },
-    {
-      "id": "huntresscookbook-mobile",
-      "title": "Huntress Cookbook Mobile",
-      "kind": "mobile",
-      "visible": true,
-      "repoPath": "C:\\Users\\TheSlyFox\\source\\repos\\Marcell0805\\HuntressCookbook Mobile",
-      "mobileRoot": "C:\\Users\\TheSlyFox\\source\\repos\\Marcell0805\\HuntressCookbook Mobile",
-      "readme": "README.md",
-      "apkSource": "build\\app\\outputs\\flutter-apk\\app-release.apk",
-      "apkFileName": "huntresscookbook-mobile.apk",
-      "status": "live",
-      "codeProtected": true,
-      "unlockCode": "0657",
-      "summaryOverride": "Offline Flutter cookbook: browse chapters, read recipes with photos, search ingredients, edit locally, and view dietary guides\u2014no network required after install.",
-      "tags": [
-        "flutter",
-        "android"
-      ],
-      "contentOta": {
-        "downloadsRoot": "C:\\Users\\TheSlyFox\\source\\repos\\huntress-cookbook\\downloads",
-        "manifestFileName": "mobile-content-manifest.json",
-        "manifestUrl": "https://marcell0805.github.io/huntress-cookbook/downloads/mobile-content-manifest.json"
-      },
-      "beta": {
-        "apkFileName": "huntresscookbook-mobile-beta.apk",
-        "apkSource": "build\\app\\outputs\\flutter-apk\\app-release.apk"
-      }
-    },
-    {
-      "id": "huntress-cookbook",
-      "title": "The Huntress Cookbook",
-      "kind": "website",
-      "visible": true,
-      "repoPath": "C:\\Users\\TheSlyFox\\source\\repos\\huntress-cookbook",
-      "readme": "README.md",
-      "externalUrl": "https://marcell0805.github.io/huntress-cookbook/",
-      "note": "Gluten-free, onion-free, IBS-conscious recipes for the Huntress \u2014 browse chapters online.",
-      "summaryOverride": "Gluten-free, onion-free, IBS-conscious recipes for the Huntress \u2014 browse chapters online.",
-      "publishedAt": "2026-07-22",
-      "status": "live",
-      "tags": [
-        "website",
-        "recipes",
-        "cookbook"
-      ]
-    },
-    {
-      "id": "streamforge",
-      "title": "StreamForge",
-      "kind": "tool",
-      "visible": true,
-      "repoPath": "C:\\Users\\TheSlyFox\\source\\repos\\StreamForge",
-      "projectPath": "C:\\Users\\TheSlyFox\\source\\repos\\StreamForge\\Forms\\SteamForge_UI\\SteamForge_UI.csproj",
-      "readme": "README.md",
-      "packageFileName": "streamforge-win-x64.zip",
-      "note": "Service Diagnostics in Settings \u2014 see if Steam, RAWG, Discord, or updates are down, then Configure / Re-login / Retry from that row.\n\u2022 Guild emoji picker in announcements \u2014 insert :name: and they resolve when you send.\n\u2022 Tag roles and specific users in the Discord ping list.\n\u2022 More reliable Discord setup (fresh login, clearer bot-token errors).\n\u2022 UI polish: stream-day dropdown and diagnostics spacing.",
-      "summaryOverride": "Windows stream schedule builder with Steam/RAWG search and Discord announcements. Download the zip, extract, and run \u2014 no installer.",
-      "publishedAt": "2026-08-17",
-      "status": "beta",
-      "tags": [
-        "tool",
-        "windows",
-        "discord",
-        "streaming"
-      ],
-      "beta": {
-        "packageFileName": "streamforge-win-x64-beta.zip"
-      }
-    },
-    {
-      "id": "wid",
-      "title": "What Was I Doing",
-      "kind": "tool",
-      "visible": true,
-      "repoPath": "D:\\repos\\wid\\Wid",
-      "projectPath": "D:\\repos\\wid\\Wid\\Wid.csproj",
-      "readme": "README.md",
-      "apkSource": "",
-      "apkFileName": "",
-      "packageFileName": "wid-win-x64.zip",
-      "status": "live",
-      "tags": [
-        "tool",
-        "windows"
-      ],
-      "note": "Personal Windows time tracker \u2014 start/stop activities, manual entries, and daily/weekly reports. Data stays on your PC. Extract the zip and run WID.exe.",
-      "publishedAt": "2026-08-26"
-    }
-  ]
+    "apps":  [
+                 {
+                     "id":  "active-huntress",
+                     "title":  "Active Huntress",
+                     "kind":  "mobile",
+                     "visible":  true,
+                     "repoPath":  "D:\\repos\\Active_Huntress Mobile",
+                     "mobileRoot":  "D:\\repos\\Active_Huntress Mobile",
+                     "readme":  "README.md",
+                     "apkSource":  "build\\app\\outputs\\flutter-apk\\app-release.apk",
+                     "apkFileName":  "active-huntress.apk",
+                     "status":  "live",
+                     "summaryOverride":  "Offline workout checklist with history, trends, and backup. No Web API needed for daily use.",
+                     "tags":  [
+                                  "flutter",
+                                  "android",
+                                  "workout"
+                              ],
+                     "beta":  {
+                                  "apkFileName":  "active-huntress-beta.apk",
+                                  "apkSource":  "build\\app\\outputs\\flutter-apk\\app-release.apk"
+                              },
+                     "codeProtected":  true,
+                     "unlockCode":  "0657"
+                 },
+                 {
+                     "id":  "huntresscookbook-mobile",
+                     "title":  "Huntress Cookbook Mobile",
+                     "kind":  "mobile",
+                     "visible":  true,
+                     "repoPath":  "C:\\Users\\TheSlyFox\\source\\repos\\Marcell0805\\HuntressCookbook Mobile",
+                     "mobileRoot":  "C:\\Users\\TheSlyFox\\source\\repos\\Marcell0805\\HuntressCookbook Mobile",
+                     "readme":  "README.md",
+                     "apkSource":  "build\\app\\outputs\\flutter-apk\\app-release.apk",
+                     "apkFileName":  "huntresscookbook-mobile.apk",
+                     "status":  "live",
+                     "codeProtected":  true,
+                     "unlockCode":  "0657",
+                     "summaryOverride":  "Offline Flutter cookbook: browse chapters, read recipes with photos, search ingredients, edit locally, and view dietary guides—no network required after install.",
+                     "tags":  [
+                                  "flutter",
+                                  "android"
+                              ],
+                     "contentOta":  {
+                                        "downloadsRoot":  "C:\\Users\\TheSlyFox\\source\\repos\\huntress-cookbook\\downloads",
+                                        "manifestFileName":  "mobile-content-manifest.json",
+                                        "manifestUrl":  "https://marcell0805.github.io/huntress-cookbook/downloads/mobile-content-manifest.json"
+                                    },
+                     "beta":  {
+                                  "apkFileName":  "huntresscookbook-mobile-beta.apk",
+                                  "apkSource":  "build\\app\\outputs\\flutter-apk\\app-release.apk"
+                              }
+                 },
+                 {
+                     "id":  "huntress-cookbook",
+                     "title":  "The Huntress Cookbook",
+                     "kind":  "website",
+                     "visible":  true,
+                     "repoPath":  "C:\\Users\\TheSlyFox\\source\\repos\\huntress-cookbook",
+                     "readme":  "README.md",
+                     "externalUrl":  "https://marcell0805.github.io/huntress-cookbook/",
+                     "note":  "Gluten-free, onion-free, IBS-conscious recipes for the Huntress — browse chapters online.",
+                     "summaryOverride":  "Gluten-free, onion-free, IBS-conscious recipes for the Huntress — browse chapters online.",
+                     "publishedAt":  "2026-07-22",
+                     "status":  "live",
+                     "tags":  [
+                                  "website",
+                                  "recipes",
+                                  "cookbook"
+                              ]
+                 },
+                 {
+                     "id":  "streamforge",
+                     "title":  "StreamForge",
+                     "kind":  "tool",
+                     "visible":  true,
+                     "repoPath":  "C:\\Users\\TheSlyFox\\source\\repos\\StreamForge",
+                     "projectPath":  "C:\\Users\\TheSlyFox\\source\\repos\\StreamForge\\Forms\\SteamForge_UI\\SteamForge_UI.csproj",
+                     "readme":  "README.md",
+                     "packageFileName":  "streamforge-win-x64.zip",
+                     "note":  "Service Diagnostics in Settings — see if Steam, RAWG, Discord, or updates are down, then Configure / Re-login / Retry from that row.\n• Guild emoji picker in announcements — insert :name: and they resolve when you send.\n• Tag roles and specific users in the Discord ping list.\n• More reliable Discord setup (fresh login, clearer bot-token errors).\n• UI polish: stream-day dropdown and diagnostics spacing.",
+                     "summaryOverride":  "Windows stream schedule builder with Steam/RAWG search and Discord announcements. Download the zip, extract, and run — no installer.",
+                     "publishedAt":  "2026-08-17",
+                     "status":  "beta",
+                     "tags":  [
+                                  "tool",
+                                  "windows",
+                                  "discord",
+                                  "streaming"
+                              ],
+                     "beta":  {
+                                  "packageFileName":  "streamforge-win-x64-beta.zip"
+                              }
+                 },
+                 {
+                     "id":  "wid",
+                     "title":  "What Was I Doing",
+                     "kind":  "tool",
+                     "visible":  true,
+                     "repoPath":  "D:\\repos\\wid\\Wid",
+                     "projectPath":  "D:\\repos\\wid\\Wid\\Wid.csproj",
+                     "readme":  "README.md",
+                     "apkSource":  "",
+                     "apkFileName":  "",
+                     "packageFileName":  "wid-win-x64.zip",
+                     "status":  "live",
+                     "tags":  [
+                                  "tool",
+                                  "windows"
+                              ],
+                     "note":  "Personal Windows time tracker — start/stop activities, manual entries, and daily/weekly reports. Data stays on your PC. Extract the zip and run WID.exe.",
+                     "publishedAt":  "2026-08-26"
+                 }
+             ]
 }
