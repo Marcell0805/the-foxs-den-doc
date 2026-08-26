@@ -20,6 +20,45 @@ param(
 $ErrorActionPreference = "Stop"
 $utf8 = [System.Text.UTF8Encoding]::new($false)
 
+function Resolve-FlutterCommand {
+    $cmd = Get-Command flutter -ErrorAction SilentlyContinue
+    if ($cmd) { return $cmd.Source }
+
+    $bins = @()
+    if ($env:FLUTTER_ROOT) {
+        $bins += (Join-Path $env:FLUTTER_ROOT.Trim('"') "bin")
+    }
+    $bins += @(
+        (Join-Path $env:USERPROFILE "source\flutter\bin"),
+        (Join-Path $env:USERPROFILE "flutter\bin"),
+        (Join-Path $env:USERPROFILE "dev\flutter\bin"),
+        (Join-Path $env:LOCALAPPDATA "flutter\bin"),
+        "C:\flutter\bin",
+        "C:\src\flutter\bin",
+        "C:\tools\flutter\bin"
+    )
+
+    foreach ($bin in $bins) {
+        if (-not (Test-Path $bin)) { continue }
+        $bat = Join-Path $bin "flutter.bat"
+        $exe = Join-Path $bin "flutter.exe"
+        if (Test-Path $bat) {
+            if ($env:PATH -notlike "*$bin*") {
+                $env:PATH = "$bin;$env:PATH"
+            }
+            return $bat
+        }
+        if (Test-Path $exe) {
+            if ($env:PATH -notlike "*$bin*") {
+                $env:PATH = "$bin;$env:PATH"
+            }
+            return $exe
+        }
+    }
+
+    return $null
+}
+
 if (-not $PortalRoot) {
     $scriptDir = $PSScriptRoot
     if (-not $scriptDir) { $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path }
@@ -131,13 +170,19 @@ Write-JsonFile $mobileConfigPath $config
 Write-Host ("Updated {0} (channel={1}, enableDemoData={2}) - baked into APK on next build" -f $mobileConfigPath, $Channel, $enableDemoData)
 
 if (-not $SkipBuild) {
+    $flutter = Resolve-FlutterCommand
+    if (-not $flutter) {
+        throw "Flutter SDK not found. Add flutter\bin to PATH (this machine has it under %USERPROFILE%\source\flutter\bin), then retry."
+    }
+    Write-Host "Using Flutter: $flutter"
+
     Push-Location $MobileRoot
     try {
         Write-Host "Running flutter pub get..."
-        & flutter pub get
+        & $flutter pub get
         if ($LASTEXITCODE -ne 0) { throw "flutter pub get failed with exit code $LASTEXITCODE" }
         Write-Host "Running flutter build apk --release..."
-        & flutter build apk --release
+        & $flutter build apk --release
         if ($LASTEXITCODE -ne 0) { throw "flutter build apk --release failed with exit code $LASTEXITCODE" }
     }
     finally {

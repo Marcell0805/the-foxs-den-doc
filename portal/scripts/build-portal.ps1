@@ -237,6 +237,26 @@ function Sync-AboutFromSettings {
     )
 
     $aboutPath = Join-Path $DataDir "about.json"
+    $showAbout = $true
+    if ($null -ne $Settings.showAbout) { $showAbout = [bool]$Settings.showAbout }
+    if (-not $showAbout) {
+        $about = [ordered]@{
+            id = "about"
+            title = "About"
+            status = "planned"
+            kind = "about"
+            hidden = $true
+            tags = @("about")
+            searchKeywords = @()
+            summary = "About is temporarily hidden."
+            sidebarNote = ""
+            contact = @{}
+            blocks = @()
+        }
+        Write-JsonFile $aboutPath $about
+        Write-Host "About section hidden (showAbout=false)"
+        return
+    }
     $blurb = if ($Settings.aboutBlurb) { $Settings.aboutBlurb } else {
         "I build personal websites and Android apps. Reach out if you want to try a build or collaborate."
     }
@@ -441,7 +461,7 @@ function Sync-AppsFromManifest {
                 downloadUrl = "$base/downloads/$packageFileName"
                 fileName = $packageFileName
                 label = "Download zip"
-                channel = "tool"
+                channel = "live"
                 version = $toolVersion
                 build = $toolBuild
                 sizeBytes = $toolSizeBytes
@@ -450,6 +470,49 @@ function Sync-AppsFromManifest {
             }
             if ($publishedAt) { $section.publishedAt = $publishedAt }
             $section.note = $toolNote
+
+            $betaPackageFile = $null
+            if ($app.beta) {
+                $betaPackageFile = if ($app.beta.packageFileName) { $app.beta.packageFileName } else {
+                    if ($packageFileName -match '\.zip$') { $packageFileName -replace '\.zip$', '-beta.zip' } else { "$packageFileName-beta.zip" }
+                }
+                $betaPackagePath = Join-Path $DownloadsDir $betaPackageFile
+                $hasBetaPackage = Test-Path $betaPackagePath
+                $betaVersionPath = Join-Path $DownloadsDir "$id/beta/tool-version.json"
+                $betaVersion = $null
+                $betaBuild = $null
+                $betaNotes = $null
+                $betaSizeBytes = $null
+                $betaSizeLabel = $null
+                if (Test-Path $betaVersionPath) {
+                    $bv = Read-Json $betaVersionPath
+                    $betaVersion = $bv.version
+                    $betaBuild = $bv.build
+                    $betaNotes = $bv.releaseNotes
+                    $betaSizeBytes = $bv.sizeBytes
+                    $betaSizeLabel = $bv.sizeLabel
+                }
+                if ($hasBetaPackage -and -not $betaSizeBytes) {
+                    $betaSizeBytes = [long](Get-Item $betaPackagePath).Length
+                    $betaSizeLabel = Format-ApkSize $betaSizeBytes
+                }
+                $section.packageBeta = @{
+                    downloadUrl = "$base/downloads/$betaPackageFile"
+                    fileName = $betaPackageFile
+                    label = "Download Beta zip"
+                    channel = "beta"
+                    version = $betaVersion
+                    build = $betaBuild
+                    releaseNotes = $betaNotes
+                    updateCheckUrl = "$base/downloads/$id/beta/tool-version.json"
+                    available = $hasBetaPackage
+                    sizeBytes = $betaSizeBytes
+                    sizeLabel = $betaSizeLabel
+                }
+                if (-not $hasBetaPackage) {
+                    Write-Warning "Beta tool package missing for $id at $betaPackagePath (optional; publish with -Channel beta)"
+                }
+            }
         } else {
             $section.apk = @{
                 downloadUrl = $live.apkUrl
@@ -499,20 +562,28 @@ function Sync-AppsFromManifest {
         })
     }
 
-    # Append fixed About after apps
-    $aboutNum = $num + 1
-    $navItems.Add([ordered]@{
-        id = "about"
-        num = $aboutNum
-        file = "about.html"
-        label = "About"
-        available = $true
-        kind = "about"
-        status = "live"
-    })
+    # Append fixed About after apps (unless temporarily hidden)
+    $showAbout = $true
+    if ($null -ne $Settings.showAbout) { $showAbout = [bool]$Settings.showAbout }
+    if ($showAbout) {
+        $aboutNum = $num + 1
+        $navItems.Add([ordered]@{
+            id = "about"
+            num = $aboutNum
+            file = "about.html"
+            label = "About"
+            available = $true
+            kind = "about"
+            status = "live"
+        })
+    }
 
     Write-JsonFile (Join-Path $DataDir "nav.json") @{ items = $navItems.ToArray() }
-    Write-Host "Synced $($navItems.Count) nav item(s) (apps + About) from apps-manifest.json"
+    if ($showAbout) {
+        Write-Host "Synced $($navItems.Count) nav item(s) (apps + About) from apps-manifest.json"
+    } else {
+        Write-Host "Synced $($navItems.Count) nav item(s) from apps-manifest.json (About hidden)"
+    }
 }
 
   function Get-SearchText($doc) {
@@ -523,6 +594,7 @@ function Sync-AppsFromManifest {
     if ($doc.publishedAt) { $parts.Add($doc.publishedAt) }
     if ($doc.externalUrl) { $parts.Add($doc.externalUrl) }
     if ($doc.package -and $doc.package.fileName) { $parts.Add($doc.package.fileName) }
+    if ($doc.packageBeta -and $doc.packageBeta.fileName) { $parts.Add($doc.packageBeta.fileName) }
     if ($doc.searchKeywords) { foreach ($k in $doc.searchKeywords) { $parts.Add($k) } }
     if ($doc.tags) { foreach ($t in $doc.tags) { $parts.Add($t) } }
     if ($doc.version) { $parts.Add($doc.version) }
@@ -613,6 +685,22 @@ foreach ($key in ($sections.Keys | Sort-Object)) {
 $sectionsJsObject = '{' + ($sectionParts -join ',') + '}'
 
 $settingsJson = ($settings | ConvertTo-Json -Depth 20 -Compress)
+# When About is hidden, strip personal contact fields from the public portal-data bundle
+$showAboutEmit = $true
+if ($null -ne $settings.showAbout) { $showAboutEmit = [bool]$settings.showAbout }
+if (-not $showAboutEmit) {
+    $settingsEmit = $settings | ConvertTo-Json -Depth 20 | ConvertFrom-Json
+    if ($settingsEmit.PSObject.Properties['contact']) {
+        $settingsEmit.PSObject.Properties.Remove('contact')
+    }
+    if ($settingsEmit.PSObject.Properties['aboutBlurb']) {
+        $settingsEmit.PSObject.Properties.Remove('aboutBlurb')
+    }
+    if ($settingsEmit.PSObject.Properties['aboutSkills']) {
+        $settingsEmit.PSObject.Properties.Remove('aboutSkills')
+    }
+    $settingsJson = ($settingsEmit | ConvertTo-Json -Depth 20 -Compress)
+}
 $navJson = ($nav | ConvertTo-Json -Depth 20 -Compress)
 $searchJson = ($searchEntries | ConvertTo-Json -Depth 10 -Compress)
 

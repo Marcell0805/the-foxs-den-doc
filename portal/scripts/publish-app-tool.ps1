@@ -3,6 +3,8 @@ param(
     [string]$AppId,
     [Parameter(Mandatory = $true)]
     [string]$ZipPath,
+    [ValidateSet('live', 'beta')]
+    [string]$Channel = "live",
     [string]$ReleaseNotes = "Tool update.",
     [string]$Version = "1.0.0",
     [int]$Build = 1,
@@ -74,7 +76,22 @@ $PagesBaseUrl = $PagesBaseUrl.TrimEnd('/')
 $packageFileName = if ($app.packageFileName) { $app.packageFileName } else { "$AppId-win-x64.zip" }
 if ($packageFileName -notmatch '\.zip$') { $packageFileName = "$packageFileName.zip" }
 
-$versionDir = Join-Path $downloadsDir $AppId
+if ($Channel -eq 'beta') {
+    if ($app.beta -and $app.beta.packageFileName) {
+        $packageFileName = $app.beta.packageFileName
+    } elseif ($packageFileName -match '\.zip$') {
+        $packageFileName = ($packageFileName -replace '\.zip$', '-beta.zip')
+    } else {
+        $packageFileName = "$packageFileName-beta.zip"
+    }
+}
+if ($packageFileName -notmatch '\.zip$') { $packageFileName = "$packageFileName.zip" }
+
+$versionDir = if ($Channel -eq 'beta') {
+    Join-Path $downloadsDir "$AppId\beta"
+} else {
+    Join-Path $downloadsDir $AppId
+}
 New-Item -ItemType Directory -Force -Path $downloadsDir | Out-Null
 New-Item -ItemType Directory -Force -Path $versionDir | Out-Null
 
@@ -94,14 +111,14 @@ $versionManifest = @{
     build = $Build
     packageUrl = $packageUrl
     releaseNotes = $ReleaseNotes
-    channel = "tool"
+    channel = $Channel
     sizeBytes = $sizeBytes
     sizeLabel = $sizeLabel
     publishedAt = $publishedAt
 }
 $versionPath = Join-Path $versionDir "tool-version.json"
 Write-JsonFile $versionPath $versionManifest
-Write-Host "Wrote $versionPath (build $Build, version $Version, $sizeLabel)"
+Write-Host "Wrote $versionPath (channel $Channel, build $Build, version $Version, $sizeLabel)"
 
 Write-Host ""
 Write-Host "Done. Run build-portal.ps1, then commit portal/downloads/ and push for GitHub Pages."

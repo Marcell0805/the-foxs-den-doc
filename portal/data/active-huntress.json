@@ -24,18 +24,18 @@
                ],
     "sidebarNote":  "Official APK is hosted on GitHub Pages.",
     "version":  "1.0.0",
-    "build":  2,
-    "releaseNotes":  "Huntress Home v1 - trends, backup, weekly plan",
+    "build":  3,
+    "releaseNotes":  "Anyone can add recipes; only you can edit ones you added. More reliable in-app update download.",
     "updateCheckUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/active-huntress/mobile-version.json",
     "apk":  {
-                "sizeLabel":  "55.3 MB",
+                "sizeLabel":  "55,3 MB",
                 "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/active-huntress.apk",
                 "channel":  "live",
                 "fileName":  "active-huntress.apk",
-                "build":  2,
+                "build":  3,
                 "version":  "1.0.0",
                 "label":  "Download Live APK",
-                "sizeBytes":  58008149
+                "sizeBytes":  58008177
             },
     "apkBeta":  {
                     "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/active-huntress-beta.apk",
@@ -44,7 +44,7 @@
                     "version":  "1.0.0",
                     "label":  "Download Beta APK",
                     "available":  true,
-                    "sizeLabel":  "55.3 MB",
+                    "sizeLabel":  "55,3 MB",
                     "channel":  "beta",
                     "releaseNotes":  "Beta",
                     "sizeBytes":  58023145,

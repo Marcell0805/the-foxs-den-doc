@@ -1,0 +1,10 @@
+{
+    "channel":  "beta",
+    "releaseNotes":  "Service Diagnostics in Settings — see if Steam, RAWG, Discord, or updates are down, then Configure / Re-login / Retry from that row.\n• Guild emoji picker in announcements — insert :name: and they resolve when you send.\n• Tag roles and specific users in the Discord ping list.\n• More reliable Discord setup (fresh login, clearer bot-token errors).\n• UI polish: stream-day dropdown and diagnostics spacing.",
+    "packageUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/streamforge-win-x64-beta.zip",
+    "publishedAt":  "2026-08-17",
+    "sizeLabel":  "81,4 MB",
+    "build":  2,
+    "version":  "1.0.0",
+    "sizeBytes":  85403468
+}

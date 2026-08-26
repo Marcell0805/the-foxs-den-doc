@@ -23,18 +23,18 @@
                ],
     "sidebarNote":  "Official APK is hosted on GitHub Pages.",
     "version":  "1.0.13",
-    "build":  19,
-    "releaseNotes":  "New gluten free app",
+    "build":  18,
+    "releaseNotes":  "All family members can add recipes\nOnly the person who added a recipe can edit or delete it\nBundled cookbook recipes stay MasterChef / Huntress editable\nIn-app update check is more reliable on real phones\nSafer APK download with timeout and cleaner retry",
     "updateCheckUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/huntresscookbook-mobile/mobile-version.json",
     "apk":  {
-                "sizeLabel":  "63.8 MB",
+                "sizeLabel":  "63,8 MB",
                 "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/huntresscookbook-mobile.apk",
                 "channel":  "live",
                 "fileName":  "huntresscookbook-mobile.apk",
-                "build":  19,
+                "build":  18,
                 "version":  "1.0.13",
                 "label":  "Download Live APK",
-                "sizeBytes":  66896299
+                "sizeBytes":  66896311
             },
     "apkBeta":  {
                     "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/huntresscookbook-mobile-beta.apk",

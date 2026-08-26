@@ -34,6 +34,7 @@
                       "label":  "StreamForge",
                       "available":  true,
                       "kind":  "tool",
+<<<<<<< HEAD
                       "status":  "in_progress"
                   },
                   {
@@ -53,6 +54,9 @@
                       "available":  true,
                       "kind":  "about",
                       "status":  "live"
+=======
+                      "status":  "beta"
+>>>>>>> 9e7523682d95c5e5acee80e78ef05ea053e476ae
                   }
               ]
 }
