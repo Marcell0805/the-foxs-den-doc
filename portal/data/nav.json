@@ -34,8 +34,7 @@
                       "label":  "StreamForge",
                       "available":  true,
                       "kind":  "tool",
-<<<<<<< HEAD
-                      "status":  "in_progress"
+                      "status":  "beta"
                   },
                   {
                       "id":  "wid",
@@ -45,18 +44,6 @@
                       "available":  true,
                       "kind":  "tool",
                       "status":  "live"
-                  },
-                  {
-                      "id":  "about",
-                      "num":  6,
-                      "file":  "about.html",
-                      "label":  "About",
-                      "available":  true,
-                      "kind":  "about",
-                      "status":  "live"
-=======
-                      "status":  "beta"
->>>>>>> 9e7523682d95c5e5acee80e78ef05ea053e476ae
                   }
               ]
 }

@@ -84,8 +84,10 @@
                                   "windows",
                                   "discord",
                                   "streaming"
-<<<<<<< HEAD
-                              ]
+                              ],
+                     "beta":  {
+                                  "packageFileName":  "streamforge-win-x64-beta.zip"
+                              }
                  },
                  {
                      "id":  "wid",
@@ -105,12 +107,6 @@
                               ],
                      "note":  "Personal Windows time tracker — start/stop activities, manual entries, and daily/weekly reports. Data stays on your PC. Extract the zip and run WID.exe.",
                      "publishedAt":  "2026-08-26"
-=======
-                              ],
-                     "beta":  {
-                                  "packageFileName":  "streamforge-win-x64-beta.zip"
-                              }
->>>>>>> 9e7523682d95c5e5acee80e78ef05ea053e476ae
                  }
              ]
 }
