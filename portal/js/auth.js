@@ -2,12 +2,22 @@
   function getSettings() {
     return (window.DELTACORE_PORTAL && DELTACORE_PORTAL.settings) || {};
   }
+  function getAuth() {
+    return getSettings().auth || {};
+  }
+  function isAuthEnabled() {
+    var auth = getAuth();
+    if (auth.enabled === false) return false;
+    if (auth.enabled === true) return true;
+    // Legacy: treat non-empty password as enabled
+    return !!(auth.password);
+  }
   function getStorageKey() {
-    var auth = getSettings().auth;
+    var auth = getAuth();
     return (auth && auth.storageKey) || 'deltacore_portal_auth';
   }
   function getPassword() {
-    var auth = getSettings().auth;
+    var auth = getAuth();
     return (auth && auth.password) || 'deltacore';
   }
   function unlock() {
@@ -47,6 +57,10 @@
     });
   }
   function init() {
+    if (!isAuthEnabled()) {
+      document.documentElement.classList.add('auth-ok');
+      return;
+    }
     if (sessionStorage.getItem(getStorageKey()) === '1') {
       document.documentElement.classList.add('auth-ok');
       return;

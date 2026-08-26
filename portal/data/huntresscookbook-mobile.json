@@ -13,12 +13,12 @@
     "summary":  "Offline Flutter cookbook: browse chapters, read recipes with photos, search ingredients, edit locally, and view dietary guides—no network required after install.",
     "blocks":  [
                    {
-                       "content":  "Details coming soon.",
+                       "content":  "Offline Flutter client for the Huntress Cookbook. Browse chapters, read recipes with photos, search ingredients, edit recipes locally, and view dietary guides ΓÇö no network required after install.",
                        "heading":  "About",
                        "bullets":  [
 
                                    ],
-                       "id":  "about"
+                       "id":  "readme-1"
                    }
                ],
     "sidebarNote":  "Official APK is hosted on GitHub Pages.",
@@ -26,6 +26,13 @@
     "build":  18,
     "releaseNotes":  "All family members can add recipes\nOnly the person who added a recipe can edit or delete it\nBundled cookbook recipes stay MasterChef / Huntress editable\nIn-app update check is more reliable on real phones\nSafer APK download with timeout and cleaner retry",
     "updateCheckUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/huntresscookbook-mobile/mobile-version.json",
+    "codeProtected":  true,
+    "unlock":  {
+                   "hint":  "4-digit code",
+                   "code":  "0657",
+                   "prompt":  "Enter the 4-digit code to continue",
+                   "storageKey":  "the_fox_s_den_huntresscookbook-mobile_unlock"
+               },
     "apk":  {
                 "sizeLabel":  "63.8 MB",
                 "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/huntresscookbook-mobile.apk",

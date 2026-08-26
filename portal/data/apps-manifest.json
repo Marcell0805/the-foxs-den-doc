@@ -33,6 +33,8 @@
                      "apkSource":  "build\\app\\outputs\\flutter-apk\\app-release.apk",
                      "apkFileName":  "huntresscookbook-mobile.apk",
                      "status":  "live",
+                     "codeProtected":  true,
+                     "unlockCode":  "0657",
                      "summaryOverride":  "Offline Flutter cookbook: browse chapters, read recipes with photos, search ingredients, edit locally, and view dietary guides—no network required after install.",
                      "tags":  [
                                   "flutter",

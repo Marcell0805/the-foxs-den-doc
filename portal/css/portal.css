@@ -58,6 +58,77 @@ img { max-width: 100%; height: auto; }
 .auth-gate-button:hover { background: var(--navy); }
 .auth-gate-error { color: #c0392b; font-size: .85rem; margin-bottom: .5rem; }
 
+.code-lock {
+  display: inline-block;
+  width: 0.7em;
+  height: 0.85em;
+  margin-left: 0.35em;
+  vertical-align: -0.05em;
+  border: 1.5px solid currentColor;
+  border-radius: 0.12em;
+  opacity: 0.75;
+  position: relative;
+}
+.code-lock::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -0.45em;
+  width: 0.45em;
+  height: 0.4em;
+  margin-left: -0.225em;
+  border: 1.5px solid currentColor;
+  border-bottom: none;
+  border-radius: 0.35em 0.35em 0 0;
+  box-sizing: border-box;
+}
+
+.code-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(20, 30, 26, 0.55);
+  padding: 1.25rem;
+}
+.code-gate-card {
+  width: min(22rem, 100%);
+  background: var(--bg, #F5F1E8);
+  color: var(--text, #1a1a1a);
+  border-radius: 0.5rem;
+  padding: 1.5rem 1.35rem;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+}
+.code-gate-title { font-family: var(--font-display); font-size: 1.2rem; margin: 0 0 0.5rem; color: var(--heading); }
+.code-gate-prompt { color: var(--muted); font-size: 0.92rem; margin: 0 0 1rem; }
+.code-gate-input {
+  width: 100%;
+  font-size: 1.25rem;
+  letter-spacing: 0.35em;
+  text-align: center;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--navy) 35%, #ccc);
+  border-radius: 0.35rem;
+  margin-bottom: 0.65rem;
+  background: #fff;
+}
+.code-gate-error { color: #c0392b; font-size: 0.85rem; margin: 0 0 0.65rem; }
+.code-gate-actions { display: flex; gap: 0.65rem; justify-content: flex-end; }
+.code-gate-cancel,
+.code-gate-button {
+  border: none;
+  border-radius: 0.35rem;
+  padding: 0.55rem 1rem;
+  cursor: pointer;
+  font: inherit;
+}
+.code-gate-cancel { background: transparent; color: var(--muted); }
+.code-gate-button { background: var(--navy, #2D4A3E); color: #fff; }
+.code-gate-button:hover { filter: brightness(1.08); }
+
+
 /* Landing */
 .landing {
   max-width: 720px; margin: 0 auto; padding: 3rem 1.5rem 4rem; text-align: center;

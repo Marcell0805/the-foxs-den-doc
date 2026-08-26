@@ -16,7 +16,8 @@
                       "label":  "Huntress Cookbook Mobile",
                       "available":  true,
                       "kind":  "mobile",
-                      "status":  "live"
+                      "status":  "live",
+                      "codeProtected":  true
                   },
                   {
                       "id":  "huntress-cookbook",
