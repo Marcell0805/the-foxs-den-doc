@@ -7,3 +7,6 @@ Thumbs.db
 
 # Local overrides (optional)
 portal/data/*.local.json
+
+# Never commit Discord/OAuth secrets (GitHub push protection blocks these)
+portal/downloads/**/discord-runtime.json

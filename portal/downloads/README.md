@@ -70,3 +70,9 @@ cd path\to\huntress-cookbook\scripts
 Commit `portal/downloads/` (including the APK) and push for GitHub Pages. Also commit cookbook `downloads/` when content or the bridge JSON changed.
 
 Bump the **`+N`** build number in `pubspec.yaml` before every publish so update checks detect new APKs.
+
+## StreamForge (Windows tool)
+
+Published builds do **not** include Discord bot secrets in the zip. Configure Discord in
+StreamForge Settings after install (OAuth login / bot token). Do not commit
+`discord-runtime.json` or real tokens to this public repo — GitHub push protection will block it.
