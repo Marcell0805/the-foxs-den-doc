@@ -1,7 +1,7 @@
 {
     "id":  "streamforge",
     "title":  "StreamForge",
-    "status":  "beta",
+    "status":  "live",
     "kind":  "tool",
     "tags":  [
                  "tool",
@@ -25,21 +25,21 @@
                ],
     "sidebarNote":  "Download the zip, extract, and run.",
     "version":  "1.0.0",
-    "build":  7,
+    "build":  8,
     "releaseNotes":  "Service Diagnostics in Settings — see if Steam, RAWG, Discord, or updates are down, then Configure / Re-login / Retry from that row.\n• Guild emoji picker in announcements — insert :name: and they resolve when you send.\n• Tag roles and specific users in the Discord ping list.\n• More reliable Discord setup (fresh login, clearer bot-token errors).\n• UI polish: stream-day dropdown and diagnostics spacing.",
     "updateCheckUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/streamforge/tool-version.json",
     "package":  {
                     "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/streamforge-win-x64.zip",
-                    "build":  7,
+                    "build":  8,
                     "fileName":  "streamforge-win-x64.zip",
                     "version":  "1.0.0",
                     "label":  "Download zip",
                     "available":  true,
                     "channel":  "live",
-                    "sizeLabel":  "81,4 MB",
-                    "sizeBytes":  85397605
+                    "sizeLabel":  "81,5 MB",
+                    "sizeBytes":  85407352
                 },
-    "publishedAt":  "2026-08-17",
+    "publishedAt":  "2026-08-27",
     "note":  "Service Diagnostics in Settings — see if Steam, RAWG, Discord, or updates are down, then Configure / Re-login / Retry from that row.\n• Guild emoji picker in announcements — insert :name: and they resolve when you send.\n• Tag roles and specific users in the Discord ping list.\n• More reliable Discord setup (fresh login, clearer bot-token errors).\n• UI polish: stream-day dropdown and diagnostics spacing.",
     "packageBeta":  {
                         "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/streamforge-win-x64-beta.zip",
