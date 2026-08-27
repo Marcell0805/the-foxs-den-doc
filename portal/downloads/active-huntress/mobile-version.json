@@ -1,9 +1,9 @@
 {
-    "build":  3,
+    "build":  5,
     "version":  "1.0.0",
-    "sizeLabel":  "55,3 MB",
-    "releaseNotes":  "Anyone can add recipes; only you can edit ones you added. More reliable in-app update download.",
+    "sizeLabel":  "55.3 MB",
+    "releaseNotes":  "Removing duplicate listing",
     "channel":  "live",
-    "sizeBytes":  58008177,
+    "sizeBytes":  58023145,
     "apkUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/active-huntress.apk"
 }

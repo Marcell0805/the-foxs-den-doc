@@ -7,7 +7,8 @@
                       "label":  "Active Huntress",
                       "available":  true,
                       "kind":  "mobile",
-                      "status":  "live"
+                      "status":  "live",
+                      "codeProtected":  true
                   },
                   {
                       "id":  "huntresscookbook-mobile",
@@ -16,7 +17,8 @@
                       "label":  "Huntress Cookbook Mobile",
                       "available":  true,
                       "kind":  "mobile",
-                      "status":  "live"
+                      "status":  "live",
+                      "codeProtected":  true
                   },
                   {
                       "id":  "huntress-cookbook",
@@ -32,6 +34,15 @@
                       "num":  4,
                       "file":  "streamforge.html",
                       "label":  "StreamForge",
+                      "available":  true,
+                      "kind":  "tool",
+                      "status":  "live"
+                  },
+                  {
+                      "id":  "wid",
+                      "num":  5,
+                      "file":  "wid.html",
+                      "label":  "What Was I Doing",
                       "available":  true,
                       "kind":  "tool",
                       "status":  "live"

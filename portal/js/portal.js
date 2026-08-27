@@ -115,12 +115,13 @@
     html += '<ol>';
     items.forEach(function (item, i) {
       var label = (i + 1) + '. ' + item.label;
+      var lock = item.codeProtected ? ' <span class="code-lock" title="Code required" aria-label="Code required"></span>' : '';
       if (item.id === active) {
-        html += '<li class="active">' + esc(label) + '</li>';
+        html += '<li class="active">' + esc(label) + lock + '</li>';
       } else if (item.available && item.file) {
-        html += '<li><a href="' + prefix + item.file + '">' + esc(label) + '</a></li>';
+        html += '<li><a href="' + prefix + item.file + '">' + esc(label) + lock + '</a></li>';
       } else {
-        html += '<li class="unavailable">' + esc(label) + ' <em>(soon)</em></li>';
+        html += '<li class="unavailable">' + esc(label) + lock + ' <em>(soon)</em></li>';
       }
     });
     html += '</ol></div>';
@@ -184,7 +185,7 @@
     return t;
   }
 
-  function renderDownloadChannel(apk, helpHref) {
+  function renderDownloadChannel(apk, helpHref, sectionId) {
     if (!apk || !apk.downloadUrl) return '';
     var parts = [];
     if (apk.version) {
@@ -209,11 +210,91 @@
     var btnClass = 'app-download-btn' + (apk.channel === 'beta' ? ' app-download-btn-beta' : '');
     var link = disabled
       ? '<span class="' + btnClass + ' is-disabled" aria-disabled="true">' + esc(apk.label || 'Download') + ' (not published)</span>'
-      : '<a href="' + esc(apk.downloadUrl) + '" class="' + btnClass + '" download>' + esc(apk.label || 'Download APK') + '</a>';
+      : '<a href="' + esc(apk.downloadUrl) + '" class="' + btnClass + '" download' +
+        (sectionId ? ' data-code-gate="' + esc(sectionId) + '"' : '') +
+        '>' + esc(apk.label || 'Download APK') + '</a>';
     return '<div class="app-channel">' +
       link + meta +
       (helpHref ? ' <a class="app-install-help" href="' + helpHref + '" target="_blank" rel="noopener">Install help</a>' : '') +
       '</div>';
+  }
+
+  function isSectionUnlocked(section) {
+    if (!section || !section.codeProtected) return true;
+    var unlock = section.unlock || {};
+    var key = unlock.storageKey || ('the_fox_s_den_' + section.id + '_unlock');
+    return sessionStorage.getItem(key) === '1';
+  }
+
+  function markSectionUnlocked(section) {
+    var unlock = (section && section.unlock) || {};
+    var key = unlock.storageKey || ('the_fox_s_den_' + (section && section.id) + '_unlock');
+    sessionStorage.setItem(key, '1');
+  }
+
+  function promptCodeUnlock(section, onSuccess) {
+    if (!section) { onSuccess(); return; }
+    if (isSectionUnlocked(section)) { onSuccess(); return; }
+    var unlock = section.unlock || {};
+    var expected = String(unlock.code || '');
+    var prompt = unlock.prompt || 'Enter the 4-digit code to continue';
+    var hint = unlock.hint || '4-digit code';
+
+    var existing = document.getElementById('code-gate');
+    if (existing) existing.remove();
+
+    var gate = document.createElement('div');
+    gate.id = 'code-gate';
+    gate.className = 'code-gate';
+    gate.innerHTML =
+      '<div class="code-gate-card" role="dialog" aria-modal="true" aria-labelledby="code-gate-title">' +
+        '<h2 id="code-gate-title" class="code-gate-title">' + esc(section.title || 'Protected') + '</h2>' +
+        '<p class="code-gate-prompt">' + esc(prompt) + '</p>' +
+        '<form class="code-gate-form" id="code-gate-form">' +
+          '<input type="text" id="code-gate-input" class="code-gate-input" inputmode="numeric" maxlength="4" pattern="\\d{4}" placeholder="' + esc(hint) + '" autocomplete="off" autofocus>' +
+          '<p class="code-gate-error" id="code-gate-error" hidden>Incorrect code.</p>' +
+          '<div class="code-gate-actions">' +
+            '<button type="button" class="code-gate-cancel" id="code-gate-cancel">Cancel</button>' +
+            '<button type="submit" class="code-gate-button">Unlock</button>' +
+          '</div>' +
+        '</form>' +
+      '</div>';
+    document.body.appendChild(gate);
+
+    function close() { gate.remove(); }
+    document.getElementById('code-gate-cancel').addEventListener('click', close);
+    gate.addEventListener('click', function (e) { if (e.target === gate) close(); });
+    document.getElementById('code-gate-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var input = document.getElementById('code-gate-input');
+      var error = document.getElementById('code-gate-error');
+      if (String(input.value || '') === expected) {
+        markSectionUnlocked(section);
+        close();
+        onSuccess();
+      } else {
+        error.hidden = false;
+        input.value = '';
+        input.focus();
+      }
+    });
+  }
+
+  function bindCodeGates(root, section) {
+    if (!root || !section || !section.codeProtected) return;
+    root.querySelectorAll('[data-code-gate]').forEach(function (el) {
+      el.addEventListener('click', function (e) {
+        if (isSectionUnlocked(section)) return;
+        e.preventDefault();
+        var href = el.getAttribute('href');
+        var target = el.getAttribute('target');
+        promptCodeUnlock(section, function () {
+          if (!href) return;
+          if (target === '_blank') window.open(href, '_blank', 'noopener');
+          else window.location.href = href;
+        });
+      });
+    });
   }
 
   function whenAuthOk(fn) {
@@ -447,7 +528,9 @@
 
     if (section.kind === 'website' && section.externalUrl) {
       html += '<p class="app-download-wrap">' +
-        '<a href="' + esc(section.externalUrl) + '" class="app-download-btn" target="_blank" rel="noopener">Open site</a>' +
+        '<a href="' + esc(section.externalUrl) + '" class="app-download-btn" target="_blank" rel="noopener"' +
+        (section.codeProtected ? ' data-code-gate="' + esc(section.id) + '"' : '') +
+        '>Open site</a>' +
         '</p>';
       var siteMeta = [];
       if (section.publishedAt) siteMeta.push('Published ' + String(section.publishedAt));
@@ -458,8 +541,8 @@
       }
     } else if (section.kind === 'tool' && (section.package || section.packageBeta)) {
       html += '<div class="app-download-wrap">';
-      if (section.package) html += renderDownloadChannel(section.package, null);
-      if (section.packageBeta) html += renderDownloadChannel(section.packageBeta, null);
+      if (section.package) html += renderDownloadChannel(section.package, null, section.codeProtected ? section.id : null);
+      if (section.packageBeta) html += renderDownloadChannel(section.packageBeta, null, section.codeProtected ? section.id : null);
       html += '</div>';
       var toolMeta = [];
       if (section.publishedAt) toolMeta.push('Published ' + String(section.publishedAt));
@@ -471,8 +554,8 @@
       html += '<p class="section-summary">Extract the zip and run the .exe. No installer required.</p>';
     } else if (section.apk || section.apkBeta) {
       html += '<div class="app-download-wrap">';
-      if (section.apk) html += renderDownloadChannel(section.apk, '../downloads/README.md');
-      if (section.apkBeta) html += renderDownloadChannel(section.apkBeta, '../downloads/README.md');
+      if (section.apk) html += renderDownloadChannel(section.apk, '../downloads/README.md', section.codeProtected ? section.id : null);
+      if (section.apkBeta) html += renderDownloadChannel(section.apkBeta, '../downloads/README.md', section.codeProtected ? section.id : null);
       html += '</div>';
     } else if (section.version) {
       html += '<p class="app-version-meta">Version ' + esc(section.version);
@@ -524,6 +607,7 @@
       html += '</section>';
     });
     mount.innerHTML = html;
+    bindCodeGates(mount, section);
   }
 
   var LANDING_GROUP_LIMIT = 10;
@@ -534,12 +618,13 @@
     function renderItem(item, index, extra) {
       var n = index + 1;
       var badge = item.status === 'beta' ? ' <span class="status-badge status-beta">Beta</span>' : '';
+      var lock = item.codeProtected ? ' <span class="code-lock" title="Code required" aria-label="Code required"></span>' : '';
       var cls = extra ? ' class="landing-nav-extra"' : '';
       var hiddenAttr = extra ? ' hidden' : '';
       if (item.available && item.file) {
-        return '<li' + cls + hiddenAttr + '><a href="sections/' + item.file + '"><span class="landing-nav-label">' + n + '. ' + esc(item.label) + '</span>' + badge + '</a></li>';
+        return '<li' + cls + hiddenAttr + '><a href="sections/' + item.file + '"><span class="landing-nav-label">' + n + '. ' + esc(item.label) + '</span>' + lock + badge + '</a></li>';
       }
-      return '<li class="unavailable' + (extra ? ' landing-nav-extra' : '') + '"' + hiddenAttr + '><span class="landing-nav-label">' + n + '. ' + esc(item.label) + '</span>' + badge + ' <em>(coming soon)</em></li>';
+      return '<li class="unavailable' + (extra ? ' landing-nav-extra' : '') + '"' + hiddenAttr + '><span class="landing-nav-label">' + n + '. ' + esc(item.label) + '</span>' + lock + badge + ' <em>(coming soon)</em></li>';
     }
     items.forEach(function (item, i) {
       html += renderItem(item, i, i >= LANDING_GROUP_LIMIT);

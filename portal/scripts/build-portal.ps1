@@ -353,12 +353,20 @@ function Sync-AppsFromManifest {
         $readmeRel = if ($app.readme) { $app.readme } else { "README.md" }
         $readmePath = if ($repoPath) { Join-Path $repoPath $readmeRel } else { "" }
 
+        $existingSectionPath = Join-Path $DataDir "$id.json"
+        $existingSection = $null
+        if (Test-Path $existingSectionPath) {
+            try { $existingSection = Read-Json $existingSectionPath } catch { $existingSection = $null }
+        }
+
         $parsed = @{ Summary = $app.title; Blocks = @(@{
             id = "about"; heading = "About"; content = "Details coming soon."; bullets = @()
         }) }
+        $parsedFromReadme = $false
         if ($readmePath -and (Test-Path $readmePath)) {
             $readmeText = [IO.File]::ReadAllText($readmePath, $utf8)
             $parsed = Parse-ReadmeContent $readmeText
+            $parsedFromReadme = $true
         } elseif (($kind -eq 'website' -or $kind -eq 'tool') -and $app.note) {
             $parsed = @{
                 Summary = if ($app.summaryOverride) { $app.summaryOverride } else { $app.note }
@@ -371,10 +379,27 @@ function Sync-AppsFromManifest {
             }
         } elseif ($readmePath) {
             Write-Warning "README not found for $id at $readmePath"
+            # Keep prior About/blocks when README is missing on this machine (avoid wipe).
+            $existingContent = $null
+            if ($existingSection -and $existingSection.blocks) {
+                $first = @($existingSection.blocks)[0]
+                $existingContent = if ($first -and $first.content) { [string]$first.content } else { "" }
+            }
+            $isPlaceholder = [string]::IsNullOrWhiteSpace($existingContent) -or
+                $existingContent.Trim().Equals("Details coming soon.", [StringComparison]::OrdinalIgnoreCase)
+            if (-not $isPlaceholder) {
+                $parsed = @{
+                    Summary = if ($existingSection.summary) { $existingSection.summary } else { $app.title }
+                    Blocks = @($existingSection.blocks)
+                }
+                Write-Host "Preserved existing About/blocks for $id (README unavailable)"
+            }
         }
 
         if ($app.summaryOverride) {
             $parsed.Summary = [string]$app.summaryOverride
+        } elseif (-not $parsedFromReadme -and $existingSection -and $existingSection.summary -and -not $app.note) {
+            $parsed.Summary = [string]$existingSection.summary
         }
 
         $apkFileName = $app.apkFileName
@@ -446,6 +471,19 @@ function Sync-AppsFromManifest {
             build = if ($kind -eq 'tool') { $toolBuild } else { $live.build }
             releaseNotes = if ($kind -eq 'website') { $websiteNote } elseif ($kind -eq 'tool') { $toolNote } else { $live.releaseNotes }
             updateCheckUrl = if ($kind -eq 'tool') { "$base/downloads/$id/tool-version.json" } else { $live.updateCheckUrl }
+        }
+
+        $codeProtected = $false
+        if ($null -ne $app.codeProtected) { $codeProtected = [bool]$app.codeProtected }
+        if ($codeProtected) {
+            $unlockCode = if ($app.unlockCode) { [string]$app.unlockCode } else { "" }
+            $section.codeProtected = $true
+            $section.unlock = @{
+                code = $unlockCode
+                storageKey = "the_fox_s_den_${id}_unlock"
+                prompt = "Enter the 4-digit code to continue"
+                hint = "4-digit code"
+            }
         }
 
         if ($kind -eq 'website') {
@@ -551,7 +589,7 @@ function Sync-AppsFromManifest {
 
         Write-JsonFile (Join-Path $DataDir "$id.json") $section
 
-        $navItems.Add([ordered]@{
+        $navItem = [ordered]@{
             id = $id
             num = $num
             file = "$id.html"
@@ -559,7 +597,9 @@ function Sync-AppsFromManifest {
             available = $available
             kind = $kind
             status = $section.status
-        })
+        }
+        if ($codeProtected) { $navItem.codeProtected = $true }
+        $navItems.Add($navItem)
     }
 
     # Append fixed About after apps (unless temporarily hidden)
@@ -741,7 +781,20 @@ $sectionTemplate = $sectionTemplate -replace 'search-index\.js(\?v=[^"]*)?', "se
 
 foreach ($key in $sections.Keys) {
     $doc = $sections[$key]
-    $html = $sectionTemplate -replace '\{\{ID\}\}', $doc.id -replace '\{\{TITLE\}\}', ($doc.title -replace '&', '&amp;')
+    $fav32 = "favicon-32.png"
+    $fav192 = "favicon-192.png"
+    $favApple = "apple-touch-icon.png"
+    if ($doc.id -eq 'huntress-cookbook') {
+        $fav32 = "cookbook-favicon-32.png"
+        $fav192 = "cookbook-favicon-192.png"
+        $favApple = "cookbook-apple-touch-icon.png"
+    }
+    $html = $sectionTemplate `
+        -replace '\{\{ID\}\}', $doc.id `
+        -replace '\{\{TITLE\}\}', ($doc.title -replace '&', '&amp;') `
+        -replace '\{\{FAVICON_32\}\}', $fav32 `
+        -replace '\{\{FAVICON_192\}\}', $fav192 `
+        -replace '\{\{FAVICON_APPLE\}\}', $favApple
     [IO.File]::WriteAllText((Join-Path $sectionsDir "$($doc.id).html"), $html, $utf8)
 }
 

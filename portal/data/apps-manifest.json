@@ -5,8 +5,8 @@
                      "title":  "Active Huntress",
                      "kind":  "mobile",
                      "visible":  true,
-                     "repoPath":  "C:\\Users\\TheSlyFox\\source\\repos\\Active_Huntress-Mobile",
-                     "mobileRoot":  "C:\\Users\\TheSlyFox\\source\\repos\\Active_Huntress-Mobile",
+                     "repoPath":  "D:\\repos\\Active_Huntress Mobile",
+                     "mobileRoot":  "D:\\repos\\Active_Huntress Mobile",
                      "readme":  "README.md",
                      "apkSource":  "build\\app\\outputs\\flutter-apk\\app-release.apk",
                      "apkFileName":  "active-huntress.apk",
@@ -20,7 +20,9 @@
                      "beta":  {
                                   "apkFileName":  "active-huntress-beta.apk",
                                   "apkSource":  "build\\app\\outputs\\flutter-apk\\app-release.apk"
-                              }
+                              },
+                     "codeProtected":  true,
+                     "unlockCode":  "0657"
                  },
                  {
                      "id":  "huntresscookbook-mobile",
@@ -33,6 +35,8 @@
                      "apkSource":  "build\\app\\outputs\\flutter-apk\\app-release.apk",
                      "apkFileName":  "huntresscookbook-mobile.apk",
                      "status":  "live",
+                     "codeProtected":  true,
+                     "unlockCode":  "0657",
                      "summaryOverride":  "Offline Flutter cookbook: browse chapters, read recipes with photos, search ingredients, edit locally, and view dietary guides—no network required after install.",
                      "tags":  [
                                   "flutter",
@@ -88,6 +92,25 @@
                      "beta":  {
                                   "packageFileName":  "streamforge-win-x64-beta.zip"
                               }
+                 },
+                 {
+                     "id":  "wid",
+                     "title":  "What Was I Doing",
+                     "kind":  "tool",
+                     "visible":  true,
+                     "repoPath":  "D:\\repos\\wid\\Wid",
+                     "projectPath":  "D:\\repos\\wid\\Wid\\Wid.csproj",
+                     "readme":  "README.md",
+                     "apkSource":  "",
+                     "apkFileName":  "",
+                     "packageFileName":  "wid-win-x64.zip",
+                     "status":  "live",
+                     "tags":  [
+                                  "tool",
+                                  "windows"
+                              ],
+                     "note":  "Personal Windows time tracker — start/stop activities, manual entries, and daily/weekly reports. Data stays on your PC. Extract the zip and run WID.exe.",
+                     "publishedAt":  "2026-08-27"
                  }
              ]
 }
