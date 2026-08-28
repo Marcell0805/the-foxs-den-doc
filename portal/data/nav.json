@@ -39,8 +39,18 @@
                       "status":  "beta"
                   },
                   {
-                      "id":  "wid",
+                      "id":  "ffs",
                       "num":  5,
+                      "file":  "ffs.html",
+                      "label":  "FFS — Financial Forecasting System",
+                      "available":  true,
+                      "kind":  "mobile",
+                      "status":  "beta",
+                      "codeProtected":  true
+                  },
+                  {
+                      "id":  "wid",
+                      "num":  6,
                       "file":  "wid.html",
                       "label":  "What Was I Doing",
                       "available":  true,
