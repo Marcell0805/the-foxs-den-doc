@@ -13,7 +13,7 @@
     "summary":  "Offline Flutter cookbook: browse chapters, read recipes with photos, search ingredients, edit locally, and view dietary guides—no network required after install.",
     "blocks":  [
                    {
-                       "content":  "Offline Flutter client for the Huntress Cookbook. Browse chapters, read recipes with photos, search ingredients, edit recipes locally, and view dietary guides ΓÇö no network required after install.",
+                       "content":  "Offline Flutter client for the Huntress Cookbook. Browse chapters, read recipes with photos, search ingredients, edit recipes locally, and view dietary guides — no network required after install.",
                        "heading":  "About",
                        "bullets":  [
 
