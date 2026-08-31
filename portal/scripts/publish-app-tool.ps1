@@ -135,3 +135,10 @@ if ($Status) {
     Write-JsonFile $manifestPath $manifest
     Write-Host "Updated apps-manifest.json status for $AppId -> $Status"
 }
+
+$iconScript = Join-Path $PSScriptRoot "sync-portal-icon.ps1"
+if (Test-Path $iconScript) {
+    $repoPath = if ($app.repoPath) { [string]$app.repoPath } else { "" }
+    $projectPath = if ($app.projectPath) { [string]$app.projectPath } else { "" }
+    & $iconScript -AppId $AppId -PortalRoot $PortalRoot -SourceRoot $repoPath -Kind "tool" -ProjectPath $projectPath
+}

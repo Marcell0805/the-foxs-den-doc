@@ -8,7 +8,8 @@
                       "available":  true,
                       "kind":  "mobile",
                       "status":  "live",
-                      "codeProtected":  true
+                      "codeProtected":  true,
+                      "icon":  "icons/active-huntress.png"
                   },
                   {
                       "id":  "huntresscookbook-mobile",
@@ -18,7 +19,8 @@
                       "available":  true,
                       "kind":  "mobile",
                       "status":  "live",
-                      "codeProtected":  true
+                      "codeProtected":  true,
+                      "icon":  "icons/huntresscookbook-mobile.png"
                   },
                   {
                       "id":  "huntress-cookbook",
@@ -27,7 +29,8 @@
                       "label":  "The Huntress Cookbook",
                       "available":  true,
                       "kind":  "website",
-                      "status":  "live"
+                      "status":  "live",
+                      "icon":  "icons/huntress-cookbook.png"
                   },
                   {
                       "id":  "streamforge",
@@ -36,7 +39,8 @@
                       "label":  "StreamForge",
                       "available":  true,
                       "kind":  "tool",
-                      "status":  "live"
+                      "status":  "live",
+                      "icon":  "icons/streamforge.png"
                   },
                   {
                       "id":  "ffs",
@@ -46,7 +50,8 @@
                       "available":  true,
                       "kind":  "mobile",
                       "status":  "beta",
-                      "codeProtected":  true
+                      "codeProtected":  true,
+                      "icon":  "icons/ffs.png"
                   },
                   {
                       "id":  "wid",
@@ -55,7 +60,8 @@
                       "label":  "What Was I Doing",
                       "available":  true,
                       "kind":  "tool",
-                      "status":  "live"
+                      "status":  "live",
+                      "icon":  "icons/wid.png"
                   }
               ]
 }

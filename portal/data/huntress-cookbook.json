@@ -27,6 +27,9 @@
     "build":  null,
     "releaseNotes":  "Gluten-free, onion-free, IBS-conscious recipes for the Huntress — browse chapters online.",
     "updateCheckUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/huntress-cookbook/mobile-version.json",
+    "icon":  "icons/huntress-cookbook.png",
+    "platform":  "Website",
+    "whatsNew":  "Gluten-free, onion-free, IBS-conscious recipes for the Huntress — browse chapters online.",
     "externalUrl":  "https://marcell0805.github.io/huntress-cookbook/",
     "publishedAt":  "2026-07-22",
     "note":  "Gluten-free, onion-free, IBS-conscious recipes for the Huntress — browse chapters online."

@@ -289,6 +289,11 @@ $versionPath = Join-Path $versionDir "mobile-version.json"
 Write-JsonFile $versionPath $versionManifest
 Write-Host "Wrote $versionPath (build $buildNumber, version $versionName, $sizeLabel)"
 
+$iconScript = Join-Path $PSScriptRoot "sync-portal-icon.ps1"
+if (Test-Path $iconScript) {
+    & $iconScript -AppId $AppId -PortalRoot $PortalRoot -SourceRoot $MobileRoot -Kind "mobile"
+}
+
 Write-Host ""
 Write-Host "Done. Run build-portal.ps1, then commit portal/downloads/ and push for GitHub Pages."
 Write-Host "  channel=$Channel enableDemoData=$enableDemoData"

@@ -33,6 +33,23 @@
                    "prompt":  "Enter the 4-digit code to continue",
                    "storageKey":  "the_fox_s_den_huntresscookbook-mobile_unlock"
                },
+    "icon":  "icons/huntresscookbook-mobile.png",
+    "platform":  "Android",
+    "features":  [
+                     {
+                         "title":  "Offline Cookbook",
+                         "description":  "Browse chapters and recipes without a network connection."
+                     },
+                     {
+                         "title":  "Family Recipes",
+                         "description":  "Add recipes locally; edit or delete only what you added."
+                     },
+                     {
+                         "title":  "Search \u0026 Guides",
+                         "description":  "Find ingredients quickly and view dietary guides in-app."
+                     }
+                 ],
+    "whatsNew":  "All family members can add recipes\nOnly the person who added a recipe can edit or delete it\nBundled cookbook recipes stay MasterChef / Huntress editable\nIn-app update check is more reliable on real phones\nSafer APK download with timeout and cleaner retry",
     "apk":  {
                 "sizeLabel":  "63.8 MB",
                 "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/huntresscookbook-mobile.apk",

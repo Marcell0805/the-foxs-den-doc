@@ -34,6 +34,27 @@
                    "prompt":  "Enter the 4-digit code to continue",
                    "storageKey":  "the_fox_s_den_ffs_unlock"
                },
+    "icon":  "icons/ffs.png",
+    "platform":  "Android",
+    "features":  [
+                     {
+                         "title":  "Local-First Finance",
+                         "description":  "Track transactions and reports on-device without a cloud dependency."
+                     },
+                     {
+                         "title":  "Goals \u0026 Reports",
+                         "description":  "Set financial goals and review progress with built-in reports."
+                     },
+                     {
+                         "title":  "Receipt OCR",
+                         "description":  "Capture receipt details with on-device text recognition."
+                     },
+                     {
+                         "title":  "CSV Export",
+                         "description":  "Export your data when you need it elsewhere."
+                     }
+                 ],
+    "whatsNew":  "Version 1.0.0 — Initial release for testing\n• Local-first transactions and reports\n• Goals scaffold\n• OCR receipt entry\n• CSV export",
     "apk":  {
                 "sizeLabel":  "84.3 MB",
                 "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs.apk",

@@ -24,8 +24,13 @@ Edit [`portal/data/apps-manifest.json`](portal/data/apps-manifest.json). Each en
 | `kind` | `mobile` (default), `website`, or `tool` — groups the landing list |
 | `visible` | Default `true`. Set `false` to hide from nav, landing, and search |
 | `available` | Clickable vs “coming soon” (also false when Live APK missing unless `allowWithoutApk`) |
-| `status` | Badge: `live`, `beta`, `in_progress`, `planned` — set in manifest or via publish `-Status` / Fox Publish **Portal status** |
-| `codeProtected` | Optional. When `true`, show a lock on landing/sidebar and require a code before Download / Open site |
+| `status` | Badge: `live`, `beta`, `in_progress`, `planned`, `archived` — set in manifest or via publish `-Status` / Fox Publish **Portal status** |
+| `icon` | Optional path under `portal/assets/` (default: `icons/<id>.png` if that file exists) |
+| `features` | Optional `[{ "title": "...", "description": "..." }]` — shown on the product page Features grid |
+| `whatsNew` | Optional human-readable changelog (falls back to release notes from publish) |
+| `googlePlayUrl` | Optional Play Store URL; when omitted, mobile listings show **Google Play — Coming Soon** |
+| `platform` | Optional display label (default: Android / Windows / Website from `kind`) |
+| `codeProtected` | Optional. When `true`, show the fox-lock on landing/sidebar and require a code before Download / Open site |
 | `unlockCode` | Optional 4-digit PIN used by the soft client-side gate (also set via Fox Publish **Code protected**) |
 | `summaryOverride` | Optional clean About blurb (preferred over raw README text) |
 | `repoPath` / `mobileRoot` | Paths for README + publish |
@@ -36,7 +41,13 @@ Edit [`portal/data/apps-manifest.json`](portal/data/apps-manifest.json). Each en
 
 **README convention:** optional `## Description`; otherwise the first paragraph after the title is the summary. If the README path is missing on the build machine, `build-portal.ps1` **keeps existing About/blocks** instead of wiping them to “Details coming soon.”
 
-**Contact / About** live in `portal/data/portal-settings.json` (`contact`, `aboutBlurb`). `build-portal.ps1` regenerates `about.json` and appends About to nav after apps (unless `showAbout` is false).
+**Contact / About** live in `portal/data/portal-settings.json` (`contact`, `aboutBlurb`, `tagline`, `descriptor`). `build-portal.ps1` regenerates `about.json` and appends About to nav after apps (unless `showAbout` is false).
+
+### Icons and screenshots
+
+- **Project icons:** place `portal/assets/icons/<app-id>.png` (square, ~96px). Override with `"icon": "icons/custom.png"` in the manifest. **Fox Publish** and `publish-app-mobile.ps1` / `publish-app-tool.ps1` run `sync-portal-icon.ps1` to copy icons from the source repo automatically (Flutter `assets/branding/icon.png`, Android launcher, WinForms `Assets/*.ico`, etc.). `build-portal.ps1` backfills missing icons when the source repo is available on the build machine.
+- **Screenshots:** add PNG/JPG/WebP files under `portal/assets/screenshots/<app-id>/` — discovered at build time and shown in a horizontal carousel on the product page.
+- **Fox lock:** protected listings use `portal/assets/fox-lock*.png` (inline + unlock modal).
 
 Set **`pagesBaseUrl`** in `portal-settings.json` to your GitHub Pages base (no trailing slash).
 

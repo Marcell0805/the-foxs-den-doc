@@ -1,6 +1,7 @@
 {
   "portalName": "The Fox's Den",
-  "tagline": "Websites and mobile apps to browse, install, and try.",
+  "tagline": "Apps, websites & tools built by Marcell",
+  "descriptor": "Independent projects & experiments",
   "version": "1.0",
   "pagesBaseUrl": "https://marcell0805.github.io/the-foxs-den-doc",
   "showAbout": false,
@@ -16,7 +17,7 @@
     "T-SQL"
   ],
   "contact": {
-    "email": "marcellvanniekerk@gmail.com",
+    "email": "marcellvn.dev@gmail.com",
     "github": "https://github.com/Marcell0805",
     "linkedin": "https://www.linkedin.com/in/marcell-van-niekerk-764649163/"
   },

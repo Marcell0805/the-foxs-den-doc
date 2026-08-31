@@ -172,6 +172,50 @@ function Format-ApkSize([long]$Bytes) {
     return ("{0:N2} GB" -f ($Bytes / 1GB))
 }
 
+function Resolve-AppIcon {
+    param(
+        [string]$AssetsDir,
+        [string]$AppId,
+        $App
+    )
+    $candidates = @()
+    if ($App.icon) { $candidates += [string]$App.icon }
+    $candidates += "icons/$AppId.png"
+    foreach ($rel in $candidates) {
+        $rel = ($rel -replace '\\', '/').TrimStart('/')
+        $full = Join-Path $AssetsDir ($rel -replace '/', [IO.Path]::DirectorySeparatorChar)
+        if (Test-Path $full) { return $rel }
+    }
+    if (Test-Path (Join-Path $AssetsDir "logo.png")) { return "logo.png" }
+    return "logo.svg"
+}
+
+function Get-AppScreenshots {
+    param(
+        [string]$AssetsDir,
+        [string]$AppId
+    )
+    $shotDir = Join-Path $AssetsDir "screenshots\$AppId"
+    if (-not (Test-Path $shotDir)) { return @() }
+    $exts = @('.png', '.jpg', '.jpeg', '.webp')
+    $shots = Get-ChildItem $shotDir -File | Where-Object {
+        $exts -contains $_.Extension.ToLower()
+    } | Sort-Object Name
+    $result = [System.Collections.Generic.List[string]]::new()
+    foreach ($s in $shots) {
+        $result.Add("screenshots/$AppId/$($s.Name)")
+    }
+    return $result.ToArray()
+}
+
+function Get-DefaultPlatform([string]$Kind) {
+    switch ($Kind) {
+        'website' { return 'Website' }
+        'tool' { return 'Windows' }
+        default { return 'Android' }
+    }
+}
+
 function Get-ChannelVersionInfo {
     param(
         [string]$DownloadsDir,
@@ -486,6 +530,29 @@ function Sync-AppsFromManifest {
             }
         }
 
+        $assetsDir = Join-Path (Split-Path $DataDir -Parent) "assets"
+        $iconRel = Resolve-AppIcon -AssetsDir $assetsDir -AppId $id -App $app
+        if (-not $iconRel -or $iconRel -eq "logo.png" -or $iconRel -eq "logo.svg") {
+            $iconScript = Join-Path $PSScriptRoot "sync-portal-icon.ps1"
+            if (Test-Path $iconScript) {
+                $srcRoot = if ($repoPath) { $repoPath } else { "" }
+                $projPath = if ($app.projectPath) { [string]$app.projectPath } else { "" }
+                & $iconScript -AppId $id -PortalRoot (Split-Path $DataDir -Parent) -SourceRoot $srcRoot -Kind $kind -ProjectPath $projPath -Quiet | Out-Null
+                $iconRel = Resolve-AppIcon -AssetsDir $assetsDir -AppId $id -App $app
+            }
+        }
+        if ($iconRel) { $section.icon = $iconRel }
+        $section.platform = if ($app.platform) { [string]$app.platform } else { Get-DefaultPlatform $kind }
+        if ($app.features) { $section.features = @($app.features) }
+        if ($app.whatsNew) {
+            $section.whatsNew = [string]$app.whatsNew
+        } elseif ($section.releaseNotes) {
+            $section.whatsNew = [string]$section.releaseNotes
+        }
+        if ($app.googlePlayUrl) { $section.googlePlayUrl = [string]$app.googlePlayUrl }
+        $shots = Get-AppScreenshots -AssetsDir $assetsDir -AppId $id
+        if ($shots.Count -gt 0) { $section.screenshots = $shots }
+
         if ($kind -eq 'website') {
             if ($app.externalUrl) {
                 $section.externalUrl = $app.externalUrl
@@ -599,6 +666,7 @@ function Sync-AppsFromManifest {
             status = $section.status
         }
         if ($codeProtected) { $navItem.codeProtected = $true }
+        if ($iconRel) { $navItem.icon = $iconRel }
         $navItems.Add($navItem)
     }
 
@@ -638,6 +706,13 @@ function Sync-AppsFromManifest {
     if ($doc.searchKeywords) { foreach ($k in $doc.searchKeywords) { $parts.Add($k) } }
     if ($doc.tags) { foreach ($t in $doc.tags) { $parts.Add($t) } }
     if ($doc.version) { $parts.Add($doc.version) }
+    if ($doc.platform) { $parts.Add($doc.platform) }
+    if ($doc.features) {
+        foreach ($f in $doc.features) {
+            if ($f.title) { $parts.Add($f.title) }
+            if ($f.description) { $parts.Add($f.description) }
+        }
+    }
     if ($doc.blocks) {
         foreach ($b in $doc.blocks) {
             if ($b.heading) { $parts.Add($b.heading) }
@@ -723,6 +798,20 @@ foreach ($key in ($sections.Keys | Sort-Object)) {
     $sectionParts += "`"$key`":$sectionJson"
 }
 $sectionsJsObject = '{' + ($sectionParts -join ',') + '}'
+
+$assetsDir = Join-Path $PortalRoot "assets"
+$foxLockPath = Join-Path $assetsDir "fox-lock.png"
+$assetVersion = "1"
+if (Test-Path $foxLockPath) {
+    $assetSha = [System.Security.Cryptography.SHA256]::Create()
+    try {
+        $foxHashBytes = $assetSha.ComputeHash([IO.File]::ReadAllBytes($foxLockPath))
+        $assetVersion = ([BitConverter]::ToString($foxHashBytes) -replace '-', '').Substring(0, 8).ToLowerInvariant()
+    } finally {
+        $assetSha.Dispose()
+    }
+}
+$settings | Add-Member -NotePropertyName assetVersion -NotePropertyValue $assetVersion -Force
 
 $settingsJson = ($settings | ConvertTo-Json -Depth 20 -Compress)
 # When About is hidden, strip personal contact fields from the public portal-data bundle

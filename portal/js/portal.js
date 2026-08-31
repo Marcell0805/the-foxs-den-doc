@@ -10,8 +10,60 @@
   function statusBadge(status) {
     if (status === 'live') return '<span class="status-badge status-live">Live</span>';
     if (status === 'beta') return '<span class="status-badge status-beta">Beta</span>';
-    if (status === 'in_progress') return '<span class="status-badge status-progress">In Progress</span>';
+    if (status === 'in_progress') return '<span class="status-badge status-progress">In Development</span>';
+    if (status === 'archived') return '<span class="status-badge status-archived">Archived</span>';
     return '<span class="status-badge status-planned">Planned</span>';
+  }
+
+  function assetsPrefix() {
+    var scope = document.body.getAttribute('data-nav-scope') || 'landing';
+    return scope === 'section' ? '../assets/' : 'assets/';
+  }
+
+  function foxLockQuery() {
+    var s = window.DELTACORE_PORTAL && window.DELTACORE_PORTAL.settings;
+    return s && s.assetVersion ? '?v=' + s.assetVersion : '';
+  }
+
+  function foxLockHtml(modal) {
+    var size = modal ? 'fox-lock-64.png' : 'fox-lock-24.png';
+    var px = modal ? '64' : '24';
+    var cls = 'fox-lock' + (modal ? ' fox-lock--modal' : '');
+    return '<img class="' + cls + '" src="' + esc(assetsPrefix() + size + foxLockQuery()) + '" alt="Code required" title="Code required" width="' + px + '" height="' + px + '">';
+  }
+
+  function appIconHtml(icon, label) {
+    var src = assetsPrefix() + (icon || 'logo.png');
+    return '<img class="app-icon" src="' + esc(src) + '" alt="" width="48" height="48" loading="lazy"' +
+      (label ? ' title="' + esc(label) + '"' : '') + '>';
+  }
+
+  function productIconHtml(icon, label) {
+    var src = assetsPrefix() + (icon || 'logo.png');
+    return '<img class="product-icon" src="' + esc(src) + '" alt="" width="72" height="72" loading="lazy"' +
+      (label ? ' title="' + esc(label) + '"' : '') + '>';
+  }
+
+  function formatSizeLabel(apk) {
+    if (!apk) return '';
+    if (apk.sizeLabel) return String(apk.sizeLabel);
+    if (apk.sizeBytes != null && apk.sizeBytes !== '') {
+      var n = Number(apk.sizeBytes);
+      if (!isNaN(n) && n > 0) {
+        if (n < 1024) return n + ' B';
+        if (n < 1024 * 1024) return (n / 1024).toFixed(1) + ' KB';
+        if (n < 1024 * 1024 * 1024) return (n / (1024 * 1024)).toFixed(1) + ' MB';
+        return (n / (1024 * 1024 * 1024)).toFixed(2) + ' GB';
+      }
+    }
+    return '';
+  }
+
+  function defaultPlatform(section) {
+    if (section.platform) return section.platform;
+    if (section.kind === 'website') return 'Website';
+    if (section.kind === 'tool') return 'Windows';
+    return 'Android';
   }
 
   function getSettings() {
@@ -115,13 +167,15 @@
     html += '<ol>';
     items.forEach(function (item, i) {
       var label = (i + 1) + '. ' + item.label;
-      var lock = item.codeProtected ? ' <span class="code-lock" title="Code required" aria-label="Code required"></span>' : '';
+      var lock = item.codeProtected ? foxLockHtml(false) : '';
+      var badge = statusBadge(item.status || 'live');
+      var icon = item.icon ? appIconHtml(item.icon, item.label) : '';
       if (item.id === active) {
-        html += '<li class="active">' + esc(label) + lock + '</li>';
+        html += '<li class="active"><span class="sidebar-item-inner">' + icon + '<span class="sidebar-item-text">' + esc(label) + '</span><span class="sidebar-item-badges">' + lock + badge + '</span></span></li>';
       } else if (item.available && item.file) {
-        html += '<li><a href="' + prefix + item.file + '">' + esc(label) + lock + '</a></li>';
+        html += '<li><a href="' + prefix + item.file + '" class="sidebar-item-link"><span class="sidebar-item-inner">' + icon + '<span class="sidebar-item-text">' + esc(label) + '</span><span class="sidebar-item-badges">' + lock + badge + '</span></span></a></li>';
       } else {
-        html += '<li class="unavailable">' + esc(label) + lock + ' <em>(soon)</em></li>';
+        html += '<li class="unavailable"><span class="sidebar-item-inner">' + icon + '<span class="sidebar-item-text">' + esc(label) + '</span><span class="sidebar-item-badges">' + lock + badge + ' <em>(soon)</em></span></span></li>';
       }
     });
     html += '</ol></div>';
@@ -185,25 +239,19 @@
     return t;
   }
 
-  function renderDownloadChannel(apk, helpHref, sectionId) {
+  function renderDownloadChannel(apk, helpHref, sectionId, hideMeta) {
     if (!apk || !apk.downloadUrl) return '';
     var parts = [];
-    if (apk.version) {
-      var ver = 'v' + String(apk.version);
-      if (apk.build != null && apk.build !== '') ver += ' (build ' + String(apk.build) + ')';
-      parts.push(ver);
-    }
-    if (apk.sizeLabel) parts.push(String(apk.sizeLabel));
-    else if (apk.sizeBytes != null && apk.sizeBytes !== '') {
-      var n = Number(apk.sizeBytes);
-      if (!isNaN(n) && n > 0) {
-        if (n < 1024) parts.push(n + ' B');
-        else if (n < 1024 * 1024) parts.push((n / 1024).toFixed(1) + ' KB');
-        else if (n < 1024 * 1024 * 1024) parts.push((n / (1024 * 1024)).toFixed(1) + ' MB');
-        else parts.push((n / (1024 * 1024 * 1024)).toFixed(2) + ' GB');
+    if (!hideMeta) {
+      if (apk.version) {
+        var ver = 'v' + String(apk.version);
+        if (apk.build != null && apk.build !== '') ver += ' (build ' + String(apk.build) + ')';
+        parts.push(ver);
       }
+      var size = formatSizeLabel(apk);
+      if (size) parts.push(size);
     }
-    var meta = parts.length
+    var meta = (!hideMeta && parts.length)
       ? '<span class="app-channel-meta">' + esc(parts.join(' · ')) + '</span>'
       : '';
     var disabled = apk.available === false;
@@ -248,6 +296,7 @@
     gate.className = 'code-gate';
     gate.innerHTML =
       '<div class="code-gate-card" role="dialog" aria-modal="true" aria-labelledby="code-gate-title">' +
+        '<div class="code-gate-brand">' + foxLockHtml(true) + '</div>' +
         '<h2 id="code-gate-title" class="code-gate-title">' + esc(section.title || 'Protected') + '</h2>' +
         '<p class="code-gate-prompt">' + esc(prompt) + '</p>' +
         '<form class="code-gate-form" id="code-gate-form">' +
@@ -501,6 +550,123 @@
     return html;
   }
 
+  function renderProductHeader(section) {
+    return '<header class="product-header">' +
+      productIconHtml(section.icon, section.title) +
+      '<div class="product-header-text">' +
+        '<div class="product-title-row">' +
+          '<h1>' + esc(section.title) + '</h1>' +
+          statusBadge(section.status) +
+        '</div>' +
+        (section.summary ? '<p class="product-tagline">' + esc(section.summary) + '</p>' : '') +
+      '</div>' +
+    '</header>';
+  }
+
+  function renderProductMeta(section) {
+    var parts = [defaultPlatform(section)];
+    if (section.version) {
+      var ver = 'v' + String(section.version);
+      if (section.build != null && section.build !== '') ver += ' (Build ' + String(section.build) + ')';
+      parts.push(ver);
+    }
+    var size = '';
+    if (section.apk) size = formatSizeLabel(section.apk);
+    else if (section.package) size = formatSizeLabel(section.package);
+    if (size) parts.push(size);
+    if (!parts.length) return '';
+    return '<p class="product-meta">' + esc(parts.join(' · ')) + '</p>';
+  }
+
+  function renderGooglePlayButton(section) {
+    if (section.kind !== 'mobile') return '';
+    var gate = section.codeProtected ? ' data-code-gate="' + esc(section.id) + '"' : '';
+    if (section.googlePlayUrl) {
+      return '<a href="' + esc(section.googlePlayUrl) + '" class="app-download-btn app-download-btn-play" target="_blank" rel="noopener"' + gate + '>Get it on Google Play</a>';
+    }
+    return '<span class="app-download-btn app-download-btn-play is-disabled" aria-disabled="true" title="Google Play availability coming soon">Google Play — Coming Soon</span>';
+  }
+
+  function renderProductActions(section) {
+    var html = '<div class="product-actions">';
+    var gateId = section.codeProtected ? section.id : null;
+    if (section.kind === 'website' && section.externalUrl) {
+      html += '<a href="' + esc(section.externalUrl) + '" class="app-download-btn" target="_blank" rel="noopener"' +
+        (gateId ? ' data-code-gate="' + esc(gateId) + '"' : '') + '>Open site</a>';
+    } else if (section.kind === 'tool') {
+      if (section.package) html += renderDownloadChannel(section.package, null, gateId, true);
+      if (section.packageBeta) html += renderDownloadChannel(section.packageBeta, null, gateId, true);
+    } else {
+      if (section.apk) html += renderDownloadChannel(section.apk, '../downloads/README.md', gateId, true);
+      if (section.apkBeta) html += renderDownloadChannel(section.apkBeta, '../downloads/README.md', gateId, true);
+      html += renderGooglePlayButton(section);
+    }
+    html += '</div>';
+    return html;
+  }
+
+  function renderWhatsNew(section) {
+    var text = section.whatsNew || section.releaseNotes;
+    if (!text) return '';
+    var lines = String(text).split(/\r?\n/).filter(function (l) { return l.trim(); });
+    var html = '<section class="whats-new"><h2>What\'s New</h2>';
+    if (lines.length <= 1) {
+      html += '<p>' + esc(text) + '</p>';
+    } else {
+      html += '<ul>';
+      lines.forEach(function (line) {
+        var item = line.replace(/^[\s•\-]+/, '').trim();
+        if (item) html += '<li>' + esc(item) + '</li>';
+      });
+      html += '</ul>';
+    }
+    html += '</section>';
+    return html;
+  }
+
+  function renderFeatures(section) {
+    var features = section.features || [];
+    if (!features.length) return '';
+    var html = '<section class="features-section"><h2>Features</h2><div class="features-grid">';
+    features.forEach(function (f) {
+      html += '<article class="feature-card">' +
+        '<h3>' + esc(f.title || '') + '</h3>' +
+        '<p>' + esc(f.description || '') + '</p>' +
+      '</article>';
+    });
+    html += '</div></section>';
+    return html;
+  }
+
+  function renderScreenshotCarousel(section) {
+    var shots = section.screenshots || [];
+    if (!shots.length) return '';
+    var prefix = assetsPrefix();
+    var html = '<section class="screenshots-section"><h2>Screenshots</h2>' +
+      '<div class="screenshot-carousel" tabindex="0" role="region" aria-label="Screenshots">';
+    shots.forEach(function (shot, i) {
+      html += '<figure class="screenshot-slide">' +
+        '<img src="' + esc(prefix + shot) + '" alt="Screenshot ' + (i + 1) + '" loading="lazy">' +
+      '</figure>';
+    });
+    html += '</div></section>';
+    return html;
+  }
+
+  function renderTechDetails(section) {
+    var parts = [];
+    if (section.version) {
+      var ver = 'Version ' + String(section.version);
+      if (section.build != null && section.build !== '') ver += ' · Build ' + String(section.build);
+      parts.push(ver);
+    }
+    var size = section.apk ? formatSizeLabel(section.apk) : (section.package ? formatSizeLabel(section.package) : '');
+    if (size) parts.push(size);
+    if (section.publishedAt) parts.push('Published ' + String(section.publishedAt));
+    if (!parts.length) return '';
+    return '<section class="tech-details"><p>' + esc(parts.join(' · ')) + '</p></section>';
+  }
+
   function renderSection() {
     var mount = document.getElementById('section-content');
     var id = document.body.getAttribute('data-section-id');
@@ -520,53 +686,22 @@
       return;
     }
 
-    var html = '<header class="section-header">' +
-      '<h1>' + esc(section.title) + '</h1>' +
-      statusBadge(section.status) +
-      '</header>';
-    if (section.summary) html += '<p class="section-summary">' + esc(section.summary) + '</p>';
-
-    if (section.kind === 'website' && section.externalUrl) {
-      html += '<p class="app-download-wrap">' +
-        '<a href="' + esc(section.externalUrl) + '" class="app-download-btn" target="_blank" rel="noopener"' +
-        (section.codeProtected ? ' data-code-gate="' + esc(section.id) + '"' : '') +
-        '>Open site</a>' +
-        '</p>';
-      var siteMeta = [];
-      if (section.publishedAt) siteMeta.push('Published ' + String(section.publishedAt));
-      if (section.note) siteMeta.push(String(section.note));
-      else if (section.releaseNotes) siteMeta.push(String(section.releaseNotes));
-      if (siteMeta.length) {
-        html += '<p class="app-channel-meta">' + esc(siteMeta.join(' · ')) + '</p>';
-      }
-    } else if (section.kind === 'tool' && (section.package || section.packageBeta)) {
-      html += '<div class="app-download-wrap">';
-      if (section.package) html += renderDownloadChannel(section.package, null, section.codeProtected ? section.id : null);
-      if (section.packageBeta) html += renderDownloadChannel(section.packageBeta, null, section.codeProtected ? section.id : null);
-      html += '</div>';
-      var toolMeta = [];
-      if (section.publishedAt) toolMeta.push('Published ' + String(section.publishedAt));
-      if (section.note) toolMeta.push(String(section.note));
-      else if (section.releaseNotes) toolMeta.push(String(section.releaseNotes));
-      if (toolMeta.length) {
-        html += '<p class="app-channel-meta">' + esc(toolMeta.join(' · ')) + '</p>';
-      }
-      html += '<p class="section-summary">Extract the zip and run the .exe. No installer required.</p>';
-    } else if (section.apk || section.apkBeta) {
-      html += '<div class="app-download-wrap">';
-      if (section.apk) html += renderDownloadChannel(section.apk, '../downloads/README.md', section.codeProtected ? section.id : null);
-      if (section.apkBeta) html += renderDownloadChannel(section.apkBeta, '../downloads/README.md', section.codeProtected ? section.id : null);
-      html += '</div>';
-    } else if (section.version) {
-      html += '<p class="app-version-meta">Version ' + esc(section.version);
-      if (section.build != null && section.build !== '') html += ' (build ' + esc(String(section.build)) + ')';
-      html += '</p>';
-    }
+    var html = renderProductHeader(section);
+    html += renderProductMeta(section);
+    html += renderProductActions(section);
 
     if (id === 'about' && !isAboutVisible()) {
       html += '<p class="section-summary">About is temporarily hidden.</p>';
       mount.innerHTML = html;
       return;
+    }
+
+    html += renderWhatsNew(section);
+    html += renderFeatures(section);
+    html += renderScreenshotCarousel(section);
+
+    if (section.kind === 'tool' && (section.package || section.packageBeta)) {
+      html += '<p class="product-hint">Extract the zip and run the .exe. No installer required.</p>';
     }
 
     if (id === 'about') {
@@ -585,7 +720,18 @@
       html += '</div>';
     }
 
-    (section.blocks || []).forEach(function (b) {
+    var blocks = section.blocks || [];
+    var hasAboutBlocks = blocks.some(function (b) {
+      var blockText = (b.content || '').trim();
+      var summaryText = (section.summary || '').trim();
+      var onlyDupSummary = blockText && summaryText && blockText === summaryText && !(b.bullets && b.bullets.length);
+      return !onlyDupSummary;
+    });
+    if (hasAboutBlocks && id !== 'about') {
+      html += '<section class="about-app-section"><h2>About this app</h2>';
+    }
+
+    blocks.forEach(function (b) {
       if (id === 'about' && b.id === 'contact') return;
       var blockText = (b.content || '').trim();
       var summaryText = (section.summary || '').trim();
@@ -593,7 +739,8 @@
         !(b.bullets && b.bullets.length);
       if (onlyDupSummary) return;
       html += '<section class="content-block" id="' + esc(b.id || '') + '">';
-      if (b.heading) html += '<h2>' + esc(b.heading) + '</h2>';
+      if (b.heading && id === 'about') html += '<h2>' + esc(b.heading) + '</h2>';
+      else if (b.heading && id !== 'about') html += '<h3>' + esc(b.heading) + '</h3>';
       if (b.content) {
         html += '<p>' + (id === 'about' ? linkifyContact(b.content) : esc(b.content)) + '</p>';
       }
@@ -606,6 +753,12 @@
       }
       html += '</section>';
     });
+
+    if (hasAboutBlocks && id !== 'about') {
+      html += '</section>';
+    }
+
+    html += renderTechDetails(section);
     mount.innerHTML = html;
     bindCodeGates(mount, section);
   }
@@ -617,14 +770,19 @@
     var html = '<section class="landing-group"><h2 class="landing-group-title">' + esc(title) + '</h2><ol class="landing-nav">';
     function renderItem(item, index, extra) {
       var n = index + 1;
-      var badge = item.status === 'beta' ? ' <span class="status-badge status-beta">Beta</span>' : '';
-      var lock = item.codeProtected ? ' <span class="code-lock" title="Code required" aria-label="Code required"></span>' : '';
+      var badge = statusBadge(item.status || 'live');
+      var lock = item.codeProtected ? foxLockHtml(false) : '';
+      var icon = item.icon ? appIconHtml(item.icon, item.label) : '';
       var cls = extra ? ' class="landing-nav-extra"' : '';
       var hiddenAttr = extra ? ' hidden' : '';
       if (item.available && item.file) {
-        return '<li' + cls + hiddenAttr + '><a href="sections/' + item.file + '"><span class="landing-nav-label">' + n + '. ' + esc(item.label) + '</span>' + lock + badge + '</a></li>';
+        return '<li' + cls + hiddenAttr + '><a href="sections/' + item.file + '" class="landing-nav-link">' + icon +
+          '<span class="landing-nav-label">' + n + '. ' + esc(item.label) + '</span>' +
+          '<span class="landing-nav-badges">' + lock + badge + '</span></a></li>';
       }
-      return '<li class="unavailable' + (extra ? ' landing-nav-extra' : '') + '"' + hiddenAttr + '><span class="landing-nav-label">' + n + '. ' + esc(item.label) + '</span>' + lock + badge + ' <em>(coming soon)</em></li>';
+      return '<li class="unavailable' + (extra ? ' landing-nav-extra' : '') + '"' + hiddenAttr + '>' + icon +
+        '<span class="landing-nav-label">' + n + '. ' + esc(item.label) + '</span>' +
+        '<span class="landing-nav-badges">' + lock + badge + ' <em>(coming soon)</em></span></li>';
     }
     items.forEach(function (item, i) {
       html += renderItem(item, i, i >= LANDING_GROUP_LIMIT);
@@ -700,6 +858,12 @@
     var settings = getSettings();
     var tagline = document.querySelector('[data-portal-tagline]');
     if (tagline && settings.tagline) tagline.textContent = settings.tagline;
+    var descriptor = document.querySelector('[data-portal-descriptor]');
+    if (descriptor) {
+      var desc = settings.descriptor || '';
+      descriptor.textContent = desc;
+      descriptor.hidden = !desc;
+    }
     var landingTitle = document.querySelector('[data-portal-title]');
     if (landingTitle && settings.portalName) landingTitle.textContent = settings.portalName;
   }

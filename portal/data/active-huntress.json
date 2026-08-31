@@ -34,6 +34,27 @@
                    "prompt":  "Enter the 4-digit code to continue",
                    "storageKey":  "the_fox_s_den_active-huntress_unlock"
                },
+    "icon":  "icons/active-huntress.png",
+    "platform":  "Android",
+    "features":  [
+                     {
+                         "title":  "Offline First",
+                         "description":  "Works without relying on a web API for daily use."
+                     },
+                     {
+                         "title":  "History \u0026 Trends",
+                         "description":  "Track progress and view changes over time."
+                     },
+                     {
+                         "title":  "Backup \u0026 Restore",
+                         "description":  "Keep important data safe and transferable."
+                     },
+                     {
+                         "title":  "Goals / Progression",
+                         "description":  "Support consistency and long-term improvement."
+                     }
+                 ],
+    "whatsNew":  "Version 1.0.0 — Live release\n• Initial live release\n• Workout history tracking\n• Progress trends\n• Backup functionality",
     "apk":  {
                 "sizeLabel":  "55.3 MB",
                 "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/active-huntress.apk",
