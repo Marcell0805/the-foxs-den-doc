@@ -261,9 +261,9 @@
       : '<a href="' + esc(apk.downloadUrl) + '" class="' + btnClass + '" download' +
         (sectionId ? ' data-code-gate="' + esc(sectionId) + '"' : '') +
         '>' + esc(apk.label || 'Download APK') + '</a>';
-    return '<div class="app-channel">' +
+    return '<div class="app-channel app-action-block">' +
       link + meta +
-      (helpHref ? ' <a class="app-install-help" href="' + helpHref + '" target="_blank" rel="noopener">Install help</a>' : '') +
+      (helpHref ? '<a class="app-install-help" href="' + helpHref + '" target="_blank" rel="noopener">Install help</a>' : '') +
       '</div>';
   }
 
@@ -581,10 +581,13 @@
   function renderGooglePlayButton(section) {
     if (section.kind !== 'mobile') return '';
     var gate = section.codeProtected ? ' data-code-gate="' + esc(section.id) + '"' : '';
+    var inner;
     if (section.googlePlayUrl) {
-      return '<a href="' + esc(section.googlePlayUrl) + '" class="app-download-btn app-download-btn-play" target="_blank" rel="noopener"' + gate + '>Get it on Google Play</a>';
+      inner = '<a href="' + esc(section.googlePlayUrl) + '" class="app-download-btn app-download-btn-play" target="_blank" rel="noopener"' + gate + '>Get it on Google Play</a>';
+    } else {
+      inner = '<span class="app-download-btn app-download-btn-play is-disabled" aria-disabled="true" title="Google Play availability coming soon">Google Play — Coming Soon</span>';
     }
-    return '<span class="app-download-btn app-download-btn-play is-disabled" aria-disabled="true" title="Google Play availability coming soon">Google Play — Coming Soon</span>';
+    return '<div class="product-action-block product-action-block--play">' + inner + '</div>';
   }
 
   function renderProductActions(section) {

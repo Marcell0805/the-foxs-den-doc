@@ -381,10 +381,18 @@ a.sidebar-footer-link:hover { color: #fff; }
   color: var(--muted); font-size: .92rem; margin: 0 0 1.25rem;
 }
 .product-actions {
-  display: flex; flex-wrap: wrap; gap: .65rem; align-items: center;
-  margin-bottom: 1.75rem;
+  display: flex; flex-direction: column; gap: 1rem; align-items: stretch;
+  margin-bottom: 1.75rem; max-width: min(100%, 22rem);
 }
-.product-actions .app-channel { margin: 0; }
+.product-actions .app-channel {
+  display: flex; flex-direction: column; align-items: stretch; gap: .4rem;
+  margin: 0; width: 100%;
+}
+.product-actions .app-install-help {
+  font-size: .875rem; align-self: flex-start; margin: 0;
+}
+.product-actions .app-download-btn { width: 100%; box-sizing: border-box; }
+.product-actions .product-action-block--play { margin-top: .5rem; }
 .product-hint {
   color: var(--muted); font-size: .92rem; margin: -0.75rem 0 1.5rem;
 }
