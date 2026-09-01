@@ -5,5 +5,7 @@
     "releaseNotes":  "Initial release for testing",
     "channel":  "live",
     "sizeBytes":  88401444,
-    "apkUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs.apk"
+    "apkUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs.apk",
+    "storeUrl":  "https://play.google.com/store/apps/details?id=dev.marcellvn.ffs",
+    "distribution":  "both"
 }

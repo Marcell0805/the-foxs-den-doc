@@ -485,7 +485,10 @@ function Sync-AppsFromManifest {
         $available = $true
         if ($null -ne $app.available) { $available = [bool]$app.available }
         $allowWithoutApk = [bool]$app.allowWithoutApk -or ($kind -eq 'website')
-        if ($kind -eq 'mobile' -and -not $live.hasApk -and -not $allowWithoutApk) { $available = $false }
+        $playUrl = if ($app.googlePlayUrl) { [string]$app.googlePlayUrl } elseif ($app.playStoreUrl) { [string]$app.playStoreUrl } else { $null }
+        $distribution = if ($app.distribution) { [string]$app.distribution } else { "apk" }
+        if ($kind -eq 'mobile' -and -not $live.hasApk -and -not $allowWithoutApk -and -not $playUrl) { $available = $false }
+        if ($kind -eq 'mobile' -and -not $live.hasApk -and $playUrl) { $available = $true }
         if ($kind -eq 'website' -and -not $app.externalUrl) { $available = $false }
         if ($kind -eq 'tool' -and -not $hasPackage) { $available = $false }
 
@@ -550,6 +553,9 @@ function Sync-AppsFromManifest {
             $section.whatsNew = [string]$section.releaseNotes
         }
         if ($app.googlePlayUrl) { $section.googlePlayUrl = [string]$app.googlePlayUrl }
+        elseif ($app.playStoreUrl) { $section.googlePlayUrl = [string]$app.playStoreUrl }
+        if ($app.distribution) { $section.distribution = [string]$app.distribution }
+        if ($app.packageName) { $section.packageName = [string]$app.packageName }
         $shots = Get-AppScreenshots -AssetsDir $assetsDir -AppId $id
         if ($shots.Count -gt 0) { $section.screenshots = $shots }
 
@@ -619,15 +625,19 @@ function Sync-AppsFromManifest {
                 }
             }
         } else {
-            $section.apk = @{
-                downloadUrl = $live.apkUrl
-                fileName = $apkFileName
-                label = "Download Live APK"
-                channel = "live"
-                version = $live.version
-                build = $live.build
-                sizeBytes = $live.sizeBytes
-                sizeLabel = $live.sizeLabel
+            $hideApk = ($distribution -eq 'store')
+            if (-not $hideApk) {
+                $section.apk = @{
+                    downloadUrl = $live.apkUrl
+                    fileName = $apkFileName
+                    label = "Download Live APK"
+                    channel = "live"
+                    version = $live.version
+                    build = $live.build
+                    sizeBytes = $live.sizeBytes
+                    sizeLabel = $live.sizeLabel
+                    available = $live.hasApk
+                }
             }
         }
 

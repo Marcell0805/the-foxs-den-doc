@@ -10,6 +10,8 @@ Example pattern:
 
 Android shows extra prompts for apps installed outside the Google Play Store. That is normal for personal test builds.
 
+Some apps (for example **FFS**) also offer **Get it on Google Play** on the portal. Play-installed copies update through the Play Store; sideloaded copies still use the APK link and `mobile-version.json` below.
+
 1. Open the app's detail page on the Fox's Den portal and tap **Download APK**, or use the direct link above.
 2. Open the downloaded file (Chrome, Files, or Google Drive).
 3. If asked, allow **Install unknown apps** for that app.

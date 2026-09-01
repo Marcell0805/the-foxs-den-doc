@@ -55,14 +55,18 @@
                      }
                  ],
     "whatsNew":  "Version 1.0.0 — Initial release for testing\n• Local-first transactions and reports\n• Goals scaffold\n• OCR receipt entry\n• CSV export",
+    "googlePlayUrl":  "https://play.google.com/store/apps/details?id=dev.marcellvn.ffs",
+    "distribution":  "both",
+    "packageName":  "dev.marcellvn.ffs",
     "apk":  {
-                "sizeLabel":  "84.3 MB",
                 "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs.apk",
-                "channel":  "live",
-                "fileName":  "ffs.apk",
                 "build":  2,
+                "fileName":  "ffs.apk",
                 "version":  "1.0.0",
                 "label":  "Download Live APK",
+                "available":  true,
+                "channel":  "live",
+                "sizeLabel":  "84,3 MB",
                 "sizeBytes":  88401444
             }
 }
