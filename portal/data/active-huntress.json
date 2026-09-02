@@ -63,7 +63,7 @@
                 "label":  "Download Live APK",
                 "available":  true,
                 "channel":  "live",
-                "sizeLabel":  "55,3 MB",
+                "sizeLabel":  "55.3 MB",
                 "sizeBytes":  58023145
             },
     "apkBeta":  {
@@ -73,7 +73,7 @@
                     "version":  "1.0.0",
                     "label":  "Download Beta APK",
                     "available":  true,
-                    "sizeLabel":  "55,3 MB",
+                    "sizeLabel":  "55.3 MB",
                     "channel":  "beta",
                     "releaseNotes":  "Beta",
                     "sizeBytes":  58023145,

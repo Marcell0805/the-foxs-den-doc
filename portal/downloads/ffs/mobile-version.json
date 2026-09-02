@@ -1,11 +1,11 @@
 {
+    "channel":  "live",
+    "releaseNotes":  "FFS 1.0.0 — Internal test build\n\n• Local-first transactions, reports, and goals\n• Home dashboard with spending overview\n• Receipt capture with on-device OCR\n• CSV export and biometric app lock\n• Notification capture scaffold (demo bank parser)\n\nThis is an internal testing release. Data stays on your device.",
+    "sizeLabel":  "84.4 MB",
+    "storeUrl":  "https://play.google.com/store/apps/details?id=dev.marcellvn.ffs",
     "build":  2,
     "version":  "1.0.0",
-    "sizeLabel":  "84.3 MB",
-    "releaseNotes":  "Initial release for testing",
-    "channel":  "live",
-    "sizeBytes":  88401444,
     "apkUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs.apk",
-    "storeUrl":  "https://play.google.com/store/apps/details?id=dev.marcellvn.ffs",
-    "distribution":  "both"
+    "distribution":  "both",
+    "sizeBytes":  88529252
 }

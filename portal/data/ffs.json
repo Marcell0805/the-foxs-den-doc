@@ -25,7 +25,7 @@
     "sidebarNote":  "Official APK is hosted on GitHub Pages.",
     "version":  "1.0.0",
     "build":  2,
-    "releaseNotes":  "Initial release for testing",
+    "releaseNotes":  "FFS 1.0.0 — Internal test build\n\n• Local-first transactions, reports, and goals\n• Home dashboard with spending overview\n• Receipt capture with on-device OCR\n• CSV export and biometric app lock\n• Notification capture scaffold (demo bank parser)\n\nThis is an internal testing release. Data stays on your device.",
     "updateCheckUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs/mobile-version.json",
     "codeProtected":  true,
     "unlock":  {
@@ -66,7 +66,7 @@
                 "label":  "Download Live APK",
                 "available":  true,
                 "channel":  "live",
-                "sizeLabel":  "84,3 MB",
-                "sizeBytes":  88401444
+                "sizeLabel":  "84.4 MB",
+                "sizeBytes":  88529252
             }
 }

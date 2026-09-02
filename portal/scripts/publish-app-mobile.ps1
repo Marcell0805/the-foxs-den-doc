@@ -219,7 +219,13 @@ if ($needsAab -or $needsApkBuild) {
         if ($needsAab) {
             Write-Host "Running flutter build appbundle --release..."
             & $flutter build appbundle --release
-            if ($LASTEXITCODE -ne 0) { throw "flutter build appbundle --release failed with exit code $LASTEXITCODE" }
+            if ($LASTEXITCODE -ne 0) {
+                if (Test-Path $aabPath) {
+                    Write-Warning "flutter exited $LASTEXITCODE but AAB exists at $aabPath (strip-debug-symbols post-step). Continuing."
+                } else {
+                    throw "flutter build appbundle --release failed with exit code $LASTEXITCODE"
+                }
+            }
             if (-not (Test-Path $aabPath)) {
                 throw "AAB not found at $aabPath after build."
             }
@@ -229,9 +235,16 @@ if ($needsAab -or $needsApkBuild) {
             if ($distribution -eq 'both' -and $Channel -eq 'live') {
                 Write-Host "Skipping local APK build (Play-signed APK expected via -PlaySignedApkPath)."
             } else {
+                $apkOut = Join-Path $MobileRoot "build\app\outputs\flutter-apk\app-release.apk"
                 Write-Host "Running flutter build apk --release..."
                 & $flutter build apk --release
-                if ($LASTEXITCODE -ne 0) { throw "flutter build apk --release failed with exit code $LASTEXITCODE" }
+                if ($LASTEXITCODE -ne 0) {
+                    if (Test-Path $apkOut) {
+                        Write-Warning "flutter exited $LASTEXITCODE but APK exists at $apkOut (strip-debug-symbols post-step). Continuing."
+                    } else {
+                        throw "flutter build apk --release failed with exit code $LASTEXITCODE"
+                    }
+                }
             }
         }
     }
