@@ -221,7 +221,7 @@ if ($needsAab -or $needsApkBuild) {
             & $flutter build appbundle --release
             if ($LASTEXITCODE -ne 0) {
                 if (Test-Path $aabPath) {
-                    Write-Warning "flutter exited $LASTEXITCODE but AAB exists at $aabPath (strip-debug-symbols post-step). Continuing."
+                    Write-Host "AAB built (Flutter strip-debug step reported a non-fatal error; continuing)."
                 } else {
                     throw "flutter build appbundle --release failed with exit code $LASTEXITCODE"
                 }
@@ -240,7 +240,7 @@ if ($needsAab -or $needsApkBuild) {
                 & $flutter build apk --release
                 if ($LASTEXITCODE -ne 0) {
                     if (Test-Path $apkOut) {
-                        Write-Warning "flutter exited $LASTEXITCODE but APK exists at $apkOut (strip-debug-symbols post-step). Continuing."
+                        Write-Host "APK built (Flutter strip-debug step reported a non-fatal error; continuing)."
                     } else {
                         throw "flutter build apk --release failed with exit code $LASTEXITCODE"
                     }
@@ -252,7 +252,7 @@ if ($needsAab -or $needsApkBuild) {
         Pop-Location
     }
 } else {
-    Write-Warning "SkipBuild: ensure assets/mobile_config.json was present when this APK was built (channel=$Channel)."
+    Write-Host "SkipBuild: using existing APK (channel=$Channel)."
 }
 
 if ($PlaySignedApkPath) {

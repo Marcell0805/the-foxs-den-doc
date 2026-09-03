@@ -58,6 +58,17 @@
     "googlePlayUrl":  "https://play.google.com/store/apps/details?id=dev.marcellvn.ffs",
     "distribution":  "both",
     "packageName":  "dev.marcellvn.ffs",
+    "screenshots":  [
+                        "screenshots/ffs/01-home.png",
+                        "screenshots/ffs/02-menu.png",
+                        "screenshots/ffs/03-transactions.png",
+                        "screenshots/ffs/04-reports.png",
+                        "screenshots/ffs/05-goal-detail.png",
+                        "screenshots/ffs/06-more.png",
+                        "screenshots/ffs/07-categories.png",
+                        "screenshots/ffs/08-accounts.png",
+                        "screenshots/ffs/09-banks-sources.png"
+                    ],
     "apk":  {
                 "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs.apk",
                 "build":  3,
