@@ -85,31 +85,36 @@ img { max-width: 100%; height: auto; }
   display: block;
   width: 22px;
   height: 22px;
+  min-width: 22px;
+  min-height: 22px;
   flex-shrink: 0;
+  box-sizing: border-box;
 }
 
 /*
- * Lock + status sit in shared row columns (not a right-aligned flex group).
- * That way a wider BETA badge cannot push the lock left of LIVE locks.
+ * Row grid: icon | label | lock | status
+ * Lock and badge are direct children (not display:contents) so long titles
+ * cannot shove LIVE/BETA out of column alignment.
  */
-.sidebar-item-badges,
-.landing-nav-badges {
-  display: contents;
-}
-
-.sidebar-item-badges .fox-lock,
-.landing-nav-badges .fox-lock,
-.sidebar-item-badges .fox-lock-slot,
-.landing-nav-badges .fox-lock-slot {
+.sidebar-item-inner > .fox-lock,
+.sidebar-item-inner > .fox-lock-slot,
+.landing-nav-link > .fox-lock,
+.landing-nav-link > .fox-lock-slot,
+.landing-nav .unavailable > .fox-lock,
+.landing-nav .unavailable > .fox-lock-slot {
   grid-column: 3;
   width: 22px;
   height: 22px;
+  min-width: 22px;
+  justify-self: center;
 }
 
-.sidebar-item-badges .status-badge,
-.landing-nav-badges .status-badge {
+.sidebar-item-inner > .status-badge,
+.landing-nav-link > .status-badge,
+.landing-nav .unavailable > .status-badge {
   grid-column: 4;
-  justify-self: start;
+  justify-self: stretch;
+  width: 100%;
   height: 22px;
   min-height: 22px;
   max-height: 22px;
@@ -122,8 +127,8 @@ img { max-width: 100%; height: auto; }
   margin: 0;
 }
 
-.sidebar-item-badges em,
-.landing-nav-badges em {
+.sidebar-item-inner > em,
+.landing-nav .unavailable > em {
   grid-column: 5;
   font-size: .7rem;
   line-height: 1.2;
@@ -226,11 +231,13 @@ img { max-width: 100%; height: auto; }
 .landing-nav li { border-bottom: 1px solid var(--border); }
 .landing-nav a {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) 22px max-content max-content;
+  grid-template-columns: auto minmax(0, 1fr) 22px 3.75rem max-content;
   align-items: center;
   column-gap: .5rem;
   padding: .9rem 1rem; color: var(--text); text-decoration: none; font-weight: 500;
   min-height: 48px;
+  width: 100%;
+  box-sizing: border-box;
   transition: background 0.15s ease, color 0.15s ease;
 }
 .landing-nav-link { width: 100%; }
@@ -243,12 +250,20 @@ img { max-width: 100%; height: auto; }
 .landing-nav a:hover { background: color-mix(in srgb, var(--blue) 12%, transparent); color: var(--blue); }
 .landing-nav .unavailable {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) 22px max-content max-content;
+  grid-template-columns: auto minmax(0, 1fr) 22px 3.75rem max-content;
   align-items: center;
   column-gap: .5rem;
   padding: .9rem 1rem; color: var(--muted); font-size: .95rem; min-height: 48px;
+  width: 100%;
+  box-sizing: border-box;
 }
-.landing-nav-label { grid-column: 2; min-width: 0; }
+.landing-nav-label {
+  grid-column: 2;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .landing-nav-toggle-wrap {
   border-bottom: none;
   padding: .25rem 0 .1rem;
@@ -495,7 +510,7 @@ img { max-width: 100%; height: auto; }
   display: flex; min-height: 70vh;
 }
 .sidebar {
-  width: 260px; flex-shrink: 0; background: var(--navy); color: var(--on-primary);
+  width: 340px; flex-shrink: 0; background: var(--navy); color: var(--on-primary);
   padding: 1.25rem 0 0; border-radius: 12px 0 0 12px;
   display: flex; flex-direction: column; align-self: stretch;
   min-height: 70vh; position: relative;
@@ -507,7 +522,7 @@ img { max-width: 100%; height: auto; }
   padding-bottom: .5rem;
 }
 .sidebar-nav ol { list-style: none; }
-.sidebar-nav li { padding: .45rem 1rem; font-size: .9rem; }
+.sidebar-nav li { padding: .4rem .85rem; font-size: .9rem; }
 .sidebar-nav a {
   color: #c5d9c8;
   text-decoration: none;
@@ -717,13 +732,26 @@ a.sidebar-footer-link:hover { color: #fff; }
 
 .sidebar-item-inner {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) 22px max-content max-content;
+  grid-template-columns: auto minmax(0, 1fr) 22px 3.75rem max-content;
   align-items: center;
-  column-gap: .5rem;
+  column-gap: .45rem;
   width: 100%;
   min-height: 44px;
+  box-sizing: border-box;
 }
-.sidebar-item-text { grid-column: 2; min-width: 0; }
+.sidebar-item-text {
+  grid-column: 2;
+  min-width: 0;
+  overflow: hidden;
+  line-height: 1.25;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
 .sidebar-item-link { display: block; text-decoration: none; color: inherit; }
 .sidebar-nav .app-icon { width: 28px; height: 28px; border-radius: 6px; grid-column: 1; }
 
@@ -817,7 +845,7 @@ a.toolbar-btn { text-decoration: none; }
   .sidebar {
     position: fixed;
     top: 0; left: 0; bottom: 0;
-    width: min(280px, 85vw);
+    width: min(340px, 90vw);
     z-index: 300;
     transform: translateX(-100%);
     transition: transform 0.25s ease;

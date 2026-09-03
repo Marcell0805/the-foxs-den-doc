@@ -177,11 +177,11 @@
       var badge = statusBadge(item.status || 'live');
       var icon = item.icon ? appIconHtml(item.icon, item.label) : '';
       if (item.id === active) {
-        html += '<li class="active"><span class="sidebar-item-inner">' + icon + '<span class="sidebar-item-text">' + esc(label) + '</span><span class="sidebar-item-badges">' + lock + badge + '</span></span></li>';
+        html += '<li class="active"><span class="sidebar-item-inner">' + icon + '<span class="sidebar-item-text">' + esc(label) + '</span>' + lock + badge + '</span></li>';
       } else if (item.available && item.file) {
-        html += '<li><a href="' + prefix + item.file + '" class="sidebar-item-link"><span class="sidebar-item-inner">' + icon + '<span class="sidebar-item-text">' + esc(label) + '</span><span class="sidebar-item-badges">' + lock + badge + '</span></span></a></li>';
+        html += '<li><a href="' + prefix + item.file + '" class="sidebar-item-link"><span class="sidebar-item-inner">' + icon + '<span class="sidebar-item-text">' + esc(label) + '</span>' + lock + badge + '</span></a></li>';
       } else {
-        html += '<li class="unavailable"><span class="sidebar-item-inner">' + icon + '<span class="sidebar-item-text">' + esc(label) + '</span><span class="sidebar-item-badges">' + lock + badge + ' <em>(soon)</em></span></span></li>';
+        html += '<li class="unavailable"><span class="sidebar-item-inner">' + icon + '<span class="sidebar-item-text">' + esc(label) + '</span>' + lock + badge + ' <em>(soon)</em></span></li>';
       }
     });
     html += '</ol></div>';
@@ -860,11 +860,11 @@
       if (item.available && item.file) {
         return '<li' + cls + hiddenAttr + '><a href="sections/' + item.file + '" class="landing-nav-link">' + icon +
           '<span class="landing-nav-label">' + n + '. ' + esc(item.label) + '</span>' +
-          '<span class="landing-nav-badges">' + lock + badge + '</span></a></li>';
+          lock + badge + '</a></li>';
       }
       return '<li class="unavailable' + (extra ? ' landing-nav-extra' : '') + '"' + hiddenAttr + '>' + icon +
         '<span class="landing-nav-label">' + n + '. ' + esc(item.label) + '</span>' +
-        '<span class="landing-nav-badges">' + lock + badge + ' <em>(coming soon)</em></span></li>';
+        lock + badge + ' <em>(coming soon)</em></li>';
     }
     items.forEach(function (item, i) {
       html += renderItem(item, i, i >= LANDING_GROUP_LIMIT);
