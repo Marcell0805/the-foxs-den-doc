@@ -24,8 +24,8 @@
                ],
     "sidebarNote":  "Official APK is hosted on GitHub Pages.",
     "version":  "1.0.0",
-    "build":  2,
-    "releaseNotes":  "FFS 1.0.0 — Internal test build\n\n• Local-first transactions, reports, and goals\n• Home dashboard with spending overview\n• Receipt capture with on-device OCR\n• CSV export and biometric app lock\n• Notification capture scaffold (demo bank parser)\n\nThis is an internal testing release. Data stays on your device.",
+    "build":  3,
+    "releaseNotes":  "FFS 1.0.0 — Internal test build\n\n• Reliable Android back navigation (tabs return to Home)\n• Clearer Home, Reports, and transaction list layout\n• Default account types \u0026 categories on first launch\n• Transfers excluded from spending reports\n• Improved goals progress and contribution screens\n• Demo bank notification can be simulated repeatedly\n• Local-first finance: transactions, reports, goals, OCR, CSV export\n\nThis is an internal testing release. Data stays on your device.",
     "updateCheckUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs/mobile-version.json",
     "codeProtected":  true,
     "unlock":  {
@@ -60,13 +60,13 @@
     "packageName":  "dev.marcellvn.ffs",
     "apk":  {
                 "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs.apk",
-                "build":  2,
+                "build":  3,
                 "fileName":  "ffs.apk",
                 "version":  "1.0.0",
                 "label":  "Download Live APK",
                 "available":  true,
                 "channel":  "live",
-                "sizeLabel":  "84.4 MB",
-                "sizeBytes":  88529252
+                "sizeLabel":  "85.3 MB",
+                "sizeBytes":  89434174
             }
 }
