@@ -1,9 +1,11 @@
 {
-    "build":  2,
-    "version":  "1.0.0",
-    "sizeLabel":  "84.3 MB",
-    "releaseNotes":  "Initial release for testing",
     "channel":  "live",
-    "sizeBytes":  88401444,
-    "apkUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs.apk"
+    "releaseNotes":  "FFS 1.0.0 — Internal test build\n\n• Reliable Android back navigation (tabs return to Home)\n• Clearer Home, Reports, and transaction list layout\n• Default account types \u0026 categories on first launch\n• Transfers excluded from spending reports\n• Improved goals progress and contribution screens\n• Demo bank notification can be simulated repeatedly\n• Local-first finance: transactions, reports, goals, OCR, CSV export\n\nThis is an internal testing release. Data stays on your device.",
+    "sizeLabel":  "85.3 MB",
+    "storeUrl":  "https://play.google.com/store/apps/details?id=dev.marcellvn.ffs",
+    "build":  3,
+    "version":  "1.0.0",
+    "apkUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs.apk",
+    "distribution":  "both",
+    "sizeBytes":  89434174
 }

@@ -56,13 +56,14 @@
                  ],
     "whatsNew":  "Version 1.0.0 — Live release\n• Initial live release\n• Workout history tracking\n• Progress trends\n• Backup functionality",
     "apk":  {
-                "sizeLabel":  "55.3 MB",
                 "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/active-huntress.apk",
-                "channel":  "live",
-                "fileName":  "active-huntress.apk",
                 "build":  5,
+                "fileName":  "active-huntress.apk",
                 "version":  "1.0.0",
                 "label":  "Download Live APK",
+                "available":  true,
+                "channel":  "live",
+                "sizeLabel":  "55.3 MB",
                 "sizeBytes":  58023145
             },
     "apkBeta":  {
