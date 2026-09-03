@@ -51,13 +51,14 @@
                  ],
     "whatsNew":  "All family members can add recipes\nOnly the person who added a recipe can edit or delete it\nBundled cookbook recipes stay MasterChef / Huntress editable\nIn-app update check is more reliable on real phones\nSafer APK download with timeout and cleaner retry",
     "apk":  {
-                "sizeLabel":  "63.8 MB",
                 "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/huntresscookbook-mobile.apk",
-                "channel":  "live",
-                "fileName":  "huntresscookbook-mobile.apk",
                 "build":  18,
+                "fileName":  "huntresscookbook-mobile.apk",
                 "version":  "1.0.13",
                 "label":  "Download Live APK",
+                "available":  true,
+                "channel":  "live",
+                "sizeLabel":  "63.8 MB",
                 "sizeBytes":  66896311
             },
     "apkBeta":  {

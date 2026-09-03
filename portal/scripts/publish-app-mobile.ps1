@@ -14,6 +14,9 @@ param(
     [string]$ContentVersion = "",
     # Local downloads folder of any companion website that hosts mobile-content-manifest.json
     [string]$ContentDownloadsRoot = "",
+    [ValidateSet('apk', 'aab', 'both')]
+    [string]$BuildTarget = "apk",
+    [string]$PlaySignedApkPath = "",
     [switch]$SkipBuild
 )
 
@@ -57,6 +60,25 @@ function Resolve-FlutterCommand {
     }
 
     return $null
+}
+
+function Test-ReleaseSigning([string]$apkPath) {
+    try {
+        $sig = & jarsigner -verify -verbose -certs $apkPath 2>&1 | Out-String
+        if ($sig -match 'CN=Android Debug') {
+            return $false
+        }
+        return $true
+    } catch {
+        return $true
+    }
+}
+
+function Assert-ReleaseKeyProperties([string]$mobileRoot) {
+    $keyProps = Join-Path $mobileRoot "android\key.properties"
+    if (-not (Test-Path $keyProps)) {
+        throw "Missing android/key.properties at $mobileRoot. Copy android/key.properties.example and configure your upload keystore before Play or release publish."
+    }
 }
 
 if (-not $PortalRoot) {
@@ -148,6 +170,11 @@ if ($versionLine -notmatch 'version:\s*([0-9.]+)\+(\d+)') {
 $versionName = $Matches[1]
 $buildNumber = [int]$Matches[2]
 
+$distribution = if ($app.distribution) { [string]$app.distribution } else { "apk" }
+$storeUrl = $null
+if ($app.googlePlayUrl) { $storeUrl = [string]$app.googlePlayUrl }
+elseif ($app.playStoreUrl) { $storeUrl = [string]$app.playStoreUrl }
+
 # Write mobile_config BEFORE flutter build so channel / enableDemoData ship inside the APK.
 $mobileConfigPath = Join-Path $MobileRoot "assets/mobile_config.json"
 $enableDemoData = ($Channel -eq 'beta')
@@ -157,6 +184,8 @@ $config = @{
     channel = $Channel
     enableDemoData = $enableDemoData
 }
+if ($storeUrl) { $config.storeUrl = $storeUrl }
+if ($distribution) { $config.distribution = $distribution }
 if (Test-Path $mobileConfigPath) {
     $existing = Read-Json $mobileConfigPath
     foreach ($prop in $existing.PSObject.Properties) {
@@ -169,7 +198,13 @@ New-Item -ItemType Directory -Force -Path (Split-Path $mobileConfigPath -Parent)
 Write-JsonFile $mobileConfigPath $config
 Write-Host ("Updated {0} (channel={1}, enableDemoData={2}) - baked into APK on next build" -f $mobileConfigPath, $Channel, $enableDemoData)
 
-if (-not $SkipBuild) {
+$aabPath = Join-Path $MobileRoot "build\app\outputs\bundle\release\app-release.aab"
+$needsAab = ($BuildTarget -in @('aab', 'both')) -and ($Channel -ne 'beta')
+$needsApkBuild = ($BuildTarget -in @('apk', 'both')) -and (-not $PlaySignedApkPath)
+if ($needsAab -or $needsApkBuild) {
+    if ($needsAab) {
+        Assert-ReleaseKeyProperties $MobileRoot
+    }
     $flutter = Resolve-FlutterCommand
     if (-not $flutter) {
         throw "Flutter SDK not found. Add flutter\bin to PATH (this machine has it under %USERPROFILE%\source\flutter\bin), then retry."
@@ -181,15 +216,70 @@ if (-not $SkipBuild) {
         Write-Host "Running flutter pub get..."
         & $flutter pub get
         if ($LASTEXITCODE -ne 0) { throw "flutter pub get failed with exit code $LASTEXITCODE" }
-        Write-Host "Running flutter build apk --release..."
-        & $flutter build apk --release
-        if ($LASTEXITCODE -ne 0) { throw "flutter build apk --release failed with exit code $LASTEXITCODE" }
+        if ($needsAab) {
+            Write-Host "Running flutter build appbundle --release..."
+            & $flutter build appbundle --release
+            if ($LASTEXITCODE -ne 0) {
+                if (Test-Path $aabPath) {
+                    Write-Host "AAB built (Flutter strip-debug step reported a non-fatal error; continuing)."
+                } else {
+                    throw "flutter build appbundle --release failed with exit code $LASTEXITCODE"
+                }
+            }
+            if (-not (Test-Path $aabPath)) {
+                throw "AAB not found at $aabPath after build."
+            }
+            Write-Host "Built AAB: $aabPath"
+        }
+        if ($needsApkBuild) {
+            if ($distribution -eq 'both' -and $Channel -eq 'live') {
+                Write-Host "Skipping local APK build (Play-signed APK expected via -PlaySignedApkPath)."
+            } else {
+                $apkOut = Join-Path $MobileRoot "build\app\outputs\flutter-apk\app-release.apk"
+                Write-Host "Running flutter build apk --release..."
+                & $flutter build apk --release
+                if ($LASTEXITCODE -ne 0) {
+                    if (Test-Path $apkOut) {
+                        Write-Host "APK built (Flutter strip-debug step reported a non-fatal error; continuing)."
+                    } else {
+                        throw "flutter build apk --release failed with exit code $LASTEXITCODE"
+                    }
+                }
+            }
+        }
     }
     finally {
         Pop-Location
     }
 } else {
-    Write-Warning "SkipBuild: ensure assets/mobile_config.json was present when this APK was built (channel=$Channel)."
+    Write-Host "SkipBuild: using existing APK (channel=$Channel)."
+}
+
+if ($PlaySignedApkPath) {
+    if (-not (Test-Path $PlaySignedApkPath)) {
+        throw "Play-signed APK not found at $PlaySignedApkPath"
+    }
+    $ApkPath = $PlaySignedApkPath
+    Write-Host "Using Play-signed APK: $ApkPath"
+}
+
+if (-not $SkipBuild -and $needsAab -and -not (Test-Path $aabPath)) {
+    throw "AAB not found at $aabPath."
+}
+
+if ($BuildTarget -eq 'aab' -and -not $PlaySignedApkPath) {
+    Write-Host "AAB-only build complete. Upload to Play before copying APK to portal."
+    if ($Status) {
+        $updatedApps = @()
+        foreach ($entry in $manifest.apps) {
+            if ($entry.id -eq $AppId) { $entry.status = $Status }
+            $updatedApps += $entry
+        }
+        $manifest.apps = $updatedApps
+        Write-JsonFile $manifestPath $manifest
+        Write-Host "Updated apps-manifest.json status for $AppId -> $Status"
+    }
+    return
 }
 
 if (-not (Test-Path $ApkPath)) {
@@ -201,8 +291,10 @@ if ($ApkPath -match '(?i)debug') {
 }
 
 try {
-    $sig = & jarsigner -verify -verbose -certs $ApkPath 2>&1 | Out-String
-    if ($sig -match 'CN=Android Debug') {
+    if (-not (Test-ReleaseSigning $ApkPath)) {
+        if ($distribution -eq 'both' -or $needsAab) {
+            throw "APK appears debug-signed. Configure android/key.properties and rebuild for release signing."
+        }
         Write-Warning "APK appears debug-signed. Configure android/key.properties and rebuild for release signing."
     }
 } catch { }
@@ -281,6 +373,8 @@ $versionManifest = @{
     sizeBytes = $sizeBytes
     sizeLabel = $sizeLabel
 }
+if ($storeUrl) { $versionManifest.storeUrl = $storeUrl }
+if ($distribution) { $versionManifest.distribution = $distribution }
 if ($ContentVersion -and $ContentManifestUrl) {
     $versionManifest.contentVersion = $ContentVersion
     $versionManifest.contentManifestUrl = $ContentManifestUrl

@@ -24,8 +24,8 @@
                ],
     "sidebarNote":  "Official APK is hosted on GitHub Pages.",
     "version":  "1.0.0",
-    "build":  2,
-    "releaseNotes":  "Initial release for testing",
+    "build":  3,
+    "releaseNotes":  "FFS 1.0.0 — Internal test build\n\n• Reliable Android back navigation (tabs return to Home)\n• Clearer Home, Reports, and transaction list layout\n• Default account types \u0026 categories on first launch\n• Transfers excluded from spending reports\n• Improved goals progress and contribution screens\n• Demo bank notification can be simulated repeatedly\n• Local-first finance: transactions, reports, goals, OCR, CSV export\n\nThis is an internal testing release. Data stays on your device.",
     "updateCheckUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs/mobile-version.json",
     "codeProtected":  true,
     "unlock":  {
@@ -55,14 +55,29 @@
                      }
                  ],
     "whatsNew":  "Version 1.0.0 — Initial release for testing\n• Local-first transactions and reports\n• Goals scaffold\n• OCR receipt entry\n• CSV export",
+    "googlePlayUrl":  "https://play.google.com/store/apps/details?id=dev.marcellvn.ffs",
+    "distribution":  "both",
+    "packageName":  "dev.marcellvn.ffs",
+    "screenshots":  [
+                        "screenshots/ffs/01-home.png",
+                        "screenshots/ffs/02-menu.png",
+                        "screenshots/ffs/03-transactions.png",
+                        "screenshots/ffs/04-reports.png",
+                        "screenshots/ffs/05-goal-detail.png",
+                        "screenshots/ffs/06-more.png",
+                        "screenshots/ffs/07-categories.png",
+                        "screenshots/ffs/08-accounts.png",
+                        "screenshots/ffs/09-banks-sources.png"
+                    ],
     "apk":  {
-                "sizeLabel":  "84.3 MB",
                 "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs.apk",
-                "channel":  "live",
+                "build":  3,
                 "fileName":  "ffs.apk",
-                "build":  2,
                 "version":  "1.0.0",
                 "label":  "Download Live APK",
-                "sizeBytes":  88401444
+                "available":  true,
+                "channel":  "live",
+                "sizeLabel":  "85.3 MB",
+                "sizeBytes":  89434174
             }
 }
