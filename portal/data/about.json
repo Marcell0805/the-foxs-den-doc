@@ -1,21 +1,48 @@
 {
     "id":  "about",
     "title":  "About",
-    "status":  "planned",
+    "status":  "live",
     "kind":  "about",
-    "hidden":  true,
+    "icon":  "logo.png",
     "tags":  [
-                 "about"
+                 "about",
+                 "contact"
              ],
     "searchKeywords":  [
-
+                           "email",
+                           "github",
+                           "contact",
+                           "marcell",
+                           "C#",
+                           "Flutter",
+                           "JavaScript",
+                           "Web Development",
+                           "REST APIs",
+                           "Oracle",
+                           "SQL Server",
+                           "T-SQL"
                        ],
-    "summary":  "About is temporarily hidden.",
-    "sidebarNote":  "",
+    "summary":  "Hey, I\u0027m Marcell - developer, builder, and creator behind The Fox\u0027s Den.",
+    "sidebarNote":  "The human side of The Fox\u0027s Den.",
     "contact":  {
-
+                    "email":  "marcellvn.dev@gmail.com",
+                    "github":  "https://github.com/Marcell0805"
                 },
     "blocks":  [
-
+                   {
+                       "content":  "I enjoy turning ideas into useful apps, tools, and side projects. Some solve real problems. Others exist because \"what if?\" seemed like a perfectly reasonable reason to start coding.",
+                       "heading":  "About me",
+                       "bullets":  [
+                                       "C#",
+                                       "Flutter",
+                                       "JavaScript",
+                                       "Web Development",
+                                       "REST APIs",
+                                       "Oracle",
+                                       "SQL Server",
+                                       "T-SQL"
+                                   ],
+                       "id":  "intro"
+                   }
                ]
 }

@@ -4,22 +4,21 @@
   "descriptor": "Independent projects & experiments",
   "version": "1.0",
   "pagesBaseUrl": "https://marcell0805.github.io/the-foxs-den-doc",
-  "showAbout": false,
-  "aboutBlurb": "I build personal websites and Android apps—tools for home, health, and family. Reach out if you want to try a build or collaborate.",
+  "showAbout": true,
+  "aboutBlurb": "I enjoy turning ideas into useful apps, tools, and side projects. Some solve real problems. Others exist because \"what if?\" seemed like a perfectly reasonable reason to start coding.",
   "aboutSkills": [
-    "Full-stack developer",
     "C#",
     "Flutter",
-    "Web & JavaScript",
-    "RESTful services",
+    "JavaScript",
+    "Web Development",
+    "REST APIs",
     "Oracle",
     "SQL Server",
     "T-SQL"
   ],
   "contact": {
     "email": "marcellvn.dev@gmail.com",
-    "github": "https://github.com/Marcell0805",
-    "linkedin": "https://www.linkedin.com/in/marcell-van-niekerk-764649163/"
+    "github": "https://github.com/Marcell0805"
   },
   "auth": {
     "enabled": false,

@@ -25,11 +25,17 @@
     return s && s.assetVersion ? '?v=' + s.assetVersion : '';
   }
 
+  function foxLockSlotHtml(codeProtected) {
+    if (codeProtected) return foxLockHtml(false);
+    return '<span class="fox-lock-slot" aria-hidden="true"></span>';
+  }
+
   function foxLockHtml(modal) {
-    var size = modal ? 'fox-lock-64.png' : 'fox-lock-24.png';
+    // Larger source scaled down keeps the sidebar/landing lock sharp.
+    var file = 'fox-lock-64.png';
     var px = modal ? '64' : '24';
     var cls = 'fox-lock' + (modal ? ' fox-lock--modal' : '');
-    return '<img class="' + cls + '" src="' + esc(assetsPrefix() + size + foxLockQuery()) + '" alt="Code required" title="Code required" width="' + px + '" height="' + px + '">';
+    return '<img class="' + cls + '" src="' + esc(assetsPrefix() + file + foxLockQuery()) + '" alt="Code required" title="Code required" width="' + px + '" height="' + px + '" decoding="async">';
   }
 
   function appIconHtml(icon, label) {
@@ -167,7 +173,7 @@
     html += '<ol>';
     items.forEach(function (item, i) {
       var label = (i + 1) + '. ' + item.label;
-      var lock = item.codeProtected ? foxLockHtml(false) : '';
+      var lock = foxLockSlotHtml(!!item.codeProtected);
       var badge = statusBadge(item.status || 'live');
       var icon = item.icon ? appIconHtml(item.icon, item.label) : '';
       if (item.id === active) {
@@ -670,6 +676,94 @@
     return '<section class="tech-details"><p>' + esc(parts.join(' · ')) + '</p></section>';
   }
 
+  function renderAboutPage(section) {
+    var settings = getSettings();
+    var c = settings.contact || section.contact || {};
+    var blurb = (settings.aboutBlurb || '').trim();
+    if (!blurb) {
+      var blocksForBlurb = section.blocks || [];
+      for (var bi = 0; bi < blocksForBlurb.length; bi++) {
+        if (blocksForBlurb[bi].id === 'intro' && blocksForBlurb[bi].content) {
+          blurb = String(blocksForBlurb[bi].content);
+          break;
+        }
+      }
+    }
+    var skills = [];
+    if (Array.isArray(settings.aboutSkills) && settings.aboutSkills.length) {
+      skills = settings.aboutSkills;
+    } else {
+      var introBlock = null;
+      var blocks = section.blocks || [];
+      for (var i = 0; i < blocks.length; i++) {
+        if (blocks[i].id === 'intro') { introBlock = blocks[i]; break; }
+      }
+      if (introBlock && introBlock.bullets) skills = introBlock.bullets;
+    }
+    var siteUrl = (settings.pagesBaseUrl || '').replace(/\/$/, '');
+    if (!siteUrl) siteUrl = '../index.html';
+    var iconSrc = assetsPrefix() + (section.icon || 'logo.png');
+
+    var html = '<article class="about-page">';
+    html += '<header class="about-hero">';
+    html += '<img class="about-hero-icon" src="' + esc(iconSrc) + '" alt="" width="112" height="112">';
+    html += '<div class="about-hero-text">';
+    html += '<p class="about-hero-greeting">Hey, I\u2019m Marcell \uD83D\uDC4B</p>';
+    html += '<p class="about-hero-roles">Developer \u00B7 Builder \u00B7 Creator</p>';
+    if (blurb) html += '<p class="about-hero-blurb">' + esc(blurb) + '</p>';
+    html += '<div class="about-hero-actions">';
+    if (c.email) {
+      html += '<a class="about-hero-btn" href="mailto:' + esc(c.email) + '">Email</a>';
+    }
+    if (c.github) {
+      html += '<a class="about-hero-btn about-hero-btn-ghost" href="' + esc(c.github) + '" target="_blank" rel="noopener">GitHub</a>';
+    }
+    html += '</div></div></header>';
+
+    if (skills && skills.length) {
+      html += '<section class="about-skills" aria-label="Skills">';
+      html += '<h2>My Toolkit</h2>';
+      html += '<div class="about-skill-badges">';
+      skills.forEach(function (skill) {
+        if (!skill) return;
+        html += '<span class="about-skill-badge">' + esc(String(skill)) + '</span>';
+      });
+      html += '</div></section>';
+    }
+
+    html += '<section class="about-build" aria-label="What I build">';
+    html += '<h2>What I build</h2>';
+    html += '<div class="about-build-grid">';
+    html += '<article class="about-build-card"><span class="about-build-emoji" aria-hidden="true">\uD83D\uDCF1</span><h3>Apps</h3><p>Android applications built to solve real problems.</p></article>';
+    html += '<article class="about-build-card"><span class="about-build-emoji" aria-hidden="true">\uD83C\uDF10</span><h3>Websites</h3><p>Personal and collaborative web projects.</p></article>';
+    html += '<article class="about-build-card"><span class="about-build-emoji" aria-hidden="true">\uD83D\uDEE0\uFE0F</span><h3>Tools</h3><p>Useful utilities, experiments, and side projects.</p></article>';
+    html += '</div></section>';
+
+    html += '<section class="about-contact" aria-label="Contact">';
+    html += '<h2>Say hello</h2>';
+    html += '<div class="about-contact-cards">';
+    if (c.email) {
+      html += '<a class="about-contact-card" href="mailto:' + esc(c.email) + '">' +
+        '<span class="about-contact-emoji" aria-hidden="true">\uD83D\uDCE7</span>' +
+        '<span class="about-contact-label">Email</span>' +
+        '<span class="about-contact-value">' + esc(c.email) + '</span></a>';
+    }
+    if (c.github) {
+      html += '<a class="about-contact-card" href="' + esc(c.github) + '" target="_blank" rel="noopener">' +
+        '<span class="about-contact-emoji" aria-hidden="true">\uD83D\uDC19</span>' +
+        '<span class="about-contact-label">GitHub</span>' +
+        '<span class="about-contact-value">' + esc(c.github.replace(/^https?:\/\//, '')) + '</span></a>';
+    }
+    html += '<a class="about-contact-card" href="' + esc(siteUrl) + '">' +
+      '<span class="about-contact-emoji" aria-hidden="true">\uD83C\uDF10</span>' +
+      '<span class="about-contact-label">Website</span>' +
+      '<span class="about-contact-value">The Fox\u2019s Den</span></a>';
+    html += '</div></section>';
+
+    html += '</article>';
+    return html;
+  }
+
   function renderSection() {
     var mount = document.getElementById('section-content');
     var id = document.body.getAttribute('data-section-id');
@@ -689,15 +783,18 @@
       return;
     }
 
+    if (id === 'about' || section.kind === 'about') {
+      if (!isAboutVisible()) {
+        mount.innerHTML = '<p class="section-summary">About is temporarily hidden.</p>';
+        return;
+      }
+      mount.innerHTML = renderAboutPage(section);
+      return;
+    }
+
     var html = renderProductHeader(section);
     html += renderProductMeta(section);
     html += renderProductActions(section);
-
-    if (id === 'about' && !isAboutVisible()) {
-      html += '<p class="section-summary">About is temporarily hidden.</p>';
-      mount.innerHTML = html;
-      return;
-    }
 
     html += renderWhatsNew(section);
     html += renderFeatures(section);
@@ -707,22 +804,6 @@
       html += '<p class="product-hint">Extract the zip and run the .exe. No installer required.</p>';
     }
 
-    if (id === 'about') {
-      var settings = getSettings();
-      var c = settings.contact || section.contact || {};
-      html += '<div class="about-contact-cards">';
-      if (c.email) {
-        html += '<a class="about-contact-card" href="mailto:' + esc(c.email) + '"><span class="about-contact-label">Email</span><span>' + esc(c.email) + '</span></a>';
-      }
-      if (c.github) {
-        html += '<a class="about-contact-card" href="' + esc(c.github) + '" target="_blank" rel="noopener"><span class="about-contact-label">GitHub</span><span>' + esc(c.github.replace(/^https?:\/\//, '')) + '</span></a>';
-      }
-      if (c.linkedin) {
-        html += '<a class="about-contact-card" href="' + esc(c.linkedin) + '" target="_blank" rel="noopener"><span class="about-contact-label">LinkedIn</span><span>Marcell van Niekerk</span></a>';
-      }
-      html += '</div>';
-    }
-
     var blocks = section.blocks || [];
     var hasAboutBlocks = blocks.some(function (b) {
       var blockText = (b.content || '').trim();
@@ -730,34 +811,32 @@
       var onlyDupSummary = blockText && summaryText && blockText === summaryText && !(b.bullets && b.bullets.length);
       return !onlyDupSummary;
     });
-    if (hasAboutBlocks && id !== 'about') {
+    if (hasAboutBlocks) {
       html += '<section class="about-app-section"><h2>About this app</h2>';
     }
 
     blocks.forEach(function (b) {
-      if (id === 'about' && b.id === 'contact') return;
       var blockText = (b.content || '').trim();
       var summaryText = (section.summary || '').trim();
       var onlyDupSummary = blockText && summaryText && blockText === summaryText &&
         !(b.bullets && b.bullets.length);
       if (onlyDupSummary) return;
       html += '<section class="content-block" id="' + esc(b.id || '') + '">';
-      if (b.heading && id === 'about') html += '<h2>' + esc(b.heading) + '</h2>';
-      else if (b.heading && id !== 'about') html += '<h3>' + esc(b.heading) + '</h3>';
+      if (b.heading) html += '<h3>' + esc(b.heading) + '</h3>';
       if (b.content) {
-        html += '<p>' + (id === 'about' ? linkifyContact(b.content) : esc(b.content)) + '</p>';
+        html += '<p>' + esc(b.content) + '</p>';
       }
       if (b.bullets && b.bullets.length) {
         html += '<ul>';
         b.bullets.forEach(function (li) {
-          html += '<li>' + (id === 'about' ? linkifyContact(li) : esc(li)) + '</li>';
+          html += '<li>' + esc(li) + '</li>';
         });
         html += '</ul>';
       }
       html += '</section>';
     });
 
-    if (hasAboutBlocks && id !== 'about') {
+    if (hasAboutBlocks) {
       html += '</section>';
     }
 
@@ -774,7 +853,7 @@
     function renderItem(item, index, extra) {
       var n = index + 1;
       var badge = statusBadge(item.status || 'live');
-      var lock = item.codeProtected ? foxLockHtml(false) : '';
+      var lock = foxLockSlotHtml(!!item.codeProtected);
       var icon = item.icon ? appIconHtml(item.icon, item.label) : '';
       var cls = extra ? ' class="landing-nav-extra"' : '';
       var hiddenAttr = extra ? ' hidden' : '';

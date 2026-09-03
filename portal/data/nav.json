@@ -62,6 +62,15 @@
                       "kind":  "tool",
                       "status":  "live",
                       "icon":  "icons/wid.png"
+                  },
+                  {
+                      "id":  "about",
+                      "num":  7,
+                      "file":  "about.html",
+                      "label":  "About",
+                      "available":  true,
+                      "kind":  "about",
+                      "status":  "live"
                   }
               ]
 }

@@ -312,44 +312,32 @@ function Sync-AboutFromSettings {
     }
     $email = if ($Settings.contact -and $Settings.contact.email) { $Settings.contact.email } else { "" }
     $github = if ($Settings.contact -and $Settings.contact.github) { $Settings.contact.github } else { "" }
-    $linkedin = if ($Settings.contact -and $Settings.contact.linkedin) { $Settings.contact.linkedin } else { "" }
-
-    $bullets = [System.Collections.Generic.List[string]]::new()
-    if ($github) { $bullets.Add("GitHub: $github") }
-    if ($linkedin) { $bullets.Add("LinkedIn: $linkedin") }
-
-    $contactContent = if ($email) { "Email: $email" } else { "Contact details are listed below." }
 
     $searchKeywords = [System.Collections.Generic.List[string]]::new()
-    foreach ($k in @("email", "github", "linkedin", "contact")) { $searchKeywords.Add($k) }
+    foreach ($k in @("email", "github", "contact", "marcell")) { $searchKeywords.Add($k) }
     foreach ($s in $skillBullets) { $searchKeywords.Add($s) }
+
+    $contact = [ordered]@{}
+    if ($email) { $contact.email = $email }
+    if ($github) { $contact.github = $github }
 
     $about = [ordered]@{
         id = "about"
         title = "About"
         status = "live"
         kind = "about"
+        icon = "logo.png"
         tags = @("about", "contact")
         searchKeywords = $searchKeywords.ToArray()
-        summary = "Who is behind The Fox's Den, and how to get in touch."
-        sidebarNote = "Password gate stays on until the site is fully public."
-        contact = @{
-            email = $email
-            github = $github
-            linkedin = $linkedin
-        }
+        summary = "Hey, I'm Marcell - developer, builder, and creator behind The Fox's Den."
+        sidebarNote = "The human side of The Fox's Den."
+        contact = $contact
         blocks = @(
             @{
                 id = "intro"
                 heading = "About me"
                 content = $blurb
                 bullets = $skillBullets.ToArray()
-            },
-            @{
-                id = "contact"
-                heading = "Contact"
-                content = $contactContent
-                bullets = $bullets.ToArray()
             }
         )
     }
