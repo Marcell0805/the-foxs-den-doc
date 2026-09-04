@@ -72,6 +72,13 @@
     return 'Android';
   }
 
+  function kindLabel(section) {
+    if (section.kind === 'website') return 'Website';
+    if (section.kind === 'tool') return 'Utility';
+    if (section.kind === 'mobile') return 'Mobile App';
+    return 'Project';
+  }
+
   function getSettings() {
     return (window.DELTACORE_PORTAL && DELTACORE_PORTAL.settings) || {};
   }
@@ -111,12 +118,27 @@
     if (!mount) return;
     var scope = document.body.getAttribute('data-nav-scope') || 'landing';
     var dedication = isDedicationPage();
+    var assetPrefix = scope === 'section' ? '../' : '';
     var backHref = scope === 'section' ? '../index.html' : 'index.html';
     var homeHref = scope === 'section' ? '../index.html' : 'index.html';
-    var backTitle = scope === 'section' ? 'Back to portal home' : 'Portal home';
+    var backTitle = scope === 'section' ? 'Back to The Den home' : 'The Den home';
+    var labsUrl = 'https://marcell0805.github.io/foxbyte-labs/';
     var menuBtn = scope === 'section' && !dedication
       ? '<button type="button" class="toolbar-btn toolbar-menu" id="toolbar-menu-btn" title="Menu" aria-label="Open menu">' + SVG_MENU + '</button>'
       : '';
+    var brand =
+      '<a class="toolbar-brand" href="' + homeHref + '" title="The Fox\'s Den">' +
+        '<img class="toolbar-brand-logo" src="' + assetPrefix + 'assets/logo.png" alt="" width="28" height="28" onerror="this.onerror=null;this.src=\'' + assetPrefix + 'assets/logo.svg\';">' +
+        '<span class="toolbar-brand-text">' +
+          '<span class="toolbar-brand-labs">Foxbyte Labs</span>' +
+          '<span class="toolbar-brand-den">The Fox\'s Den</span>' +
+        '</span>' +
+      '</a>';
+    var labsLink =
+      '<a class="toolbar-labs-link" href="' + labsUrl + '" target="_blank" rel="noopener noreferrer" title="Back to Foxbyte Labs">' +
+        '<span class="toolbar-labs-full">← Back to Foxbyte Labs</span>' +
+        '<span class="toolbar-labs-short">← Labs</span>' +
+      '</a>';
     mount.outerHTML =
       '<header class="portal-toolbar no-print" aria-label="Page tools">' +
         '<div class="toolbar-inner">' +
@@ -125,9 +147,10 @@
             (scope === 'section'
               ? '<a href="' + backHref + '" class="toolbar-btn" title="' + backTitle + '">' + SVG_BACK + '</a>'
               : '') +
-            '<a href="' + homeHref + '" class="toolbar-btn" title="Home" style="' + (scope === 'landing' ? 'display:none' : '') + '">' + SVG_HOME + '</a>' +
+            brand +
           '</div>' +
           '<div class="toolbar-end">' +
+            labsLink +
             (dedication ? '' : '<button type="button" class="toolbar-btn" id="toolbar-search-btn" title="Search (Ctrl+K)">' + SVG_SEARCH + '</button>') +
             (dedication ? '' : '<button type="button" class="toolbar-btn toolbar-print" title="Print (Ctrl+P)">' + SVG_PRINT + '</button>') +
           '</div>' +
@@ -560,6 +583,7 @@
     return '<header class="product-header">' +
       productIconHtml(section.icon, section.title) +
       '<div class="product-header-text">' +
+        '<p class="product-kind">' + esc(kindLabel(section)) + '</p>' +
         '<div class="product-title-row">' +
           '<h1>' + esc(section.title) + '</h1>' +
           statusBadge(section.status) +
@@ -929,11 +953,71 @@
     el.hidden = !isAboutVisible();
   }
 
+  function enhanceScreenshotCarousels() {
+    document.querySelectorAll('.screenshot-carousel').forEach(function (carousel) {
+      if (carousel.dataset.swipeReady === '1') return;
+      carousel.dataset.swipeReady = '1';
+
+      var dragging = false;
+      var startX = 0;
+      var startScroll = 0;
+      var moved = false;
+
+      carousel.addEventListener('pointerdown', function (e) {
+        if (e.pointerType === 'mouse' && e.button !== 0) return;
+        dragging = true;
+        moved = false;
+        startX = e.clientX;
+        startScroll = carousel.scrollLeft;
+        carousel.classList.add('is-dragging');
+        try { carousel.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
+      });
+
+      carousel.addEventListener('pointermove', function (e) {
+        if (!dragging) return;
+        var dx = e.clientX - startX;
+        if (Math.abs(dx) > 4) moved = true;
+        carousel.scrollLeft = startScroll - dx;
+      });
+
+      function endDrag(e) {
+        if (!dragging) return;
+        dragging = false;
+        carousel.classList.remove('is-dragging');
+        try { carousel.releasePointerCapture(e.pointerId); } catch (err) { /* ignore */ }
+      }
+
+      carousel.addEventListener('pointerup', endDrag);
+      carousel.addEventListener('pointercancel', endDrag);
+
+      // Prevent accidental image click/drag after a swipe
+      carousel.addEventListener('click', function (e) {
+        if (moved) {
+          e.preventDefault();
+          e.stopPropagation();
+          moved = false;
+        }
+      }, true);
+
+      carousel.addEventListener('keydown', function (e) {
+        var step = Math.max(200, Math.floor(carousel.clientWidth * 0.8));
+        if (e.key === 'ArrowRight') {
+          e.preventDefault();
+          carousel.scrollBy({ left: step, behavior: 'smooth' });
+        } else if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          carousel.scrollBy({ left: -step, behavior: 'smooth' });
+        }
+      });
+    });
+  }
+
   function init() {
     if (isDedicationPage()) document.body.classList.add('dedication-page');
     renderToolbar();
     renderSidebar();
     renderSection();
+    enhanceScreenshotCarousels();
     renderLandingNav();
     renderContactFooter();
     renderLearnMore();

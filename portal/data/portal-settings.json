@@ -1,7 +1,7 @@
 {
   "portalName": "The Fox's Den",
-  "tagline": "Apps, websites & tools built by Marcell",
-  "descriptor": "Independent projects & experiments",
+  "tagline": "The collection of things that escaped the workshop.",
+  "descriptor": "Apps, websites & tools built by Marcell",
   "version": "1.0",
   "pagesBaseUrl": "https://marcell0805.github.io/the-foxs-den-doc",
   "showAbout": true,
@@ -26,9 +26,9 @@
     "storageKey": "the_fox_s_den_portal_auth"
   },
   "theme": {
-    "primaryColor": "#2D4A3E",
-    "accentColor": "#3F5F47",
-    "highlightColor": "#B8860B",
-    "backgroundColor": "#F5F1E8"
+    "primaryColor": "#152019",
+    "accentColor": "#e08a45",
+    "highlightColor": "#c9a06a",
+    "backgroundColor": "#0c1410"
   }
 }
