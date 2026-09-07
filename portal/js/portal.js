@@ -69,12 +69,14 @@
     if (section.platform) return section.platform;
     if (section.kind === 'website') return 'Website';
     if (section.kind === 'tool') return 'Windows';
+    if (section.kind === 'addon') return 'Chrome';
     return 'Android';
   }
 
   function kindLabel(section) {
     if (section.kind === 'website') return 'Website';
-    if (section.kind === 'tool') return 'Utility';
+    if (section.kind === 'tool') return 'Desktop tool';
+    if (section.kind === 'addon') return 'Browser add-on';
     if (section.kind === 'mobile') return 'Mobile App';
     return 'Project';
   }
@@ -177,16 +179,18 @@
     var mobile = [];
     var websites = [];
     var tools = [];
+    var addons = [];
     var about = [];
     var other = [];
     getNav().forEach(function (item) {
       if (item.kind === 'about') about.push(item);
       else if (item.kind === 'website') websites.push(item);
       else if (item.kind === 'tool') tools.push(item);
+      else if (item.kind === 'addon') addons.push(item);
       else if (item.kind === 'mobile' || !item.kind) mobile.push(item);
       else other.push(item);
     });
-    return { mobile: mobile, websites: websites, tools: tools, about: about, other: other };
+    return { mobile: mobile, websites: websites, tools: tools, addons: addons, about: about, other: other };
   }
 
   function renderSidebarGroup(title, items, active, prefix) {
@@ -246,7 +250,8 @@
     html += '<nav class="sidebar-nav">';
     html += renderSidebarGroup('Mobile apps', groups.mobile, active, prefix);
     html += renderSidebarGroup('Websites', groups.websites, active, prefix);
-    html += renderSidebarGroup('Tools', groups.tools, active, prefix);
+    html += renderSidebarGroup('Desktop tools', groups.tools, active, prefix);
+    html += renderSidebarGroup('Browser add-ons', groups.addons, active, prefix);
     html += renderSidebarGroup('More', groups.other, active, prefix);
     html += '</nav>';
     var section = getSection(active);
@@ -629,6 +634,17 @@
     } else if (section.kind === 'tool') {
       if (section.package) html += renderDownloadChannel(section.package, null, gateId, true);
       if (section.packageBeta) html += renderDownloadChannel(section.packageBeta, null, gateId, true);
+    } else if (section.kind === 'addon') {
+      if (section.storeUrl) {
+        html += '<a href="' + esc(section.storeUrl) + '" class="app-download-btn" target="_blank" rel="noopener"' +
+          (gateId ? ' data-code-gate="' + esc(gateId) + '"' : '') + '>Get on Chrome Web Store</a>';
+      }
+      if (section.package) html += renderDownloadChannel(section.package, null, gateId, true);
+      if (section.packageBeta) html += renderDownloadChannel(section.packageBeta, null, gateId, true);
+      if (section.privacyUrl) {
+        html += '<a href="' + esc(section.privacyUrl) + '" class="app-download-btn app-download-btn-secondary" target="_blank" rel="noopener">Privacy policy</a>';
+      }
+      html += '<p class="addon-install-hint">Prefer the Chrome Web Store when listed. Or download the zip and follow INSTALL-CHROME.md inside the package.</p>';
     } else {
       if (section.apk) html += renderDownloadChannel(section.apk, '../downloads/README.md', gateId, true);
       if (section.apkBeta) html += renderDownloadChannel(section.apkBeta, '../downloads/README.md', gateId, true);
@@ -760,7 +776,8 @@
     html += '<div class="about-build-grid">';
     html += '<article class="about-build-card"><span class="about-build-emoji" aria-hidden="true">\uD83D\uDCF1</span><h3>Apps</h3><p>Android applications built to solve real problems.</p></article>';
     html += '<article class="about-build-card"><span class="about-build-emoji" aria-hidden="true">\uD83C\uDF10</span><h3>Websites</h3><p>Personal and collaborative web projects.</p></article>';
-    html += '<article class="about-build-card"><span class="about-build-emoji" aria-hidden="true">\uD83D\uDEE0\uFE0F</span><h3>Tools</h3><p>Useful utilities, experiments, and side projects.</p></article>';
+    html += '<article class="about-build-card"><span class="about-build-emoji" aria-hidden="true">\uD83D\uDEE0\uFE0F</span><h3>Desktop tools</h3><p>Windows utilities you download and run locally.</p></article>';
+    html += '<article class="about-build-card"><span class="about-build-emoji" aria-hidden="true">\uD83D\uDD0C</span><h3>Browser add-ons</h3><p>Chrome extensions — Web Store or zip from this site.</p></article>';
     html += '</div></section>';
 
     html += '<section class="about-contact" aria-label="Contact">';
@@ -826,6 +843,9 @@
 
     if (section.kind === 'tool' && (section.package || section.packageBeta)) {
       html += '<p class="product-hint">Extract the zip and run the .exe. No installer required.</p>';
+    }
+    if (section.kind === 'addon') {
+      html += '<p class="product-hint">Chrome extension — install from the Web Store when available, or load the zip via chrome://extensions (Developer mode → Load unpacked).</p>';
     }
 
     var blocks = section.blocks || [];
@@ -911,7 +931,8 @@
     var html = '';
     html += renderNavGroup('Mobile apps', groups.mobile);
     html += renderNavGroup('Websites', groups.websites);
-    html += renderNavGroup('Tools', groups.tools);
+    html += renderNavGroup('Desktop tools', groups.tools);
+    html += renderNavGroup('Browser add-ons', groups.addons);
     html += renderNavGroup('More', groups.other);
     if (!html) html = '<p class="landing-empty">No projects listed yet.</p>';
     mount.innerHTML = html;

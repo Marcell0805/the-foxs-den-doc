@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FoxFill Privacy Policy</title>
+    <style>
+      :root {
+        --primary: #0f3d2e;
+        --accent: #d4b574;
+        --surface: #f8f7f4;
+        --text: #1f2a25;
+        --muted: #6b7a72;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+        color: var(--text);
+        background: var(--primary);
+        line-height: 1.55;
+      }
+      main {
+        max-width: 720px;
+        margin: 0 auto;
+        min-height: 100vh;
+        padding: 40px 24px 64px;
+        background: var(--surface);
+        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12);
+      }
+      h1 {
+        margin: 0 0 8px;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 28px;
+        color: var(--primary);
+      }
+      h1 span { color: var(--accent); }
+      .meta {
+        margin: 0 0 28px;
+        color: var(--muted);
+        font-size: 14px;
+      }
+      h2 {
+        margin: 28px 0 10px;
+        font-size: 15px;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      p, li { font-size: 15px; }
+      ul { padding-left: 1.2em; }
+      a { color: var(--primary); font-weight: 600; }
+      .back {
+        display: inline-block;
+        margin-bottom: 20px;
+        font-size: 13px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <a class="back" href="../index.html">← The Fox’s Den</a>
+      <h1>Fox<span>Fill</span> Privacy Policy</h1>
+      <p class="meta">Last updated: 7 September 2026</p>
+
+      <p>
+        FoxFill is a Chrome browser extension that fills web forms from a
+        profile you manage on your own device. This policy explains what data
+        FoxFill handles and what it does <strong>not</strong> do.
+      </p>
+
+      <h2>Single purpose</h2>
+      <p>
+        FoxFill fills web forms from a user-managed profile stored only on the
+        local device. Users scan a page, review matched fields, and choose what
+        to fill.
+      </p>
+
+      <h2>Data stored on your device</h2>
+      <p>
+        When you enter details in FoxFill (for example name, address, email,
+        phone, ID number, passport number, date of birth, or custom fields),
+        those values are saved in Chrome’s local extension storage
+        (<code>chrome.storage.local</code>) on your computer. You may keep
+        multiple named profiles.
+      </p>
+      <p>
+        Optionally, you can enable a passphrase so profiles are encrypted at
+        rest on this device (AES-GCM). A recovery email you set is used only for
+        local unlock recovery—not sent to a FoxFill server (FoxFill has no
+        backend).
+      </p>
+
+      <h2>What we do not collect</h2>
+      <ul>
+        <li>No FoxFill account, cloud sync, or remote profile backup</li>
+        <li>No analytics, advertising, or usage tracking SDKs</li>
+        <li>No sale or transfer of your profile data to third parties</li>
+        <li>No filling of website password fields</li>
+        <li>No background scanning of every page you visit</li>
+      </ul>
+
+      <h2>Permissions</h2>
+      <ul>
+        <li>
+          <strong>storage</strong> — save your profiles on this device
+          (optionally encrypted).
+        </li>
+        <li>
+          <strong>activeTab</strong> — temporary access to the tab you are on
+          when you open FoxFill and click Scan or Fill.
+        </li>
+        <li>
+          <strong>scripting</strong> — inject scanner/matcher/filler scripts
+          only after you click Scan or Fill.
+        </li>
+      </ul>
+      <p>
+        FoxFill does not use remote code. All scripts ship inside the extension
+        package.
+      </p>
+
+      <h2>Website interaction</h2>
+      <p>
+        On your command, FoxFill reads form field labels and structure on the
+        current page to match them to your local profile, may highlight fields,
+        and may write values you approved into empty inputs. It does not submit
+        forms automatically.
+      </p>
+
+      <h2>Contact</h2>
+      <p>
+        Questions about this policy:
+        <a href="mailto:marcellvn.dev@gmail.com">marcellvn.dev@gmail.com</a>
+        ·
+        <a href="https://github.com/Marcell0805" rel="noopener" target="_blank"
+          >GitHub</a
+        >
+      </p>
+    </main>
+  </body>
+</html>

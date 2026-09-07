@@ -1,0 +1,69 @@
+{
+    "id":  "foxfill",
+    "title":  "FoxFill",
+    "status":  "live",
+    "kind":  "addon",
+    "tags":  [
+                 "chrome",
+                 "extension",
+                 "addon"
+             ],
+    "searchKeywords":  [
+
+                       ],
+    "summary":  "Privacy-first form filling from a local profile. Scan, review, then fill — your details stay on this device.",
+    "blocks":  [
+                   {
+                       "content":  "Privacy-first Chrome extension that fills web forms from a locally stored profile. Current: Phase 9 — multi-profile, custom fields, encryption, full settings page (local), optional in-page overlay preview. Product rules and roadmap: PLAN.md",
+                       "heading":  "About",
+                       "bullets":  [
+
+                                   ],
+                       "id":  "readme-1"
+                   }
+               ],
+    "sidebarNote":  "Download the zip and load in Chrome.",
+    "version":  "0.9.7",
+    "build":  2,
+    "releaseNotes":  "Chrome extension. Prefer the Web Store when listed, or download the zip and follow INSTALL-CHROME.md.",
+    "updateCheckUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/foxfill/addon-version.json",
+    "icon":  "icons/foxfill.png",
+    "platform":  "Chrome",
+    "features":  [
+                     {
+                         "title":  "Local profiles",
+                         "description":  "Personal and address details stored only on your device — optional passphrase encryption."
+                     },
+                     {
+                         "title":  "Scan → Review → Fill",
+                         "description":  "Match form fields with confidence markers; you choose what to fill."
+                     },
+                     {
+                         "title":  "Multi-profile",
+                         "description":  "Keep Personal, Work, and more — switch anytime."
+                     }
+                 ],
+    "whatsNew":  "Chrome extension. Prefer the Web Store when listed, or download the zip and follow INSTALL-CHROME.md.",
+    "screenshots":  [
+                        "screenshots/foxfill/01-scan-certain.jpg",
+                        "screenshots/foxfill/02-scan-review.jpg",
+                        "screenshots/foxfill/03-fill-complete.jpg",
+                        "screenshots/foxfill/04-fill-contact.jpg",
+                        "screenshots/foxfill/05-settings.jpg"
+                    ],
+    "package":  {
+                    "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/foxfill.zip",
+                    "build":  2,
+                    "fileName":  "foxfill.zip",
+                    "version":  "0.9.7",
+                    "label":  "Download zip",
+                    "available":  true,
+                    "channel":  "live",
+                    "sizeLabel":  "1.9 MB",
+                    "sizeBytes":  1971862
+                },
+    "publishedAt":  "2026-09-07",
+    "note":  "Chrome extension. Prefer the Web Store when listed, or download the zip and follow INSTALL-CHROME.md.",
+    "privacyUrl":  "https://marcell0805.github.io/the-foxs-den-doc/privacy/foxfill.html",
+    "offerZip":  true
+}

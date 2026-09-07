@@ -1,0 +1,10 @@
+{
+    "channel":  "live",
+    "releaseNotes":  "Chrome extension. Prefer the Web Store when listed, or download the zip and follow INSTALL-CHROME.md.",
+    "packageUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/foxfill.zip",
+    "publishedAt":  "2026-09-07",
+    "sizeLabel":  "1.9 MB",
+    "build":  2,
+    "version":  "0.9.7",
+    "sizeBytes":  1971862
+}

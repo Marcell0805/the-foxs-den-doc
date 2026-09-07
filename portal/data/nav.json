@@ -54,8 +54,18 @@
                       "icon":  "icons/ffs.png"
                   },
                   {
-                      "id":  "wid",
+                      "id":  "foxfill",
                       "num":  6,
+                      "file":  "foxfill.html",
+                      "label":  "FoxFill",
+                      "available":  true,
+                      "kind":  "addon",
+                      "status":  "live",
+                      "icon":  "icons/foxfill.png"
+                  },
+                  {
+                      "id":  "wid",
+                      "num":  7,
                       "file":  "wid.html",
                       "label":  "What Was I Doing",
                       "available":  true,
@@ -65,7 +75,7 @@
                   },
                   {
                       "id":  "about",
-                      "num":  7,
+                      "num":  8,
                       "file":  "about.html",
                       "label":  "About",
                       "available":  true,

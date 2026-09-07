@@ -1,11 +1,11 @@
 {
   "portalName": "The Fox's Den",
   "tagline": "The collection of things that escaped the workshop.",
-  "descriptor": "Apps, websites & tools built by Marcell",
+  "descriptor": "Apps, websites, desktop tools & browser add-ons built by Marcell",
   "version": "1.0",
   "pagesBaseUrl": "https://marcell0805.github.io/the-foxs-den-doc",
   "showAbout": true,
-  "aboutBlurb": "I enjoy turning ideas into useful apps, tools, and side projects. Some solve real problems. Others exist because \"what if?\" seemed like a perfectly reasonable reason to start coding.",
+  "aboutBlurb": "I enjoy turning ideas into useful apps, desktop tools, browser add-ons, and side projects. Some solve real problems. Others exist because \"what if?\" seemed like a perfectly reasonable reason to start coding.",
   "aboutSkills": [
     "C#",
     "Flutter",

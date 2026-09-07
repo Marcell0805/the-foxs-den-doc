@@ -212,6 +212,7 @@ function Get-DefaultPlatform([string]$Kind) {
     switch ($Kind) {
         'website' { return 'Website' }
         'tool' { return 'Windows' }
+        'addon' { return 'Chrome' }
         default { return 'Android' }
     }
 }
@@ -399,7 +400,7 @@ function Sync-AppsFromManifest {
             $readmeText = [IO.File]::ReadAllText($readmePath, $utf8)
             $parsed = Parse-ReadmeContent $readmeText
             $parsedFromReadme = $true
-        } elseif (($kind -eq 'website' -or $kind -eq 'tool') -and $app.note) {
+        } elseif (($kind -eq 'website' -or $kind -eq 'tool' -or $kind -eq 'addon') -and $app.note) {
             $parsed = @{
                 Summary = if ($app.summaryOverride) { $app.summaryOverride } else { $app.note }
                 Blocks = @(@{
@@ -437,17 +438,24 @@ function Sync-AppsFromManifest {
         $apkFileName = $app.apkFileName
         if (-not $apkFileName) { $apkFileName = "$id.apk" }
 
-        $packageFileName = if ($app.packageFileName) { $app.packageFileName } else { "$id-win-x64.zip" }
+        $packageFileName = if ($app.packageFileName) {
+            $app.packageFileName
+        } elseif ($kind -eq 'addon') {
+            "$id.zip"
+        } else {
+            "$id-win-x64.zip"
+        }
         $packagePath = Join-Path $DownloadsDir $packageFileName
         $hasPackage = Test-Path $packagePath
-        $toolVersionPath = Join-Path $DownloadsDir "$id/tool-version.json"
+        $versionJsonName = if ($kind -eq 'addon') { "addon-version.json" } else { "tool-version.json" }
+        $toolVersionPath = Join-Path $DownloadsDir "$id/$versionJsonName"
         $toolVersion = $null
         $toolBuild = $null
         $toolNotes = $null
         $toolSizeBytes = $null
         $toolSizeLabel = $null
         $toolPublishedAt = $null
-        if ($kind -eq 'tool' -and (Test-Path $toolVersionPath)) {
+        if (($kind -eq 'tool' -or $kind -eq 'addon') -and (Test-Path $toolVersionPath)) {
             $tv = Read-Json $toolVersionPath
             $toolVersion = $tv.version
             $toolBuild = $tv.build
@@ -469,6 +477,9 @@ function Sync-AppsFromManifest {
         if ($kind -eq 'tool' -and -not $hasPackage) {
             Write-Warning "Tool package missing for $id at $packagePath (run publish-app-tool.ps1)"
         }
+        if ($kind -eq 'addon' -and -not $hasPackage -and -not $app.storeUrl) {
+            Write-Warning "Addon package missing for $id at $packagePath and no storeUrl (run publish-app-addon.ps1)"
+        }
 
         $available = $true
         if ($null -ne $app.available) { $available = [bool]$app.available }
@@ -479,9 +490,18 @@ function Sync-AppsFromManifest {
         if ($kind -eq 'mobile' -and -not $live.hasApk -and $playUrl) { $available = $true }
         if ($kind -eq 'website' -and -not $app.externalUrl) { $available = $false }
         if ($kind -eq 'tool' -and -not $hasPackage) { $available = $false }
+        if ($kind -eq 'addon') {
+            $offerZip = $true
+            if ($null -ne $app.offerZip) { $offerZip = [bool]$app.offerZip }
+            $hasStore = -not [string]::IsNullOrWhiteSpace([string]$app.storeUrl)
+            if ($offerZip -and -not $hasPackage -and -not $hasStore) { $available = $false }
+            if (-not $offerZip -and -not $hasStore) { $available = $false }
+        }
 
         $websiteNote = if ($app.note) { [string]$app.note } else { "Website project." }
-        $toolNote = if ($app.note) { [string]$app.note } elseif ($toolNotes) { [string]$toolNotes } else { "Windows tool package." }
+        $toolNote = if ($app.note) { [string]$app.note } elseif ($toolNotes) { [string]$toolNotes } else {
+            if ($kind -eq 'addon') { "Chrome extension package." } else { "Windows desktop tool package." }
+        }
         $publishedAt = if ($app.publishedAt) { [string]$app.publishedAt } elseif ($toolPublishedAt) { [string]$toolPublishedAt } else { $null }
 
         $section = [ordered]@{
@@ -497,15 +517,26 @@ function Sync-AppsFromManifest {
                 $websiteNote
             } elseif ($kind -eq 'tool') {
                 if ($hasPackage) { "Download the zip, extract, and run." } else { "Package not published yet." }
+            } elseif ($kind -eq 'addon') {
+                if ($app.storeUrl -and $hasPackage) { "Chrome Web Store or download zip." }
+                elseif ($app.storeUrl) { "Get it on the Chrome Web Store." }
+                elseif ($hasPackage) { "Download the zip and load in Chrome." }
+                else { "Not published yet." }
             } elseif ($live.hasApk) {
                 "Official APK is hosted on GitHub Pages."
             } else {
                 "APK not published yet."
             }
-            version = if ($kind -eq 'tool') { $toolVersion } else { $live.version }
-            build = if ($kind -eq 'tool') { $toolBuild } else { $live.build }
-            releaseNotes = if ($kind -eq 'website') { $websiteNote } elseif ($kind -eq 'tool') { $toolNote } else { $live.releaseNotes }
-            updateCheckUrl = if ($kind -eq 'tool') { "$base/downloads/$id/tool-version.json" } else { $live.updateCheckUrl }
+            version = if ($kind -eq 'tool' -or $kind -eq 'addon') { $toolVersion } else { $live.version }
+            build = if ($kind -eq 'tool' -or $kind -eq 'addon') { $toolBuild } else { $live.build }
+            releaseNotes = if ($kind -eq 'website') { $websiteNote } elseif ($kind -eq 'tool' -or $kind -eq 'addon') { $toolNote } else { $live.releaseNotes }
+            updateCheckUrl = if ($kind -eq 'tool') {
+                "$base/downloads/$id/tool-version.json"
+            } elseif ($kind -eq 'addon') {
+                "$base/downloads/$id/addon-version.json"
+            } else {
+                $live.updateCheckUrl
+            }
         }
 
         $codeProtected = $false
@@ -555,7 +586,7 @@ function Sync-AppsFromManifest {
                 $section.publishedAt = $publishedAt
             }
             $section.note = $websiteNote
-        } elseif ($kind -eq 'tool') {
+        } elseif ($kind -eq 'tool' -or $kind -eq 'addon') {
             $section.package = @{
                 downloadUrl = "$base/downloads/$packageFileName"
                 fileName = $packageFileName
@@ -569,6 +600,9 @@ function Sync-AppsFromManifest {
             }
             if ($publishedAt) { $section.publishedAt = $publishedAt }
             $section.note = $toolNote
+            if ($app.storeUrl) { $section.storeUrl = [string]$app.storeUrl }
+            if ($app.privacyUrl) { $section.privacyUrl = [string]$app.privacyUrl }
+            if ($null -ne $app.offerZip) { $section.offerZip = [bool]$app.offerZip }
 
             $betaPackageFile = $null
             if ($app.beta) {
@@ -577,7 +611,8 @@ function Sync-AppsFromManifest {
                 }
                 $betaPackagePath = Join-Path $DownloadsDir $betaPackageFile
                 $hasBetaPackage = Test-Path $betaPackagePath
-                $betaVersionPath = Join-Path $DownloadsDir "$id/beta/tool-version.json"
+                $betaVersionJson = if ($kind -eq 'addon') { "addon-version.json" } else { "tool-version.json" }
+                $betaVersionPath = Join-Path $DownloadsDir "$id/beta/$betaVersionJson"
                 $betaVersion = $null
                 $betaBuild = $null
                 $betaNotes = $null
@@ -603,13 +638,13 @@ function Sync-AppsFromManifest {
                     version = $betaVersion
                     build = $betaBuild
                     releaseNotes = $betaNotes
-                    updateCheckUrl = "$base/downloads/$id/beta/tool-version.json"
+                    updateCheckUrl = "$base/downloads/$id/beta/$betaVersionJson"
                     available = $hasBetaPackage
                     sizeBytes = $betaSizeBytes
                     sizeLabel = $betaSizeLabel
                 }
                 if (-not $hasBetaPackage) {
-                    Write-Warning "Beta tool package missing for $id at $betaPackagePath (optional; publish with -Channel beta)"
+                    Write-Warning "Beta $kind package missing for $id at $betaPackagePath (optional; publish with -Channel beta)"
                 }
             }
         } else {

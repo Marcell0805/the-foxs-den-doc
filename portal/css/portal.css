@@ -348,7 +348,19 @@ img { max-width: 100%; height: auto; }
   text-decoration: none; border-radius: 999px; font-weight: 600; font-size: .95rem; min-height: 44px;
   box-shadow: 0 8px 20px rgba(224, 138, 69, 0.18);
 }
-.app-download-btn:hover { background: var(--accent-hover); color: #1a1008; filter: none; }
+.product-actions .app-download-btn-secondary {
+  background: transparent;
+  color: var(--accent-soft, #c9a06a);
+  border: 1px solid rgba(201, 160, 106, 0.45);
+  box-shadow: none;
+}
+.product-actions .addon-install-hint {
+  margin: 0.35rem 0 0;
+  font-size: 0.88rem;
+  color: var(--muted);
+  line-height: 1.4;
+  max-width: 36rem;
+}
 .app-download-btn-beta {
   background: transparent; color: var(--accent-soft);
   border: 1px solid rgba(201, 160, 106, 0.45); box-shadow: none;
