@@ -189,8 +189,16 @@ Write-IconLog "Synced portal icon for $AppId from $sourceIcon -> $destPath"
 $updated = $false
 foreach ($entry in $manifest.apps) {
     if ($entry.id -eq $AppId) {
-        if ($entry.icon -ne $iconRel) {
-            $entry.icon = $iconRel
+        $currentIcon = $null
+        if ($entry.PSObject.Properties.Name -contains 'icon') {
+            $currentIcon = [string]$entry.icon
+        }
+        if ($currentIcon -ne $iconRel) {
+            if ($entry.PSObject.Properties.Name -contains 'icon') {
+                $entry.icon = $iconRel
+            } else {
+                $entry | Add-Member -NotePropertyName icon -NotePropertyValue $iconRel -Force
+            }
             $updated = $true
         }
         break
