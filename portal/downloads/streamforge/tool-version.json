@@ -1,10 +1,10 @@
 {
     "channel":  "live",
-    "releaseNotes":  "Service Diagnostics in Settings — see if Steam, RAWG, Discord, or updates are down, then Configure / Re-login / Retry from that row.\n• Guild emoji picker in announcements — insert :name: and they resolve when you send.\n• Tag roles and specific users in the Discord ping list.\n• More reliable Discord setup (fresh login, clearer bot-token errors).\n• UI polish: stream-day dropdown and diagnostics spacing.",
+    "releaseNotes":  "Fixed scheduling multiple games on the same day — each game now keeps its own time, and same-day games are sorted earliest to latest.",
     "packageUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/streamforge-win-x64.zip",
-    "publishedAt":  "2026-09-09",
+    "publishedAt":  "2026-09-10",
     "sizeLabel":  "81.6 MB",
-    "build":  11,
-    "version":  "1.0.10",
-    "sizeBytes":  85586907
+    "build":  12,
+    "version":  "1.0.11",
+    "sizeBytes":  85591936
 }
