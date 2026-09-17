@@ -23,8 +23,8 @@
                    }
                ],
     "sidebarNote":  "Download the zip and load in Chrome.",
-    "version":  "0.9.7",
-    "build":  2,
+    "version":  "0.9.14",
+    "build":  3,
     "releaseNotes":  "Chrome extension. Prefer the Web Store when listed, or download the zip and follow INSTALL-CHROME.md.",
     "updateCheckUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/foxfill/addon-version.json",
     "icon":  "icons/foxfill.png",
@@ -49,20 +49,21 @@
                         "screenshots/foxfill/02-scan-review.jpg",
                         "screenshots/foxfill/03-fill-complete.jpg",
                         "screenshots/foxfill/04-fill-contact.jpg",
-                        "screenshots/foxfill/05-settings.jpg"
+                        "screenshots/foxfill/05-settings.jpg",
+                        "screenshots/foxfill/06-PopUp-Icon-1280x800.png"
                     ],
     "package":  {
                     "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/foxfill.zip",
-                    "build":  2,
+                    "build":  3,
                     "fileName":  "foxfill.zip",
-                    "version":  "0.9.7",
+                    "version":  "0.9.14",
                     "label":  "Download zip",
                     "available":  true,
                     "channel":  "live",
                     "sizeLabel":  "1.9 MB",
-                    "sizeBytes":  1971862
+                    "sizeBytes":  1983092
                 },
-    "publishedAt":  "2026-09-07",
+    "publishedAt":  "2026-09-17",
     "note":  "Chrome extension. Prefer the Web Store when listed, or download the zip and follow INSTALL-CHROME.md.",
     "privacyUrl":  "https://marcell0805.github.io/the-foxs-den-doc/privacy/foxfill.html",
     "offerZip":  true
