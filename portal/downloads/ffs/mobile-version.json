@@ -1,11 +1,11 @@
 {
     "channel":  "live",
-    "releaseNotes":  "FFS 1.0.0 — Internal test build\n\n• Reliable Android back navigation (tabs return to Home)\n• Clearer Home, Reports, and transaction list layout\n• Default account types \u0026 categories on first launch\n• Transfers excluded from spending reports\n• Improved goals progress and contribution screens\n• Demo bank notification can be simulated repeatedly\n• Local-first finance: transactions, reports, goals, OCR, CSV export\n\nThis is an internal testing release. Data stays on your device.",
-    "sizeLabel":  "85.3 MB",
+    "releaseNotes":  "FFS 1.1.0 — Internal test\n\n• Planning tab: Budget + Goals together\n• Monthly Needs / Wants / Savings budgets\n• Budget vs Actual tracking\n• Better bank alerts (FNB, Capitec, Discovery, Wallet)\n• Wallet + bank duplicate blocking\n• Improved receipt OCR totals\n• Clearer money-in vs money-out detection\n• More category icons + Home budget snapshot\n\nLocal-only. Internal testing build.",
+    "sizeLabel":  "86.0 MB",
     "storeUrl":  "https://play.google.com/store/apps/details?id=dev.marcellvn.ffs",
-    "build":  3,
-    "version":  "1.0.0",
+    "build":  5,
+    "version":  "1.1.0",
     "apkUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs.apk",
     "distribution":  "both",
-    "sizeBytes":  89434174
+    "sizeBytes":  90171454
 }
