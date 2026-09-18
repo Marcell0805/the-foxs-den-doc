@@ -24,8 +24,8 @@
                ],
     "sidebarNote":  "Official APK is hosted on GitHub Pages.",
     "version":  "1.1.0",
-    "build":  7,
-    "releaseNotes":  "FFS 1.1.0 — Receipt scan fix\n\n• More reliable receipt OCR on real phones\n• Camera/gallery images copied locally before scan\n• Better handling of large photos and gallery picks\n• Clearer errors if a scan still fails\n• Improved on-device text recognition setup\n\nLocal-only. Internal testing build.",
+    "build":  8,
+    "releaseNotes":  "FFS 1.1.0 — Receipt OCR fix\n\n• More reliable camera and gallery scanning\n• Fixes crash when opening photos for text recognition\n• Images prepared locally before OCR\n• Clearer errors if a scan fails\n\nLocal-only. Internal testing build.",
     "updateCheckUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs/mobile-version.json",
     "codeProtected":  true,
     "unlock":  {
@@ -71,13 +71,13 @@
                     ],
     "apk":  {
                 "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs.apk",
-                "build":  7,
+                "build":  8,
                 "fileName":  "ffs.apk",
                 "version":  "1.1.0",
                 "label":  "Download Live APK",
                 "available":  true,
                 "channel":  "live",
-                "sizeLabel":  "86.0 MB",
-                "sizeBytes":  90171454
+                "sizeLabel":  "86.1 MB",
+                "sizeBytes":  90253374
             }
 }

@@ -1,11 +1,11 @@
 {
     "channel":  "live",
-    "releaseNotes":  "FFS 1.1.0 — Receipt scan fix\n\n• More reliable receipt OCR on real phones\n• Camera/gallery images copied locally before scan\n• Better handling of large photos and gallery picks\n• Clearer errors if a scan still fails\n• Improved on-device text recognition setup\n\nLocal-only. Internal testing build.",
-    "sizeLabel":  "86.0 MB",
+    "releaseNotes":  "FFS 1.1.0 — Receipt OCR fix\n\n• More reliable camera and gallery scanning\n• Fixes crash when opening photos for text recognition\n• Images prepared locally before OCR\n• Clearer errors if a scan fails\n\nLocal-only. Internal testing build.",
+    "sizeLabel":  "86.1 MB",
     "storeUrl":  "https://play.google.com/store/apps/details?id=dev.marcellvn.ffs",
-    "build":  7,
+    "build":  8,
     "version":  "1.1.0",
     "apkUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs.apk",
     "distribution":  "both",
-    "sizeBytes":  90171454
+    "sizeBytes":  90253374
 }
