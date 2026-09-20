@@ -1,11 +1,11 @@
 {
     "channel":  "live",
-    "releaseNotes":  "FFS 1.1.0 — Receipt OCR fix\n\n• More reliable camera and gallery scanning\n• Fixes crash when opening photos for text recognition\n• Images prepared locally before OCR\n• Clearer errors if a scan fails\n\nLocal-only. Internal testing build.",
-    "sizeLabel":  "86.1 MB",
+    "releaseNotes":  "FFS 1.1.1 — Capture, updates \u0026 stability\n\n• More reliable bank notification capture (Wallet, Capitec, Discovery amounts)\n• Bank icons on Accounts and Banks \u0026 sources\n• In-app update prompt with download progress and installer\n• Faster, more stable startup (fewer freezes on open)\n• Transactions back goes to Home like other tabs\n• “Set up notification capture” only shows when access isn’t allowed yet\n\nLocal-only. Internal testing build.",
+    "sizeLabel":  "85.3 MB",
     "storeUrl":  "https://play.google.com/store/apps/details?id=dev.marcellvn.ffs",
-    "build":  8,
+    "build":  11,
     "version":  "1.1.0",
     "apkUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs.apk",
     "distribution":  "both",
-    "sizeBytes":  90253374
+    "sizeBytes":  89434174
 }
