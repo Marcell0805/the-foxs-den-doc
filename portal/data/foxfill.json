@@ -24,8 +24,8 @@
                ],
     "sidebarNote":  "Download the zip and load in Chrome.",
     "version":  "0.9.14",
-    "build":  3,
-    "releaseNotes":  "Chrome extension. Prefer the Web Store when listed, or download the zip and follow INSTALL-CHROME.md.",
+    "build":  4,
+    "releaseNotes":  "• Searchable country picker (type to find your country)\n• Phone field hint follows your country dial code (+1, +44, +27, …)\n• New profiles start with a country from your browser language\n• Address labels adapt (State/ZIP, County/Postcode, or Province/Postal Code)\n• Clearer tips — less South Africa–only wording",
     "updateCheckUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/foxfill/addon-version.json",
     "icon":  "icons/foxfill.png",
     "platform":  "Chrome",
@@ -43,7 +43,7 @@
                          "description":  "Keep Personal, Work, and more — switch anytime."
                      }
                  ],
-    "whatsNew":  "Chrome extension. Prefer the Web Store when listed, or download the zip and follow INSTALL-CHROME.md.",
+    "whatsNew":  "• Searchable country picker (type to find your country)\n• Phone field hint follows your country dial code (+1, +44, +27, …)\n• New profiles start with a country from your browser language\n• Address labels adapt (State/ZIP, County/Postcode, or Province/Postal Code)\n• Clearer tips — less South Africa–only wording",
     "screenshots":  [
                         "screenshots/foxfill/01-scan-certain.jpg",
                         "screenshots/foxfill/02-scan-review.jpg",
@@ -54,17 +54,17 @@
                     ],
     "package":  {
                     "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/foxfill.zip",
-                    "build":  3,
+                    "build":  4,
                     "fileName":  "foxfill.zip",
                     "version":  "0.9.14",
                     "label":  "Download zip",
                     "available":  true,
                     "channel":  "live",
                     "sizeLabel":  "1.9 MB",
-                    "sizeBytes":  1983092
+                    "sizeBytes":  1988409
                 },
-    "publishedAt":  "2026-09-17",
-    "note":  "Chrome extension. Prefer the Web Store when listed, or download the zip and follow INSTALL-CHROME.md.",
+    "publishedAt":  "2026-09-21",
+    "note":  "• Searchable country picker (type to find your country)\n• Phone field hint follows your country dial code (+1, +44, +27, …)\n• New profiles start with a country from your browser language\n• Address labels adapt (State/ZIP, County/Postcode, or Province/Postal Code)\n• Clearer tips — less South Africa–only wording",
     "privacyUrl":  "https://marcell0805.github.io/the-foxs-den-doc/privacy/foxfill.html",
     "offerZip":  true
 }

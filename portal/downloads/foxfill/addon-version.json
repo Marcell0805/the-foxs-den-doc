@@ -1,10 +1,10 @@
 {
     "channel":  "live",
-    "releaseNotes":  "Chrome extension. Prefer the Web Store when listed, or download the zip and follow INSTALL-CHROME.md.",
+    "releaseNotes":  "• Searchable country picker (type to find your country)\n• Phone field hint follows your country dial code (+1, +44, +27, …)\n• New profiles start with a country from your browser language\n• Address labels adapt (State/ZIP, County/Postcode, or Province/Postal Code)\n• Clearer tips — less South Africa–only wording",
     "packageUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/foxfill.zip",
-    "publishedAt":  "2026-09-17",
+    "publishedAt":  "2026-09-21",
     "sizeLabel":  "1.9 MB",
-    "build":  3,
+    "build":  4,
     "version":  "0.9.14",
-    "sizeBytes":  1983092
+    "sizeBytes":  1988409
 }
