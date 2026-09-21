@@ -24,8 +24,8 @@
                ],
     "sidebarNote":  "Official APK is hosted on GitHub Pages.",
     "version":  "1.1.0",
-    "build":  11,
-    "releaseNotes":  "FFS 1.1.1 — Capture, updates \u0026 stability\n\n• More reliable bank notification capture (Wallet, Capitec, Discovery amounts)\n• Bank icons on Accounts and Banks \u0026 sources\n• In-app update prompt with download progress and installer\n• Faster, more stable startup (fewer freezes on open)\n• Transactions back goes to Home like other tabs\n• “Set up notification capture” only shows when access isn’t allowed yet\n\nLocal-only. Internal testing build.",
+    "build":  12,
+    "releaseNotes":  "Polish bank branding, reports drill-down, and branded splash bootstrap.\n\nAdd bank badges with real icons and acronym fallback, make reports more useful with summary/period charts and tap-through filters, and introduce a longer staged splash so startup can absorb future warm-up work.",
     "updateCheckUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs/mobile-version.json",
     "codeProtected":  true,
     "unlock":  {
@@ -71,13 +71,13 @@
                     ],
     "apk":  {
                 "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs.apk",
-                "build":  11,
+                "build":  12,
                 "fileName":  "ffs.apk",
                 "version":  "1.1.0",
                 "label":  "Download Live APK",
                 "available":  true,
                 "channel":  "live",
-                "sizeLabel":  "85.3 MB",
-                "sizeBytes":  89434174
+                "sizeLabel":  "85.7 MB",
+                "sizeBytes":  89877471
             }
 }

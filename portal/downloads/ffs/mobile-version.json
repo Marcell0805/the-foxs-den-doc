@@ -1,11 +1,11 @@
 {
     "channel":  "live",
-    "releaseNotes":  "FFS 1.1.1 — Capture, updates \u0026 stability\n\n• More reliable bank notification capture (Wallet, Capitec, Discovery amounts)\n• Bank icons on Accounts and Banks \u0026 sources\n• In-app update prompt with download progress and installer\n• Faster, more stable startup (fewer freezes on open)\n• Transactions back goes to Home like other tabs\n• “Set up notification capture” only shows when access isn’t allowed yet\n\nLocal-only. Internal testing build.",
-    "sizeLabel":  "85.3 MB",
+    "releaseNotes":  "Polish bank branding, reports drill-down, and branded splash bootstrap.\n\nAdd bank badges with real icons and acronym fallback, make reports more useful with summary/period charts and tap-through filters, and introduce a longer staged splash so startup can absorb future warm-up work.",
+    "sizeLabel":  "85.7 MB",
     "storeUrl":  "https://play.google.com/store/apps/details?id=dev.marcellvn.ffs",
-    "build":  11,
+    "build":  12,
     "version":  "1.1.0",
     "apkUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs.apk",
     "distribution":  "both",
-    "sizeBytes":  89434174
+    "sizeBytes":  89877471
 }
