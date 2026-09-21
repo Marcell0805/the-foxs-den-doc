@@ -42,6 +42,8 @@
       question: 'Are you excited for the Drakensberg?',
       yesLabel: 'YES! 🏹',
       noLabel: 'No... 🦊',
+      acceptFlipLabel: 'The Huntress accepts.',
+      foxedLine: 'You just got foxed.',
       noLabels: [
         'No... 🦊',
         'Still no.',
@@ -183,11 +185,14 @@
           '<div class="berg-sky" aria-hidden="true"></div>' +
           '<div class="berg-backdrop" aria-hidden="true">' +
             '<img src="' + esc(landSrc) + '" alt="">' +
+            '<div class="berg-layer berg-layer-trees"><img src="' + esc(landSrc) + '" alt=""></div>' +
+            '<div class="berg-layer berg-layer-river"><img src="' + esc(landSrc) + '" alt=""></div>' +
             '<div class="berg-tint"></div>' +
           '</div>' +
           '<div class="berg-sun" aria-hidden="true"></div>' +
           '<div class="berg-moon" aria-hidden="true"></div>' +
           '<div class="berg-stars" aria-hidden="true">' + stars + '</div>' +
+          '<span class="berg-shooting-star" aria-hidden="true"></span>' +
           '<button type="button" class="berg-constellation" aria-label="A faint constellation">' +
             '<svg viewBox="0 0 160 110" width="160" height="110" aria-hidden="true">' +
               '<g fill="#f7f3e8" stroke="none">' +
@@ -348,7 +353,7 @@
     if (this.discoveries[kind]) return false;
     this.discoveries[kind] = true;
     this.updateHud();
-    if (toast) this.showToast(toast.title, toast.body, toast.xp);
+    if (toast) this.showToast(toast.title, toast.body, toast.xp || '+10 Huntress XP');
     this.maybeCelebrate();
     return true;
   };
@@ -437,45 +442,59 @@
     });
   };
 
-  Quest.prototype.launchFireworks = function () {
-    var host = this.root && this.root.querySelector('.berg-fireworks');
-    if (!host) return;
-    host.innerHTML = '';
-    host.classList.add('is-live');
-    if (this.reduceMotion) {
-      var self = this;
-      this.after(2200, function () {
-        host.classList.remove('is-live');
-        host.innerHTML = '';
-      });
-      return;
-    }
+  Quest.prototype.spawnFireworkWave = function (host, wave) {
     var colors = ['#e0b15a', '#f4efe4', '#e08a45', '#7ec8e3', '#c45c3a', '#f6e38b', '#f27a7a'];
     var burst;
     var i;
-    for (burst = 0; burst < 5; burst++) {
-      var cx = 18 + (burst * 16) + (burst % 2 ? 8 : 0);
-      var cy = 16 + ((burst * 11) % 28);
-      for (i = 0; i < 18; i++) {
-        var angle = (i / 18) * Math.PI * 2;
-        var dist = 48 + (i % 5) * 14;
+    for (burst = 0; burst < 4; burst++) {
+      var cx = 10 + ((burst * 22 + wave * 13) % 78);
+      var cy = 8 + ((burst * 15 + wave * 11) % 34);
+      for (i = 0; i < 16; i++) {
+        var angle = (i / 16) * Math.PI * 2;
+        var dist = 52 + (i % 5) * 16;
         var el = document.createElement('span');
         el.className = 'berg-spark';
         el.style.left = cx + '%';
         el.style.top = cy + '%';
         el.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
         el.style.setProperty('--dy', Math.sin(angle) * dist + 'px');
-        el.style.background = colors[(i + burst) % colors.length];
-        el.style.color = colors[(i + burst) % colors.length];
-        el.style.animationDelay = (burst * 0.22) + (i % 3) * 0.04 + 's';
+        el.style.background = colors[(i + burst + wave) % colors.length];
+        el.style.color = colors[(i + burst + wave) % colors.length];
+        el.style.animationDelay = (burst * 0.1) + (i % 4) * 0.03 + 's';
         host.appendChild(el);
       }
     }
+  };
+
+  Quest.prototype.launchFireworks = function () {
+    var host = this.root && this.root.querySelector('.berg-fireworks');
+    if (!host) return;
+    host.innerHTML = '';
+    host.classList.add('is-live');
     var self = this;
-    this.after(3600, function () {
-      host.classList.remove('is-live');
-      host.innerHTML = '';
-    });
+    if (this.reduceMotion) {
+      this.after(2200, function () {
+        host.classList.remove('is-live');
+        host.innerHTML = '';
+      });
+      return;
+    }
+    var started = Date.now();
+    var wave = 0;
+    var tick = function () {
+      if (!self.root || !host.isConnected) return;
+      if (Date.now() - started >= 10000) {
+        self.after(2000, function () {
+          host.classList.remove('is-live');
+          host.innerHTML = '';
+        });
+        return;
+      }
+      self.spawnFireworkWave(host, wave);
+      wave += 1;
+      self.after(1600, tick);
+    };
+    tick();
   };
 
   Quest.prototype.handleNo = function () {
@@ -486,6 +505,7 @@
     };
     var labels = this.cfg.noLabels || [this.cfg.noLabel];
     this.noIndex += 1;
+    var atEnd = this.noIndex >= labels.length - 1;
     var noLabel = labels[Math.min(this.noIndex, labels.length - 1)] || this.cfg.noLabel;
     this.dodgeArmed = false;
     this.panel().innerHTML =
@@ -496,14 +516,51 @@
         '<p class="berg-no-title">' + esc(item.title) + '</p>' +
         '<p>' + nl(item.body) + '</p>' +
       '</div>' +
-      '<div class="berg-actions">' +
+      '<div class="berg-actions is-apart">' +
         '<span class="berg-yes-slot" aria-hidden="true"></span>' +
-        '<button type="button" class="berg-btn berg-btn-no">' + esc(noLabel) + '</button>' +
+        '<button type="button" class="berg-btn berg-btn-no' + (atEnd ? ' berg-no-final' : '') + '">' +
+          esc(noLabel) +
+        '</button>' +
       '</div>';
     this.parkYes();
     var self = this;
     this.after(900, function () { self.dodgeArmed = true; });
     if (this.noIndex === 2) this.showFoxLine();
+    this.reactToNo(item);
+  };
+
+  Quest.prototype.reactToNo = function (item) {
+    var text = (((item && item.title) || '') + ' ' + ((item && item.body) || '')).toLowerCase();
+    if (/detected suspicious|suspicious huntress/.test(text)) {
+      this.shakeEl(this.root.querySelector('.berg-fox'));
+    }
+    if (/otter has been notified|an otter has been/.test(text)) {
+      this.shakeEl(this.root.querySelector('.berg-otter'));
+    }
+    if (/there will be mountains|a river/.test(text)) {
+      this.stirLandscape(3000);
+    }
+  };
+
+  Quest.prototype.shakeEl = function (el) {
+    if (!el || this.reduceMotion) return;
+    el.classList.remove('is-shaking');
+    void el.offsetWidth;
+    el.classList.add('is-shaking');
+    this.after(1600, function () {
+      if (el) el.classList.remove('is-shaking');
+    });
+  };
+
+  Quest.prototype.stirLandscape = function (ms) {
+    var stage = this.root && this.root.querySelector('.berg-backdrop');
+    if (!stage || this.reduceMotion) return;
+    stage.classList.remove('is-living');
+    void stage.offsetWidth;
+    stage.classList.add('is-living');
+    this.after(ms || 3000, function () {
+      if (stage) stage.classList.remove('is-living');
+    });
   };
 
   Quest.prototype.catchable = function () {
@@ -565,6 +622,11 @@
     var msgs = this.cfg.dodgeMessages || [];
     var msg = msgs.length ? msgs[(this.dodgeCount - 1) % msgs.length] : '';
     if (msg) this.showToast('', msg);
+
+    if (this.dodgeCount >= (this.cfg.maxDodges || 8)) {
+      this.parkYes();
+      return;
+    }
 
     var perch = null;
     if (/otter/i.test(msg)) perch = '.berg-otter';
@@ -705,16 +767,35 @@
     }).join('');
     this.panel().innerHTML =
       '<p class="berg-kicker">Drakensberg expedition</p>' +
-      '<h1>' + esc(cfg.finaleTitle) + '</h1>' +
+      '<h1 class="berg-finale-title">' + esc(cfg.finaleTitle) + '</h1>' +
       '<p class="berg-subtitle">' + esc(cfg.finaleHeading) + '</p>' +
-      '<p>' + esc(cfg.finalePlace) + '</p>' +
-      '<ul class="berg-list">' + items + '</ul>' +
+      '<div class="berg-finale-stack">' +
+        '<p class="berg-place">' + esc(cfg.finalePlace) + '</p>' +
+        '<ul class="berg-list">' + items + '</ul>' +
+      '</div>' +
       '<div class="berg-close">' + close + '</div>' +
       '<p class="berg-hearts">🦊 ❤️ 🏹</p>' +
       '<div class="berg-actions">' +
         '<button type="button" class="berg-btn berg-replay">' + esc(cfg.replayLabel) + '</button>' +
         '<a class="berg-btn berg-btn-ghost berg-return" href="../index.html">' + esc(cfg.returnLabel) + '</a>' +
       '</div>';
+  };
+
+  Quest.prototype.flipToAccept = function (btn) {
+    if (!btn || btn.classList.contains('is-accepting')) return;
+    var label = this.cfg.acceptFlipLabel || 'The Huntress accepts.';
+    btn.classList.add('is-accepting');
+    btn.textContent = label;
+    btn.setAttribute('aria-label', label);
+  };
+
+  Quest.prototype.unflipFinalNo = function (btn) {
+    if (!btn || !btn.classList.contains('berg-no-final')) return;
+    btn.classList.remove('is-accepting');
+    var labels = this.cfg.noLabels || [];
+    var label = labels[labels.length - 1] || this.cfg.noLabel || 'The Huntress declines.';
+    btn.textContent = label;
+    btn.setAttribute('aria-label', label);
   };
 
   Quest.prototype.bind = function () {
@@ -739,8 +820,27 @@
     }, opts);
 
     this.yesBtn.addEventListener('mouseenter', function (e) {
+      if (self.catchable() && self.phase === 'day' && !self.completed) {
+        self.flipToAccept(self.yesBtn);
+        return;
+      }
       if (!self.dodgeArmed || self.catchable() || self.coarse) return;
       self.dodgeFrom(e.clientX, e.clientY);
+    }, opts);
+
+    root.addEventListener('pointerover', function (e) {
+      var finalNo = e.target.closest && e.target.closest('.berg-no-final');
+      if (finalNo && self.phase === 'day' && !self.completed) {
+        self.flipToAccept(finalNo);
+      }
+    }, opts);
+
+    root.addEventListener('pointerout', function (e) {
+      var finalNo = e.target.closest && e.target.closest('.berg-no-final');
+      if (!finalNo || self.completed) return;
+      var next = e.relatedTarget;
+      if (next && finalNo.contains(next)) return;
+      self.unflipFinalNo(finalNo);
     }, opts);
 
     root.addEventListener('click', function (e) {
@@ -753,6 +853,12 @@
       }
       var noBtn = e.target.closest('.berg-btn-no');
       if (noBtn) {
+        if (noBtn.classList.contains('berg-no-final')) {
+          self.flipToAccept(noBtn);
+          self.showToast('', self.cfg.foxedLine || 'You just got foxed.');
+          self.acceptQuest();
+          return;
+        }
         self.handleNo();
         return;
       }
@@ -790,7 +896,7 @@
           if (self.discoveries.constellation) return;
           self.discoveries.constellation = true;
           el.classList.add('is-found');
-          self.showToast(self.cfg.constellation.title, self.cfg.constellation.body);
+          self.showToast(self.cfg.constellation.title, self.cfg.constellation.body, '+10 Huntress XP');
           return;
         }
         var names = { fox: 'Fox', eagle: 'Eagle', butterfly: 'Butterfly' };

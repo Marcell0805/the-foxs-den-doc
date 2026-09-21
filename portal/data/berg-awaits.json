@@ -27,6 +27,8 @@
     "question": "Are you excited for the Drakensberg?",
     "yesLabel": "YES! 🏹",
     "noLabel": "No... 🦊",
+    "acceptFlipLabel": "The Huntress accepts.",
+    "foxedLine": "You just got foxed.",
     "noLabels": [
       "No... 🦊",
       "Still no.",
@@ -105,7 +107,8 @@
     "otterAgain": "The otter refuses to elaborate.",
     "constellation": {
       "title": "A constellation has been discovered.",
-      "body": "Even the sky knows about the Fox and Huntress."
+      "body": "Even the sky knows about the Fox and Huntress.",
+      "xp": "+10 Huntress XP"
     },
     "allFoundTitle": "Every creature found.",
     "allFoundLine": "You've got the eyes of a true Huntress.",

@@ -89,6 +89,7 @@ Use AppGen **Import from portal folder** after editing JSON, or edit `appgen.jso
 ### Hidden pages (maintainers)
 
 - Search phrase **`my huntress`** (Enter in Ctrl+K / landing search) → `portal/data/my-huntress.json` / `sections/my-huntress.html` (not in nav or Fuse). Page also asks for a private date code (`unlock` in that JSON).
+- Search phrase **`Drakenberg`** / **`Drakensberg`** (Enter in Ctrl+K / landing search) → `portal/data/berg-awaits.json` / `sections/berg-awaits.html` (not in nav or Fuse). Opens the hidden “The Berg Awaits” quest.
 
 ## Commit and publish to GitHub
 

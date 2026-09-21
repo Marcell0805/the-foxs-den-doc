@@ -124,6 +124,43 @@ body.quest-page #section-content {
   transition: background 1.8s ease, opacity 1.8s ease;
 }
 
+.berg-layer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.berg-layer img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 55%;
+  display: block;
+}
+
+.berg-layer-trees {
+  clip-path: inset(38% 0 24% 0);
+}
+
+.berg-layer-river {
+  clip-path: inset(74% 0 0 0);
+}
+
+.berg-backdrop.is-living .berg-layer {
+  opacity: 1;
+}
+
+.berg-backdrop.is-living .berg-layer-river img {
+  animation: berg-river-flow 0.85s ease-in-out infinite;
+}
+
+.berg-backdrop.is-living .berg-layer-trees img {
+  transform-origin: 50% 70%;
+  animation: berg-trees-sway 1.05s ease-in-out infinite;
+}
+
 .berg-quest[data-phase="sunset"] .berg-backdrop img {
   filter: saturate(1.35) sepia(0.38) hue-rotate(-18deg) brightness(0.68) contrast(1.12);
 }
@@ -213,6 +250,39 @@ body.quest-page #section-content {
   opacity: 1;
 }
 
+.berg-shooting-star {
+  position: absolute;
+  top: 10%;
+  left: 0;
+  width: 92px;
+  height: 2px;
+  pointer-events: none;
+  z-index: 3;
+  opacity: 0;
+  transform: translate3d(-20vw, 0, 0) rotate(-16deg);
+  background: linear-gradient(90deg, transparent, rgba(247, 243, 232, 0.15) 25%, #f7f3e8 78%, #fff);
+  border-radius: 999px;
+  box-shadow: 0 0 10px 2px rgba(247, 243, 232, 0.45);
+}
+
+.berg-shooting-star::after {
+  content: '';
+  position: absolute;
+  right: -2px;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #fff;
+  transform: translateY(-50%);
+  box-shadow: 0 0 12px 4px rgba(255, 255, 255, 0.8);
+}
+
+.berg-quest[data-phase="night"] .berg-shooting-star,
+.berg-quest[data-phase="finale"] .berg-shooting-star {
+  animation: berg-shoot 16s linear infinite;
+}
+
 .berg-star {
   position: absolute;
   width: 2px;
@@ -226,6 +296,39 @@ body.quest-page #section-content {
   width: 3px;
   height: 3px;
   box-shadow: 0 0 6px rgba(247, 243, 232, 0.8);
+}
+
+.berg-shooting-star {
+  position: absolute;
+  top: 10%;
+  left: 0;
+  width: 92px;
+  height: 2px;
+  pointer-events: none;
+  z-index: 3;
+  opacity: 0;
+  transform: translate3d(-20vw, 0, 0) rotate(-16deg);
+  background: linear-gradient(90deg, transparent, rgba(247, 243, 232, 0.15) 25%, #f7f3e8 78%, #fff);
+  border-radius: 999px;
+  box-shadow: 0 0 10px 2px rgba(247, 243, 232, 0.45);
+}
+
+.berg-shooting-star::after {
+  content: '';
+  position: absolute;
+  right: -2px;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #fff;
+  transform: translateY(-50%);
+  box-shadow: 0 0 12px 4px rgba(255, 255, 255, 0.8);
+}
+
+.berg-quest[data-phase="night"] .berg-shooting-star,
+.berg-quest[data-phase="finale"] .berg-shooting-star {
+  animation: berg-shoot 16s linear infinite;
 }
 
 .berg-constellation {
@@ -613,22 +716,33 @@ body.quest-page #section-content {
 }
 
 .berg-quest[data-phase="day"] .berg-panel,
-.berg-quest[data-phase="accepted"] .berg-panel {
-  color: #1a3228;
+.berg-quest[data-phase="accepted"] .berg-panel,
+.berg-quest[data-phase="sunset"] .berg-panel {
+  color: #102018;
+  background: rgba(255, 250, 240, 0.9);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  border-radius: 28px;
+  box-shadow: 0 18px 48px rgba(12, 28, 20, 0.2);
+  padding: 1.6rem 1.4rem 1.5rem;
+  margin-top: 1.35rem;
 }
 
 .berg-quest[data-phase="day"] .berg-panel h1,
 .berg-quest[data-phase="day"] .berg-panel h2,
 .berg-quest[data-phase="accepted"] .berg-panel h1,
-.berg-quest[data-phase="accepted"] .berg-panel h2 {
-  color: #14261e;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.72), 0 2px 16px rgba(255, 255, 255, 0.35);
+.berg-quest[data-phase="accepted"] .berg-panel h2,
+.berg-quest[data-phase="sunset"] .berg-panel h1,
+.berg-quest[data-phase="sunset"] .berg-panel h2 {
+  color: #102018;
+  text-shadow: none;
 }
 
 .berg-quest[data-phase="day"] .berg-kicker,
-.berg-quest[data-phase="accepted"] .berg-kicker {
+.berg-quest[data-phase="accepted"] .berg-kicker,
+.berg-quest[data-phase="sunset"] .berg-kicker {
   color: #8a4f16;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.65);
+  text-shadow: none;
 }
 
 .berg-quest[data-phase="day"] .berg-subtitle,
@@ -646,30 +760,50 @@ body.quest-page #section-content {
 .berg-quest[data-phase="accepted"] .berg-list,
 .berg-quest[data-phase="accepted"] .berg-close,
 .berg-quest[data-phase="accepted"] .berg-no-title,
-.berg-quest[data-phase="accepted"] .berg-no-reply {
-  color: #1a3228;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.75), 0 2px 12px rgba(255, 255, 255, 0.35);
+.berg-quest[data-phase="accepted"] .berg-no-reply,
+.berg-quest[data-phase="sunset"] .berg-subtitle,
+.berg-quest[data-phase="sunset"] .berg-copy,
+.berg-quest[data-phase="sunset"] .berg-question,
+.berg-quest[data-phase="sunset"] .berg-hint,
+.berg-quest[data-phase="sunset"] .berg-list,
+.berg-quest[data-phase="sunset"] .berg-close {
+  color: #102018;
+  text-shadow: none;
+}
+
+.berg-quest[data-phase="day"] .berg-list,
+.berg-quest[data-phase="accepted"] .berg-list,
+.berg-quest[data-phase="sunset"] .berg-list {
+  font-weight: 600;
+}
+
+.berg-quest[data-phase="day"] .berg-hint,
+.berg-quest[data-phase="accepted"] .berg-hint,
+.berg-quest[data-phase="sunset"] .berg-hint {
+  color: #2a3f34;
 }
 
 .berg-quest[data-phase="day"] .berg-no-reply,
 .berg-quest[data-phase="accepted"] .berg-no-reply {
-  background: rgba(255, 248, 234, 0.55);
+  background: rgba(16, 32, 24, 0.06);
 }
 
 .berg-quest[data-phase="day"] .berg-btn-no,
 .berg-quest[data-phase="day"] .berg-btn-ghost,
 .berg-quest[data-phase="accepted"] .berg-btn-no,
-.berg-quest[data-phase="accepted"] .berg-btn-ghost {
-  color: #14261e;
-  border-color: rgba(20, 38, 30, 0.42);
-  background: rgba(255, 248, 234, 0.72);
+.berg-quest[data-phase="accepted"] .berg-btn-ghost,
+.berg-quest[data-phase="sunset"] .berg-btn-ghost {
+  color: #102018;
+  border-color: rgba(16, 32, 24, 0.35);
+  background: rgba(255, 255, 255, 0.72);
 }
 
 .berg-quest[data-phase="day"] .berg-btn-no:hover,
 .berg-quest[data-phase="day"] .berg-btn-ghost:hover,
 .berg-quest[data-phase="accepted"] .berg-btn-no:hover,
-.berg-quest[data-phase="accepted"] .berg-btn-ghost:hover {
-  background: rgba(255, 248, 234, 0.92);
+.berg-quest[data-phase="accepted"] .berg-btn-ghost:hover,
+.berg-quest[data-phase="sunset"] .berg-btn-ghost:hover {
+  background: #fff;
 }
 
 .berg-panel h1 { font-size: clamp(1.8rem, 6vw, 2.7rem); margin-bottom: 0.45rem; }
@@ -718,11 +852,59 @@ body.quest-page #section-content {
   line-height: 1.8;
 }
 
+.berg-panel h1.berg-finale-title {
+  white-space: nowrap;
+  font-size: clamp(1.55rem, 4.4vw, 2.35rem);
+  letter-spacing: 0.06em;
+  line-height: 1.2;
+  margin-bottom: 0.35rem;
+}
+
+.berg-quest[data-phase="finale"] .berg-panel {
+  padding: 1.75rem 1.25rem 2.25rem;
+  width: min(38rem, calc(100vw - 1.5rem));
+}
+
+.berg-quest[data-phase="finale"] .berg-subtitle {
+  margin-bottom: 0.7rem;
+}
+
+.berg-finale-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.berg-place {
+  margin: 0 0 0.45rem;
+}
+
+.berg-finale-stack .berg-place,
+.berg-finale-stack .berg-list {
+  width: min(20rem, 100%);
+  text-align: left;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.berg-finale-stack .berg-list {
+  margin-top: 0;
+}
+
+.berg-list li {
+  padding: 0.05rem 0;
+}
+
 .berg-close {
   margin-top: 1.25rem;
   font-family: var(--font-display);
   font-style: italic;
   line-height: 1.7;
+}
+
+.berg-close p {
+  margin: 0.12rem 0;
 }
 
 .berg-hearts {
@@ -733,9 +915,13 @@ body.quest-page #section-content {
 .berg-actions {
   display: flex;
   justify-content: center;
-  gap: 0.85rem;
+  gap: 1.6rem;
   margin-top: 1.5rem;
   min-height: 3.2rem;
+}
+
+.berg-actions.is-apart {
+  gap: clamp(4rem, 14vw, 8rem);
 }
 
 .berg-btn {
@@ -765,6 +951,24 @@ body.quest-page #section-content {
   color: var(--berg-cream);
   border: 1px solid rgba(244, 239, 228, 0.35);
   box-shadow: none;
+  white-space: nowrap;
+}
+
+.berg-no-final.is-accepting,
+.berg-yes.is-accepting {
+  background: var(--accent, #e08a45);
+  color: #1a1008;
+  border-color: transparent;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22);
+}
+
+.berg-quest[data-phase="day"] .berg-no-final.is-accepting,
+.berg-quest[data-phase="day"] .berg-yes.is-accepting,
+.berg-quest[data-phase="day"] .berg-no-final.is-accepting:hover,
+.berg-quest[data-phase="day"] .berg-yes.is-accepting:hover {
+  background: var(--accent, #e08a45);
+  color: #1a1008;
+  border-color: transparent;
 }
 
 .berg-btn-no:hover { background: rgba(244, 239, 228, 0.08); }
@@ -789,6 +993,11 @@ body.quest-page #section-content {
   z-index: 22;
 }
 
+.berg-fox.is-shaking,
+.berg-otter.is-shaking {
+  animation: berg-shake 0.45s ease-in-out 4;
+}
+
 .berg-fox.is-reacting {
   animation: berg-fox-flinch 0.55s ease;
 }
@@ -807,6 +1016,23 @@ body.quest-page #section-content {
 
 .berg-constellation.is-reacting {
   animation: berg-star-flare 0.6s ease;
+}
+
+@keyframes berg-shake {
+  0%, 100% { transform: translateX(0) rotate(0); }
+  25% { transform: translateX(-11px) rotate(-8deg); }
+  50% { transform: translateX(10px) rotate(7deg); }
+  75% { transform: translateX(-7px) rotate(-4deg); }
+}
+
+@keyframes berg-river-flow {
+  0%, 100% { transform: translate3d(0, 0, 0) scaleX(1); }
+  50% { transform: translate3d(1.6%, 0.5%, 0) scaleX(1.02); }
+}
+
+@keyframes berg-trees-sway {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  50% { transform: translate3d(0.9%, 0, 0) rotate(0.4deg); }
 }
 
 @keyframes berg-fox-flinch {
@@ -880,6 +1106,26 @@ body.quest-page #section-content {
   50%, 100% { transform: scaleX(-1); }
 }
 
+@keyframes berg-shoot {
+  0% {
+    transform: translate3d(-18vw, 0, 0) rotate(-16deg);
+    opacity: 0;
+  }
+  6% { opacity: 1; }
+  36% {
+    transform: translate3d(112vw, 16vh, 0) rotate(-16deg);
+    opacity: 1;
+  }
+  42% {
+    transform: translate3d(118vw, 18vh, 0) rotate(-16deg);
+    opacity: 0;
+  }
+  100% {
+    transform: translate3d(118vw, 18vh, 0) rotate(-16deg);
+    opacity: 0;
+  }
+}
+
 @keyframes berg-burst {
   0% {
     opacity: 1;
@@ -914,6 +1160,7 @@ body.quest-page #section-content {
 
 @media (max-width: 720px) {
   .berg-panel { padding: 2.4rem 0.85rem 8.5rem; }
+  .berg-panel h1.berg-finale-title { white-space: normal; text-wrap: balance; font-size: clamp(1.45rem, 7vw, 2rem); }
   .berg-hud { top: auto; bottom: 0.6rem; right: 0.6rem; }
   .berg-narrator { left: 0.6rem; top: 0.6rem; bottom: auto; }
   .berg-fox { width: min(112px, 30vw); bottom: 20%; }
@@ -929,11 +1176,14 @@ body.quest-page #section-content {
   .berg-eagle,
   .berg-eagle-face,
   .berg-spark,
+  .berg-shooting-star,
   .berg-firefly,
   .berg-grass-blade,
   .berg-otter.is-diving,
   .berg-fox.is-reacting,
+  .berg-fox.is-shaking,
   .berg-otter.is-reacting,
+  .berg-otter.is-shaking,
   .berg-constellation.is-reacting,
   .berg-yes,
   .berg-toast,

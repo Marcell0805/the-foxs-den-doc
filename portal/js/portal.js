@@ -480,7 +480,7 @@
       var link = document.createElement('link');
       link.id = 'berg-awaits-css';
       link.rel = 'stylesheet';
-      link.href = prefix + 'css/berg-awaits.css' + (foxLockQuery() ? foxLockQuery() + '&berg=13' : '?berg=13');
+      link.href = prefix + 'css/berg-awaits.css' + (foxLockQuery() ? foxLockQuery() + '&berg=18' : '?berg=18');
       document.head.appendChild(link);
     }
     if (window.BergAwaits) {
@@ -494,7 +494,7 @@
     }
     var script = document.createElement('script');
     script.id = 'berg-awaits-js';
-    script.src = prefix + 'js/berg-awaits.js' + (foxLockQuery() ? foxLockQuery() + '&berg=13' : '?berg=13');
+    script.src = prefix + 'js/berg-awaits.js' + (foxLockQuery() ? foxLockQuery() + '&berg=18' : '?berg=18');
     script.onload = done;
     script.onerror = function () {
       done();
