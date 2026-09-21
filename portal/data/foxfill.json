@@ -24,7 +24,7 @@
                ],
     "sidebarNote":  "Download the zip and load in Chrome.",
     "version":  "0.9.14",
-    "build":  4,
+    "build":  5,
     "releaseNotes":  "• Searchable country picker (type to find your country)\n• Phone field hint follows your country dial code (+1, +44, +27, …)\n• New profiles start with a country from your browser language\n• Address labels adapt (State/ZIP, County/Postcode, or Province/Postal Code)\n• Clearer tips — less South Africa–only wording",
     "updateCheckUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/foxfill/addon-version.json",
     "icon":  "icons/foxfill.png",
@@ -54,7 +54,7 @@
                     ],
     "package":  {
                     "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/foxfill.zip",
-                    "build":  4,
+                    "build":  5,
                     "fileName":  "foxfill.zip",
                     "version":  "0.9.14",
                     "label":  "Download zip",
