@@ -4,6 +4,13 @@
   var fuse = null;
   var modal = null;
 
+  var SECRET_PAGES = {
+    'myhuntress': 'my-huntress.html',
+    'my huntress': 'my-huntress.html',
+    'drakenberg': 'berg-awaits.html',
+    'drakensberg': 'berg-awaits.html'
+  };
+
   function esc(t) {
     var d = document.createElement('div');
     d.textContent = t == null ? '' : String(t);
@@ -82,12 +89,13 @@
           .trim()
           .replace(/\s+/g, ' ')
           .toLowerCase();
-        if (q === 'my huntress' || q === 'myhuntress') {
+        var secretPage = SECRET_PAGES[q] || SECRET_PAGES[q.replace(/\s+/g, '')];
+        if (secretPage) {
           e.preventDefault();
           close();
           var href = document.body.getAttribute('data-nav-scope') === 'landing'
-            ? 'sections/my-huntress.html'
-            : 'my-huntress.html';
+            ? 'sections/' + secretPage
+            : secretPage;
           location.href = href;
         }
       }

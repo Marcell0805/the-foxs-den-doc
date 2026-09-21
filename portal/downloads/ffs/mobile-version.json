@@ -1,11 +1,11 @@
 {
     "channel":  "live",
-    "releaseNotes":  "Polish bank branding, reports drill-down, and branded splash bootstrap.\n\nAdd bank badges with real icons and acronym fallback, make reports more useful with summary/period charts and tap-through filters, and introduce a longer staged splash so startup can absorb future warm-up work.",
-    "sizeLabel":  "85.7 MB",
+    "releaseNotes":  "Bank notification capture\n\nCaptures payment alerts from supported bank and Wallet apps into Needs review\nPull-to-refresh on Transactions scans notifications still in the shade\nLocal FFS alert when a payment is captured (Confirm / Review)\nBetter ZA parsing (FNB, Capitec, Discovery, Wallet) with Wallet↔bank dedupe",
+    "sizeLabel":  "86.0 MB",
     "storeUrl":  "https://play.google.com/store/apps/details?id=dev.marcellvn.ffs",
-    "build":  12,
+    "build":  13,
     "version":  "1.1.0",
     "apkUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs.apk",
     "distribution":  "both",
-    "sizeBytes":  89877471
+    "sizeBytes":  90155999
 }

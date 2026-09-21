@@ -115,17 +115,25 @@
     return document.body.getAttribute('data-section-id') === 'my-huntress';
   }
 
+  function isQuestPage() {
+    return document.body.getAttribute('data-section-id') === 'berg-awaits';
+  }
+
+  function isSecretExperiencePage() {
+    return isDedicationPage() || isQuestPage();
+  }
+
   function renderToolbar() {
     var mount = document.getElementById('portal-toolbar');
     if (!mount) return;
     var scope = document.body.getAttribute('data-nav-scope') || 'landing';
-    var dedication = isDedicationPage();
+    var secret = isSecretExperiencePage();
     var assetPrefix = scope === 'section' ? '../' : '';
     var backHref = scope === 'section' ? '../index.html' : 'index.html';
     var homeHref = scope === 'section' ? '../index.html' : 'index.html';
     var backTitle = scope === 'section' ? 'Back to The Den home' : 'The Den home';
     var labsUrl = 'https://marcell0805.github.io/foxbyte-labs/';
-    var menuBtn = scope === 'section' && !dedication
+    var menuBtn = scope === 'section' && !secret
       ? '<button type="button" class="toolbar-btn toolbar-menu" id="toolbar-menu-btn" title="Menu" aria-label="Open menu">' + SVG_MENU + '</button>'
       : '';
     var brand =
@@ -153,8 +161,8 @@
           '</div>' +
           '<div class="toolbar-end">' +
             labsLink +
-            (dedication ? '' : '<button type="button" class="toolbar-btn" id="toolbar-search-btn" title="Search (Ctrl+K)">' + SVG_SEARCH + '</button>') +
-            (dedication ? '' : '<button type="button" class="toolbar-btn toolbar-print" title="Print (Ctrl+P)">' + SVG_PRINT + '</button>') +
+            (secret ? '' : '<button type="button" class="toolbar-btn" id="toolbar-search-btn" title="Search (Ctrl+K)">' + SVG_SEARCH + '</button>') +
+            (secret ? '' : '<button type="button" class="toolbar-btn toolbar-print" title="Print (Ctrl+P)">' + SVG_PRINT + '</button>') +
           '</div>' +
         '</div>' +
       '</header>';
@@ -394,6 +402,135 @@
     obs.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
   }
 
+  function prefersReducedMotion() {
+    return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  }
+
+  function createUnlockOverlay(withHeart) {
+    var overlay = document.createElement('div');
+    overlay.className = 'dedication-unlock';
+    overlay.setAttribute('role', 'status');
+    overlay.setAttribute('aria-live', 'polite');
+    overlay.innerHTML =
+      '<div class="dedication-unlock-inner">' +
+        '<p class="dedication-unlock-msg"></p>' +
+        (withHeart ? '<div class="dedication-unlock-heart" hidden aria-hidden="true">♥</div>' : '') +
+      '</div>';
+    document.body.appendChild(overlay);
+    document.body.classList.add('dedication-revealing');
+    return overlay;
+  }
+
+  function playTimedMessages(lines, opts, done) {
+    opts = opts || {};
+    if (prefersReducedMotion()) {
+      done();
+      return;
+    }
+
+    var perMsg = opts.perMsg != null ? opts.perMsg : 2000;
+    var lastHold = opts.lastHold != null ? opts.lastHold : perMsg;
+    var showHeartOnLast = !!opts.showHeartOnLast;
+    var overlay = createUnlockOverlay(showHeartOnLast);
+    var msg = overlay.querySelector('.dedication-unlock-msg');
+    var heart = overlay.querySelector('.dedication-unlock-heart');
+
+    function setMsg(text, showHeart) {
+      msg.classList.remove('is-visible');
+      if (heart) {
+        heart.hidden = true;
+        heart.classList.remove('is-visible');
+      }
+      window.setTimeout(function () {
+        msg.textContent = text;
+        msg.classList.add('is-visible');
+        if (showHeart && heart) {
+          heart.hidden = false;
+          window.setTimeout(function () { heart.classList.add('is-visible'); }, 120);
+        }
+      }, 80);
+    }
+
+    var total = 0;
+    lines.forEach(function (line, i) {
+      var at = i * perMsg;
+      var isLast = i === lines.length - 1;
+      window.setTimeout(function () {
+        setMsg(line, showHeartOnLast && isLast);
+      }, at);
+      if (isLast) total = at + lastHold;
+    });
+
+    window.setTimeout(function () {
+      overlay.classList.add('is-leaving');
+      window.setTimeout(function () {
+        if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+        done();
+      }, 700);
+    }, total);
+  }
+
+  function portalAssetPrefix() {
+    return document.body.getAttribute('data-nav-scope') === 'section' ? '../' : '';
+  }
+
+  function loadQuestModule(done) {
+    var prefix = portalAssetPrefix();
+    if (!document.getElementById('berg-awaits-css')) {
+      var link = document.createElement('link');
+      link.id = 'berg-awaits-css';
+      link.rel = 'stylesheet';
+      link.href = prefix + 'css/berg-awaits.css' + (foxLockQuery() ? foxLockQuery() + '&berg=13' : '?berg=13');
+      document.head.appendChild(link);
+    }
+    if (window.BergAwaits) {
+      done();
+      return;
+    }
+    var existing = document.getElementById('berg-awaits-js');
+    if (existing) {
+      existing.addEventListener('load', done);
+      return;
+    }
+    var script = document.createElement('script');
+    script.id = 'berg-awaits-js';
+    script.src = prefix + 'js/berg-awaits.js' + (foxLockQuery() ? foxLockQuery() + '&berg=13' : '?berg=13');
+    script.onload = done;
+    script.onerror = function () {
+      done();
+    };
+    document.body.appendChild(script);
+  }
+
+  function bindQuestLeave() {
+    function leave() {
+      if (window.BergAwaits && typeof window.BergAwaits.destroy === 'function') {
+        window.BergAwaits.destroy();
+      }
+    }
+    document.querySelectorAll('.toolbar-brand, .toolbar-start a.toolbar-btn').forEach(function (el) {
+      el.addEventListener('click', leave);
+    });
+  }
+
+  function startBergQuest(mount, section) {
+    var unlock = (section && section.unlock) || {};
+    var lines = unlock.searchLines || ['SECRET QUEST DETECTED', 'THE BERG AWAITS'];
+    document.body.classList.add('quest-page');
+    mount.innerHTML = '';
+    playTimedMessages(lines, { perMsg: 1800, lastHold: 1600, showHeartOnLast: false }, function () {
+      document.body.classList.remove('dedication-revealing');
+      loadQuestModule(function () {
+        if (window.BergAwaits && typeof window.BergAwaits.start === 'function') {
+          window.BergAwaits.start(mount, section);
+          bindQuestLeave();
+        } else {
+          mount.innerHTML = '<p>The Berg could not be reached.</p>';
+        }
+      });
+    });
+  }
+
   function playDedicationUnlock(letter, section) {
     if (!letter) return;
 
@@ -411,76 +548,12 @@
       'One hidden page found.',
       'Opening dedication…'
     ];
-    var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var reduceMotion = prefersReducedMotion();
 
     function revealLetter() {
       letter.classList.remove('is-waiting');
       letter.classList.add('is-revealed');
       document.body.classList.remove('dedication-revealing');
-    }
-
-    function createUnlockOverlay(withHeart) {
-      var overlay = document.createElement('div');
-      overlay.className = 'dedication-unlock';
-      overlay.setAttribute('role', 'status');
-      overlay.setAttribute('aria-live', 'polite');
-      overlay.innerHTML =
-        '<div class="dedication-unlock-inner">' +
-          '<p class="dedication-unlock-msg"></p>' +
-          (withHeart ? '<div class="dedication-unlock-heart" hidden aria-hidden="true">♥</div>' : '') +
-        '</div>';
-      document.body.appendChild(overlay);
-      document.body.classList.add('dedication-revealing');
-      return overlay;
-    }
-
-    function playTimedMessages(lines, opts, done) {
-      opts = opts || {};
-      if (reduceMotion) {
-        done();
-        return;
-      }
-
-      var perMsg = opts.perMsg != null ? opts.perMsg : 2000;
-      var lastHold = opts.lastHold != null ? opts.lastHold : perMsg;
-      var showHeartOnLast = !!opts.showHeartOnLast;
-      var overlay = createUnlockOverlay(showHeartOnLast);
-      var msg = overlay.querySelector('.dedication-unlock-msg');
-      var heart = overlay.querySelector('.dedication-unlock-heart');
-
-      function setMsg(text, showHeart) {
-        msg.classList.remove('is-visible');
-        if (heart) {
-          heart.hidden = true;
-          heart.classList.remove('is-visible');
-        }
-        window.setTimeout(function () {
-          msg.textContent = text;
-          msg.classList.add('is-visible');
-          if (showHeart && heart) {
-            heart.hidden = false;
-            window.setTimeout(function () { heart.classList.add('is-visible'); }, 120);
-          }
-        }, 80);
-      }
-
-      var total = 0;
-      lines.forEach(function (line, i) {
-        var at = i * perMsg;
-        var isLast = i === lines.length - 1;
-        window.setTimeout(function () {
-          setMsg(line, showHeartOnLast && isLast);
-        }, at);
-        if (isLast) total = at + lastHold;
-      });
-
-      window.setTimeout(function () {
-        overlay.classList.add('is-leaving');
-        window.setTimeout(function () {
-          if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
-          done();
-        }, 700);
-      }, total);
     }
 
     function playSearchSequence(done) {
@@ -815,6 +888,12 @@
       return;
     }
 
+    if (id === 'berg-awaits' || section.kind === 'quest') {
+      document.body.classList.add('quest-page');
+      startBergQuest(mount, section);
+      return;
+    }
+
     if (id === 'my-huntress' || section.kind === 'dedication') {
       document.body.classList.add('dedication-page');
       document.body.setAttribute('data-section-id', 'my-huntress');
@@ -1035,6 +1114,7 @@
 
   function init() {
     if (isDedicationPage()) document.body.classList.add('dedication-page');
+    if (isQuestPage()) document.body.classList.add('quest-page');
     renderToolbar();
     renderSidebar();
     renderSection();

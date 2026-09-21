@@ -1,0 +1,953 @@
+/* The Berg Awaits — scoped to the hidden quest page */
+
+body.quest-page {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100dvh;
+  background: #0b1c28;
+}
+
+body.quest-page .portal-toolbar {
+  flex-shrink: 0;
+  background: rgba(8, 16, 12, 0.42);
+  backdrop-filter: blur(10px);
+  border-bottom-color: rgba(242, 239, 232, 0.08);
+}
+
+body.quest-page .page {
+  display: block;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  max-width: none !important;
+  margin: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0;
+  overflow: hidden;
+}
+
+body.quest-page .sidebar {
+  display: none !important;
+}
+
+body.quest-page .main {
+  width: 100%;
+  max-width: none;
+  padding: 0;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+body.quest-page #section-content {
+  height: 100%;
+}
+
+.berg-quest {
+  --berg-sky-top: #7ec8e3;
+  --berg-sky-mid: #cfe7c8;
+  --berg-sky-bot: #e7d7a8;
+  --berg-peak: #3d5a6c;
+  --berg-peak-far: #6d8b9a;
+  --berg-forest: #1f3d2c;
+  --berg-water: #3a7ca5;
+  --berg-gold: #e0b15a;
+  --berg-cream: #f4efe4;
+  --berg-ink: #152019;
+  position: relative;
+  isolation: auto;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+  color: var(--berg-cream);
+  font-family: var(--font-body);
+  transition: color 1.4s ease;
+}
+
+.berg-quest[data-phase="sunset"] {
+  --berg-sky-top: #3a2a4a;
+  --berg-sky-mid: #d2613a;
+  --berg-sky-bot: #f0a15a;
+  --berg-peak: #2a3348;
+  --berg-peak-far: #5a4660;
+  --berg-forest: #173024;
+  --berg-water: #2c5474;
+}
+
+.berg-quest[data-phase="night"],
+.berg-quest[data-phase="finale"] {
+  --berg-sky-top: #071018;
+  --berg-sky-mid: #102033;
+  --berg-sky-bot: #1a2c3c;
+  --berg-peak: #121a24;
+  --berg-peak-far: #1c2a38;
+  --berg-forest: #0d1a14;
+  --berg-water: #16324a;
+}
+
+.berg-stage {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.berg-sky {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, var(--berg-sky-top) 0%, var(--berg-sky-mid) 46%, var(--berg-sky-bot) 100%);
+  transition: background 1.8s ease;
+}
+
+.berg-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.berg-backdrop img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 55%;
+  display: block;
+  transition: filter 1.8s ease;
+}
+
+.berg-tint {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  transition: background 1.8s ease, opacity 1.8s ease;
+}
+
+.berg-quest[data-phase="sunset"] .berg-backdrop img {
+  filter: saturate(1.35) sepia(0.38) hue-rotate(-18deg) brightness(0.68) contrast(1.12);
+}
+
+.berg-quest[data-phase="sunset"] .berg-tint {
+  background: linear-gradient(180deg, rgba(70, 24, 80, 0.4) 0%, rgba(210, 80, 30, 0.34) 42%, rgba(40, 16, 8, 0.3) 100%);
+}
+
+.berg-quest[data-phase="night"] .berg-backdrop img,
+.berg-quest[data-phase="finale"] .berg-backdrop img {
+  filter: brightness(0.22) saturate(0.35) hue-rotate(24deg) contrast(1.2);
+}
+
+.berg-quest[data-phase="night"] .berg-tint,
+.berg-quest[data-phase="finale"] .berg-tint {
+  background: linear-gradient(180deg, rgba(4, 10, 28, 0.62) 0%, rgba(8, 16, 40, 0.45) 48%, rgba(2, 8, 18, 0.55) 100%);
+}
+
+.berg-sun {
+  position: absolute;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  right: 18%;
+  top: 12%;
+  z-index: 2;
+  background: radial-gradient(circle at 35% 35%, #fff6d2, #f0c14b 55%, #e08a45 100%);
+  box-shadow: 0 0 40px 12px rgba(240, 193, 75, 0.35);
+  transition: top 1.8s ease, right 1.8s ease, opacity 1.8s ease, background 1.8s ease, box-shadow 1.8s ease;
+  pointer-events: none;
+}
+
+.berg-quest[data-phase="sunset"] .berg-sun {
+  top: 38%;
+  right: 14%;
+  background: radial-gradient(circle at 35% 35%, #ffe0a8, #e08a45 60%, #c45c3a 100%);
+  box-shadow: 0 0 56px 18px rgba(224, 138, 69, 0.5);
+}
+
+.berg-quest[data-phase="night"] .berg-sun,
+.berg-quest[data-phase="finale"] .berg-sun {
+  opacity: 0;
+}
+
+.berg-moon {
+  position: absolute;
+  width: 54px;
+  height: 54px;
+  right: 16%;
+  top: 9%;
+  z-index: 2;
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 32%, #fffdf4, #e6dfcc 68%, #c4bba6 100%);
+  box-shadow: 0 0 28px 10px rgba(247, 243, 232, 0.28);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1.8s ease, top 1.8s ease;
+}
+
+.berg-moon::before,
+.berg-moon::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(176, 166, 148, 0.32);
+}
+
+.berg-moon::before { width: 14px; height: 14px; left: 30%; top: 40%; }
+.berg-moon::after { width: 8px; height: 8px; left: 58%; top: 24%; }
+
+.berg-quest[data-phase="night"] .berg-moon,
+.berg-quest[data-phase="finale"] .berg-moon {
+  opacity: 1;
+}
+
+.berg-stars {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  z-index: 2;
+  transition: opacity 1.6s ease;
+  pointer-events: none;
+}
+
+.berg-quest[data-phase="night"] .berg-stars,
+.berg-quest[data-phase="finale"] .berg-stars {
+  opacity: 1;
+}
+
+.berg-star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: #f7f3e8;
+  opacity: 0.85;
+}
+
+.berg-star.is-bright {
+  width: 3px;
+  height: 3px;
+  box-shadow: 0 0 6px rgba(247, 243, 232, 0.8);
+}
+
+.berg-constellation {
+  position: absolute;
+  left: 4%;
+  top: 8%;
+  width: 160px;
+  height: 110px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 3;
+  transition: opacity 1.6s ease;
+}
+
+.berg-quest[data-phase="night"] .berg-constellation {
+  opacity: 0.9;
+  pointer-events: auto;
+}
+
+.berg-quest[data-phase="finale"] .berg-constellation {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.berg-constellation:focus-visible {
+  outline: 2px solid var(--berg-gold);
+  outline-offset: 4px;
+  border-radius: 8px;
+}
+
+.berg-constellation.is-found .berg-constellation-line {
+  opacity: 0.85;
+}
+
+.berg-peak-far { fill: var(--berg-peak-far); opacity: 0.7; transition: fill 1.6s ease; }
+.berg-peak { fill: var(--berg-peak); transition: fill 1.6s ease; }
+.berg-forest-fill { fill: var(--berg-forest); transition: fill 1.6s ease; }
+.berg-water-fill { fill: var(--berg-water); transition: fill 1.6s ease; }
+
+.berg-scene {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: min(68%, 34rem);
+  pointer-events: none;
+}
+
+.berg-scene .berg-hotspot {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.berg-scene .berg-hotspot:focus-visible {
+  outline: 2px solid var(--berg-gold);
+  outline-offset: 3px;
+}
+
+.berg-cloud {
+  position: absolute;
+  height: 28px;
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.72);
+  border-radius: 40px;
+  filter: blur(0.4px);
+  animation: berg-drift 48s linear infinite;
+  pointer-events: none;
+  box-shadow: 18px -10px 0 8px rgba(255, 255, 255, 0.55);
+}
+
+.berg-cloud::before,
+.berg-cloud::after {
+  content: '';
+  position: absolute;
+  background: inherit;
+  border-radius: 50%;
+}
+
+.berg-cloud::before { width: 34px; height: 34px; left: 18px; top: -16px; }
+.berg-cloud::after { width: 22px; height: 22px; right: 16px; top: -8px; }
+
+.berg-cloud-a { width: 120px; top: 10%; left: -20%; animation-duration: 56s; }
+.berg-cloud-b { width: 90px; top: 18%; left: -30%; animation-duration: 72s; animation-delay: -20s; opacity: 0.78; }
+.berg-cloud-c { width: 70px; top: 7%; left: -10%; animation-duration: 64s; animation-delay: -40s; opacity: 0.6; }
+.berg-cloud-d { width: 150px; top: 14%; left: -40%; animation-duration: 80s; animation-delay: -12s; opacity: 0.5; height: 22px; }
+
+.berg-quest[data-phase="sunset"] .berg-cloud {
+  background: rgba(255, 214, 176, 0.7);
+  box-shadow: 18px -10px 0 8px rgba(255, 186, 140, 0.45);
+}
+
+.berg-quest[data-phase="night"] .berg-cloud,
+.berg-quest[data-phase="finale"] .berg-cloud {
+  opacity: 0.18;
+  background: rgba(180, 196, 220, 0.35);
+}
+
+.berg-bird {
+  position: absolute;
+  top: 22%;
+  left: -10%;
+  width: 18px;
+  height: 8px;
+  pointer-events: none;
+  animation: berg-bird 22s linear infinite;
+}
+
+.berg-bird::before,
+.berg-bird::after {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 2px;
+  background: #2a2418;
+  border-radius: 2px;
+}
+
+.berg-bird::before { left: 0; transform: rotate(-28deg); transform-origin: right center; animation: berg-wing 0.7s ease-in-out infinite; }
+.berg-bird::after { right: 0; transform: rotate(28deg); transform-origin: left center; animation: berg-wing 0.7s ease-in-out infinite reverse; }
+
+.berg-butterfly {
+  position: absolute;
+  width: min(78px, 11vw);
+  height: auto;
+  right: 26%;
+  bottom: 30%;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  pointer-events: auto;
+  cursor: pointer;
+  z-index: 4;
+  animation: berg-flutter 7s ease-in-out infinite;
+}
+
+.berg-butterfly img {
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+}
+
+.berg-fox,
+.berg-otter,
+.berg-eagle {
+  position: absolute;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  cursor: pointer;
+  z-index: 5;
+}
+
+.berg-fox:focus-visible,
+.berg-otter:focus-visible,
+.berg-eagle:focus-visible,
+.berg-butterfly:focus-visible {
+  outline: 2px solid var(--berg-gold);
+  outline-offset: 3px;
+  border-radius: 10px;
+}
+
+.berg-fox {
+  right: 12%;
+  bottom: 22%;
+  width: min(150px, 16vw);
+  mix-blend-mode: screen;
+}
+
+.berg-fox img,
+.berg-otter img,
+.berg-eagle img {
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+}
+
+.berg-otter {
+  left: 14%;
+  bottom: 2%;
+  width: min(180px, 20vw);
+  z-index: 6;
+  mix-blend-mode: screen;
+}
+
+.berg-eagle {
+  left: -18%;
+  right: auto;
+  top: 7%;
+  width: min(168px, 20vw);
+  height: auto;
+  z-index: 4;
+  animation: berg-eagle-track 28s linear infinite;
+}
+
+.berg-eagle-face {
+  display: block;
+  animation: berg-eagle-face 28s linear infinite;
+}
+
+.berg-forest-perch {
+  position: absolute;
+  left: 48%;
+  bottom: 44%;
+  width: 90px;
+  height: 24px;
+  pointer-events: none;
+}
+
+.berg-firefly {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #f6e38b;
+  box-shadow: 0 0 8px 2px rgba(246, 227, 139, 0.7);
+  opacity: 0;
+  animation: berg-glow 4.5s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.berg-quest[data-phase="sunset"] .berg-firefly,
+.berg-quest[data-phase="night"] .berg-firefly,
+.berg-quest[data-phase="finale"] .berg-firefly {
+  opacity: 0.9;
+}
+
+.berg-fireworks {
+  position: absolute;
+  inset: 0;
+  z-index: 7;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.berg-fireworks.is-live::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 28%, rgba(255, 236, 180, 0.2), transparent 58%);
+  animation: berg-flash 0.7s ease-out;
+}
+
+.berg-spark {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  margin: 0;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: berg-burst 1.9s ease-out forwards;
+  box-shadow: 0 0 10px 2px currentColor;
+}
+
+.berg-hud {
+  position: absolute;
+  right: 0.75rem;
+  bottom: 0.75rem;
+  left: auto;
+  top: auto;
+  z-index: 8;
+  background: rgba(8, 16, 12, 0.55);
+  border: 1px solid rgba(242, 239, 232, 0.12);
+  border-radius: 12px;
+  padding: 0.45rem 0.65rem;
+  min-width: 7.5rem;
+  backdrop-filter: blur(8px);
+  pointer-events: none;
+}
+
+.berg-hud h2 {
+  font-family: var(--font-display);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--berg-gold);
+  margin-bottom: 0.35rem;
+}
+
+.berg-hud ul {
+  list-style: none;
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+.berg-hud .is-found { opacity: 1; }
+.berg-hud .is-hidden { opacity: 0.55; }
+
+.berg-toast,
+.berg-narrator {
+  position: absolute;
+  z-index: 12;
+  max-width: min(22rem, calc(100vw - 2rem));
+  background: rgba(12, 20, 16, 0.78);
+  border: 1px solid rgba(201, 160, 106, 0.28);
+  border-radius: 14px;
+  padding: 0.8rem 1rem;
+  color: var(--berg-cream);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
+}
+
+.berg-toast {
+  top: 0.85rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.berg-toast.is-visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.berg-toast strong { display: block; font-family: var(--font-display); margin-bottom: 0.2rem; }
+
+.berg-narrator {
+  left: 0.85rem;
+  top: 0.85rem;
+  bottom: auto;
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  pointer-events: none;
+}
+
+.berg-narrator.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.berg-narrator-label {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--berg-gold);
+  margin-bottom: 0.2rem;
+}
+
+.berg-panel {
+  position: relative;
+  z-index: 7;
+  width: min(34rem, calc(100vw - 1.5rem));
+  margin: 0 auto;
+  padding: 2.5rem 1rem 7.5rem;
+  text-align: center;
+  pointer-events: none;
+}
+
+.berg-panel .berg-btn,
+.berg-panel a,
+.berg-panel button {
+  pointer-events: auto;
+}
+
+.berg-kicker {
+  font-size: 0.82rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--berg-gold);
+  margin-bottom: 0.45rem;
+}
+
+.berg-panel h1,
+.berg-panel h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #f7f1e4;
+  text-shadow: 0 2px 18px rgba(8, 16, 12, 0.45);
+}
+
+.berg-quest[data-phase="day"] .berg-panel,
+.berg-quest[data-phase="accepted"] .berg-panel {
+  color: #1a3228;
+}
+
+.berg-quest[data-phase="day"] .berg-panel h1,
+.berg-quest[data-phase="day"] .berg-panel h2,
+.berg-quest[data-phase="accepted"] .berg-panel h1,
+.berg-quest[data-phase="accepted"] .berg-panel h2 {
+  color: #14261e;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.72), 0 2px 16px rgba(255, 255, 255, 0.35);
+}
+
+.berg-quest[data-phase="day"] .berg-kicker,
+.berg-quest[data-phase="accepted"] .berg-kicker {
+  color: #8a4f16;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.65);
+}
+
+.berg-quest[data-phase="day"] .berg-subtitle,
+.berg-quest[data-phase="day"] .berg-copy,
+.berg-quest[data-phase="day"] .berg-question,
+.berg-quest[data-phase="day"] .berg-hint,
+.berg-quest[data-phase="day"] .berg-list,
+.berg-quest[data-phase="day"] .berg-close,
+.berg-quest[data-phase="day"] .berg-no-title,
+.berg-quest[data-phase="day"] .berg-no-reply,
+.berg-quest[data-phase="accepted"] .berg-subtitle,
+.berg-quest[data-phase="accepted"] .berg-copy,
+.berg-quest[data-phase="accepted"] .berg-question,
+.berg-quest[data-phase="accepted"] .berg-hint,
+.berg-quest[data-phase="accepted"] .berg-list,
+.berg-quest[data-phase="accepted"] .berg-close,
+.berg-quest[data-phase="accepted"] .berg-no-title,
+.berg-quest[data-phase="accepted"] .berg-no-reply {
+  color: #1a3228;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.75), 0 2px 12px rgba(255, 255, 255, 0.35);
+}
+
+.berg-quest[data-phase="day"] .berg-no-reply,
+.berg-quest[data-phase="accepted"] .berg-no-reply {
+  background: rgba(255, 248, 234, 0.55);
+}
+
+.berg-quest[data-phase="day"] .berg-btn-no,
+.berg-quest[data-phase="day"] .berg-btn-ghost,
+.berg-quest[data-phase="accepted"] .berg-btn-no,
+.berg-quest[data-phase="accepted"] .berg-btn-ghost {
+  color: #14261e;
+  border-color: rgba(20, 38, 30, 0.42);
+  background: rgba(255, 248, 234, 0.72);
+}
+
+.berg-quest[data-phase="day"] .berg-btn-no:hover,
+.berg-quest[data-phase="day"] .berg-btn-ghost:hover,
+.berg-quest[data-phase="accepted"] .berg-btn-no:hover,
+.berg-quest[data-phase="accepted"] .berg-btn-ghost:hover {
+  background: rgba(255, 248, 234, 0.92);
+}
+
+.berg-panel h1 { font-size: clamp(1.8rem, 6vw, 2.7rem); margin-bottom: 0.45rem; }
+.berg-panel h2 { font-size: clamp(1.35rem, 4.5vw, 1.9rem); margin-bottom: 0.6rem; }
+
+.berg-subtitle,
+.berg-copy {
+  color: #f4efe4;
+  text-shadow: 0 1px 10px rgba(8, 16, 12, 0.5);
+}
+
+.berg-subtitle { font-family: var(--font-display); font-style: italic; margin-bottom: 1.25rem; }
+
+.berg-copy p { margin: 0 0 0.35rem; }
+.berg-question {
+  margin-top: 1rem;
+  font-weight: 700;
+  font-size: 1.08rem;
+  color: #fff8ea;
+}
+
+.berg-no-reply {
+  margin-top: 0.85rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: 12px;
+  background: rgba(8, 16, 12, 0.28);
+}
+
+.berg-no-title {
+  font-weight: 700;
+  color: var(--berg-gold);
+  margin-bottom: 0.25rem;
+}
+
+.berg-hint {
+  margin-top: 0.85rem;
+  font-size: 0.92rem;
+  color: rgba(244, 239, 228, 0.82);
+}
+
+.berg-list {
+  list-style: none;
+  margin: 1rem auto 0;
+  text-align: left;
+  width: fit-content;
+  line-height: 1.8;
+}
+
+.berg-close {
+  margin-top: 1.25rem;
+  font-family: var(--font-display);
+  font-style: italic;
+  line-height: 1.7;
+}
+
+.berg-hearts {
+  margin-top: 0.85rem;
+  font-size: 1.25rem;
+}
+
+.berg-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.85rem;
+  margin-top: 1.5rem;
+  min-height: 3.2rem;
+}
+
+.berg-btn {
+  appearance: none;
+  border: 0;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 1rem;
+  min-height: 48px;
+  padding: 0.75rem 1.25rem;
+  border-radius: 999px;
+  color: #1a1008;
+  background: var(--accent, #e08a45);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.berg-btn:hover { background: var(--accent-hover, #eba05f); }
+.berg-btn:focus-visible {
+  outline: 2px solid #fff8ea;
+  outline-offset: 3px;
+}
+
+.berg-btn-no {
+  background: transparent;
+  color: var(--berg-cream);
+  border: 1px solid rgba(244, 239, 228, 0.35);
+  box-shadow: none;
+}
+
+.berg-btn-no:hover { background: rgba(244, 239, 228, 0.08); }
+
+.berg-btn-ghost {
+  background: transparent;
+  color: var(--berg-cream);
+  border: 1px solid rgba(244, 239, 228, 0.28);
+  box-shadow: none;
+  font-weight: 600;
+}
+
+.berg-btn-ghost:hover { background: rgba(244, 239, 228, 0.08); }
+
+.berg-yes {
+  z-index: 20;
+}
+
+.berg-yes.is-loose {
+  position: absolute;
+  margin: 0;
+  z-index: 22;
+}
+
+.berg-fox.is-reacting {
+  animation: berg-fox-flinch 0.55s ease;
+}
+
+.berg-otter.is-reacting {
+  animation: berg-otter-bob 0.72s ease;
+}
+
+.berg-eagle.is-reacting img {
+  animation: berg-eagle-flare 0.65s ease-in-out;
+}
+
+.berg-butterfly.is-reacting {
+  animation: berg-butterfly-startle 0.52s ease-in-out;
+}
+
+.berg-constellation.is-reacting {
+  animation: berg-star-flare 0.6s ease;
+}
+
+@keyframes berg-fox-flinch {
+  0% { transform: translate(0, 0) rotate(0); }
+  22% { transform: translate(-12px, -8px) rotate(-9deg); }
+  48% { transform: translate(8px, 2px) rotate(5deg); }
+  72% { transform: translate(-4px, -3px) rotate(-2deg); }
+  100% { transform: translate(0, 0) rotate(0); }
+}
+
+@keyframes berg-otter-bob {
+  0% { transform: translateY(0) scale(1); }
+  32% { transform: translateY(16px) scale(0.94, 0.82); }
+  58% { transform: translateY(-14px) scale(1.05, 1.1); }
+  100% { transform: translateY(0) scale(1); }
+}
+
+@keyframes berg-eagle-flare {
+  0% { transform: translate(0, 0) rotate(-4deg) scale(1); }
+  28% { transform: translate(-6px, 10px) rotate(14deg) scale(1.08); }
+  58% { transform: translate(8px, -16px) rotate(-12deg) scale(1.14); }
+  100% { transform: translate(0, 0) rotate(-4deg) scale(1); }
+}
+
+@keyframes berg-butterfly-startle {
+  0% { transform: translate(0, 0) rotate(0) scale(1); }
+  18% { transform: translate(-14px, -24px) rotate(-28deg) scale(1.18); }
+  42% { transform: translate(16px, -10px) rotate(22deg) scale(0.92); }
+  68% { transform: translate(-8px, -18px) rotate(-12deg) scale(1.08); }
+  100% { transform: translate(0, 0) rotate(0) scale(1); }
+}
+
+@keyframes berg-star-flare {
+  0% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(247, 243, 232, 0)); }
+  40% { transform: scale(1.14); filter: drop-shadow(0 0 14px rgba(247, 243, 232, 0.95)); }
+  100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(247, 243, 232, 0)); }
+}
+
+@keyframes berg-drift {
+  from { transform: translateX(0); }
+  to { transform: translateX(140vw); }
+}
+
+@keyframes berg-bird {
+  0% { transform: translate(0, 0); }
+  50% { transform: translate(60vw, -18px); }
+  100% { transform: translate(120vw, 8px); }
+}
+
+@keyframes berg-wing {
+  from { transform: rotate(-28deg); }
+  to { transform: rotate(18deg); }
+}
+
+@keyframes berg-flutter {
+  0%, 100% { transform: translate(0, 0); }
+  40% { transform: translate(-28px, -22px); }
+  70% { transform: translate(12px, -8px); }
+}
+
+@keyframes berg-eagle-track {
+  0% { left: -18%; top: 8%; }
+  25% { left: 34%; top: 5%; }
+  50% { left: 84%; top: 9%; }
+  75% { left: 34%; top: 6%; }
+  100% { left: -18%; top: 8%; }
+}
+
+@keyframes berg-eagle-face {
+  0%, 49.9% { transform: scaleX(1); }
+  50%, 100% { transform: scaleX(-1); }
+}
+
+@keyframes berg-burst {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0.35);
+  }
+  35% { opacity: 1; }
+  100% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0.15);
+  }
+}
+
+@keyframes berg-flash {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes berg-glow {
+  0%, 100% { opacity: 0.15; transform: translateY(0); }
+  50% { opacity: 0.95; transform: translateY(-10px); }
+}
+
+@keyframes berg-sway {
+  from { transform: rotate(-4deg); }
+  to { transform: rotate(5deg); }
+}
+
+.berg-grass-blade {
+  transform-origin: bottom center;
+  animation: berg-sway 3.2s ease-in-out infinite alternate;
+}
+
+@media (max-width: 720px) {
+  .berg-panel { padding: 2.4rem 0.85rem 8.5rem; }
+  .berg-hud { top: auto; bottom: 0.6rem; right: 0.6rem; }
+  .berg-narrator { left: 0.6rem; top: 0.6rem; bottom: auto; }
+  .berg-fox { width: min(112px, 30vw); bottom: 20%; }
+  .berg-otter { width: min(128px, 36vw); }
+  .berg-eagle { width: min(112px, 28vw); }
+  .berg-butterfly { width: min(56px, 16vw); bottom: 28%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .berg-cloud,
+  .berg-bird,
+  .berg-butterfly,
+  .berg-eagle,
+  .berg-eagle-face,
+  .berg-spark,
+  .berg-firefly,
+  .berg-grass-blade,
+  .berg-otter.is-diving,
+  .berg-fox.is-reacting,
+  .berg-otter.is-reacting,
+  .berg-constellation.is-reacting,
+  .berg-yes,
+  .berg-toast,
+  .berg-narrator,
+  .berg-sky,
+  .berg-sun,
+  .berg-moon,
+  .berg-backdrop img,
+  .berg-tint,
+  .berg-stars,
+  .berg-quest {
+    animation: none !important;
+    transition: none !important;
+  }
+  .berg-yes.is-loose { position: static; }
+  .berg-eagle { left: auto; right: 8%; top: 6%; }
+}

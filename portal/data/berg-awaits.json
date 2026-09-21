@@ -1,0 +1,133 @@
+{
+  "id": "berg-awaits",
+  "title": "The Berg Awaits",
+  "kind": "quest",
+  "status": "live",
+  "hidden": true,
+  "greeting": "THE BERG AWAITS",
+  "unlock": {
+    "searchLines": [
+      "SECRET QUEST DETECTED",
+      "THE BERG AWAITS"
+    ]
+  },
+  "quest": {
+    "maxDodges": 8,
+    "dodgePadding": 14,
+    "dodgeArmMs": 1600,
+    "otterXP": 10,
+    "enableSound": false,
+    "heading": "THE BERG AWAITS",
+    "subtitle": "A secret expedition has been prepared...",
+    "intro": [
+      "Huntress...",
+      "The mountains are waiting.",
+      "The Fox has prepared the expedition."
+    ],
+    "question": "Are you excited for the Drakensberg?",
+    "yesLabel": "YES! 🏹",
+    "noLabel": "No... 🦊",
+    "noLabels": [
+      "No... 🦊",
+      "Still no.",
+      "Not excited.",
+      "I said no.",
+      "Absolutely not.",
+      "Nope.",
+      "The Huntress declines."
+    ],
+    "noDialogue": [
+      {
+        "title": "Are you sure? 👀",
+        "body": "The mountains disagree."
+      },
+      {
+        "title": "Interesting...",
+        "body": "The Fox has detected suspicious Huntress behaviour."
+      },
+      {
+        "title": "Huntress...",
+        "body": "There will be mountains.\nA river.\nPines.\nStars.\n\n...and a Fox. 🦊"
+      },
+      {
+        "title": "A formal notice",
+        "body": "The mountains have filed a complaint."
+      },
+      {
+        "title": "Meanwhile, in the river...",
+        "body": "An otter has been notified."
+      },
+      {
+        "title": "Hmm.",
+        "body": "The Fox is beginning to question your intentions."
+      },
+      {
+        "title": "This is becoming suspicious.",
+        "body": "You know you're supposed to say yes, right?"
+      }
+    ],
+    "dodgeMessages": [
+      "🦊 Nice try.",
+      "Too slow, Huntress.",
+      "The Fox has hidden the answer.",
+      "The forest protects this button.",
+      "The mountains have relocated it.",
+      "An otter stole it.",
+      "Almost..."
+    ],
+    "acceptedTitle": "QUEST ACCEPTED",
+    "acceptedBody": "The Huntress has accepted the expedition.",
+    "acceptedItems": [
+      "📍 Drakensberg",
+      "🌿 Nature",
+      "💧 The river",
+      "🌌 Stars",
+      "🦦 Otter hunting",
+      "🦊 Fox & Huntress adventures"
+    ],
+    "foxLines": [
+      "I have prepared everything.",
+      "Snacks?",
+      "Camera?",
+      "Huntress?",
+      "...I already knew that."
+    ],
+    "sunsetKicker": "The light is changing",
+    "sunsetTitle": "The Berg keeps its promises",
+    "sunsetBody": "The river is still talking. The escarpment is catching the last of the sun.",
+    "nightLine": "Some adventures are worth looking up for. ✨",
+    "nightBody": "Look up. The sky is not empty.",
+    "otterFound": {
+      "title": "OTTER DISCOVERED!",
+      "body": "The Huntress has found one of the rare creatures of the Berg.",
+      "xp": "+10 Huntress XP"
+    },
+    "otterAgain": "The otter refuses to elaborate.",
+    "constellation": {
+      "title": "A constellation has been discovered.",
+      "body": "Even the sky knows about the Fox and Huntress."
+    },
+    "allFoundTitle": "Every creature found.",
+    "allFoundLine": "You've got the eyes of a true Huntress.",
+    "allFoundWaitLine": "Wait until it's night for a surprise...",
+    "finaleTitle": "THE ADVENTURE AWAITS",
+    "finaleHeading": "DRAKENSBERG EXPEDITION",
+    "finalePlace": "📍 Kezlyn Farm Cottages",
+    "finaleItems": [
+      "🌿 Explore",
+      "💧 Sit by the river",
+      "🌌 Watch the stars",
+      "🦦 Search for otters",
+      "📸 Make memories",
+      "🦊 Adventure with the Fox",
+      "🏹 Adventure with the Huntress"
+    ],
+    "finaleClose": [
+      "Some adventures are planned.",
+      "Some adventures just happen.",
+      "This one is ours."
+    ],
+    "replayLabel": "↻ Replay the Adventure",
+    "returnLabel": "← Return to the Den"
+  }
+}

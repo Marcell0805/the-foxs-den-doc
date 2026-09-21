@@ -19,7 +19,7 @@ $downloadsDir = Join-Path $PortalRoot "downloads"
 $dataExclude = @("portal-settings.json", "nav.json", "apps-manifest.json")
 $fixedNavIds = @("about")
 # Fixed sections kept out of nav / Fuse, but still generated into portal-data + HTML
-$hiddenSectionIds = @("my-huntress")
+$hiddenSectionIds = @("my-huntress", "berg-awaits")
 
 function Read-Json([string]$path) {
     $text = [System.IO.File]::ReadAllText($path, $utf8)
