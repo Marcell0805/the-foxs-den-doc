@@ -24,8 +24,8 @@
                ],
     "sidebarNote":  "Official APK is hosted on GitHub Pages.",
     "version":  "1.1.0",
-    "build":  13,
-    "releaseNotes":  "Bank notification capture\n\nCaptures payment alerts from supported bank and Wallet apps into Needs review\nPull-to-refresh on Transactions scans notifications still in the shade\nLocal FFS alert when a payment is captured (Confirm / Review)\nBetter ZA parsing (FNB, Capitec, Discovery, Wallet) with Wallet↔bank dedupe",
+    "build":  14,
+    "releaseNotes":  "Fixes\n\nBiometric app lock no longer crashes or blocks launch\nPayment capture only from known bank/Wallet apps (no Spotify / random alerts)\nUpdate prompt and navigation no longer fail on cold start\nDark mode refreshes the Settings header and shell immediately\n\nImprovements\n\nBrand shown as F.F.S; version footer as V1.1.0 -N\nMore renamed to Settings\nLight / Dark appearance toggle in Settings\nOptional Bank dropdown on manual transactions\nMonthly trend title layout matches Spending by category",
     "updateCheckUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs/mobile-version.json",
     "codeProtected":  true,
     "unlock":  {
@@ -71,13 +71,13 @@
                     ],
     "apk":  {
                 "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs.apk",
-                "build":  13,
+                "build":  14,
                 "fileName":  "ffs.apk",
                 "version":  "1.1.0",
                 "label":  "Download Live APK",
                 "available":  true,
                 "channel":  "live",
-                "sizeLabel":  "86.0 MB",
-                "sizeBytes":  90155999
+                "sizeLabel":  "86.1 MB",
+                "sizeBytes":  90254303
             }
 }
