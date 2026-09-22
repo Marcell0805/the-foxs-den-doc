@@ -1,11 +1,11 @@
 {
     "channel":  "live",
-    "releaseNotes":  "Fixes\n\nBiometric app lock no longer crashes or blocks launch\nPayment capture only from known bank/Wallet apps (no Spotify / random alerts)\nUpdate prompt and navigation no longer fail on cold start\nDark mode refreshes the Settings header and shell immediately\n\nImprovements\n\nBrand shown as F.F.S; version footer as V1.1.0 -N\nMore renamed to Settings\nLight / Dark appearance toggle in Settings\nOptional Bank dropdown on manual transactions\nMonthly trend title layout matches Spending by category",
+    "releaseNotes":  "Fixes\n\nUpdate prompt no longer races startup — checks run on the splash screen\n\nImprovements\n\nSplash checks for updates and opens Play Store when a newer build is available\nSplash prompts for notification access so bank alerts can be captured without digging through Settings",
     "sizeLabel":  "86.1 MB",
     "storeUrl":  "https://play.google.com/store/apps/details?id=dev.marcellvn.ffs",
-    "build":  14,
+    "build":  15,
     "version":  "1.1.0",
     "apkUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs.apk",
     "distribution":  "both",
-    "sizeBytes":  90254303
+    "sizeBytes":  90270687
 }
