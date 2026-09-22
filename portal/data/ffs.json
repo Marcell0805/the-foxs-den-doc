@@ -24,8 +24,8 @@
                ],
     "sidebarNote":  "Official APK is hosted on GitHub Pages.",
     "version":  "1.1.0",
-    "build":  15,
-    "releaseNotes":  "Fixes\n\nUpdate prompt no longer races startup — checks run on the splash screen\n\nImprovements\n\nSplash checks for updates and opens Play Store when a newer build is available\nSplash prompts for notification access so bank alerts can be captured without digging through Settings",
+    "build":  16,
+    "releaseNotes":  "Improvements\n\nDelete local data clears all transactions and restores empty defaults — no more sample salary or grocery amounts after reset",
     "updateCheckUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs/mobile-version.json",
     "codeProtected":  true,
     "unlock":  {
@@ -71,13 +71,13 @@
                     ],
     "apk":  {
                 "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs.apk",
-                "build":  15,
+                "build":  16,
                 "fileName":  "ffs.apk",
                 "version":  "1.1.0",
                 "label":  "Download Live APK",
                 "available":  true,
                 "channel":  "live",
                 "sizeLabel":  "86.1 MB",
-                "sizeBytes":  90270687
+                "sizeBytes":  90254303
             }
 }

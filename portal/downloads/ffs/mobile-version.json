@@ -1,11 +1,11 @@
 {
     "channel":  "live",
-    "releaseNotes":  "Fixes\n\nUpdate prompt no longer races startup — checks run on the splash screen\n\nImprovements\n\nSplash checks for updates and opens Play Store when a newer build is available\nSplash prompts for notification access so bank alerts can be captured without digging through Settings",
+    "releaseNotes":  "Improvements\n\nDelete local data clears all transactions and restores empty defaults — no more sample salary or grocery amounts after reset",
     "sizeLabel":  "86.1 MB",
     "storeUrl":  "https://play.google.com/store/apps/details?id=dev.marcellvn.ffs",
-    "build":  15,
+    "build":  16,
     "version":  "1.1.0",
     "apkUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs.apk",
     "distribution":  "both",
-    "sizeBytes":  90270687
+    "sizeBytes":  90254303
 }
