@@ -1,11 +1,11 @@
 {
     "channel":  "live",
-    "releaseNotes":  "Fixes\n\nBank capture no longer treats Gmail or other apps as payments\nRefresh can reconnect notification access after the phone sleeps\nNeeds review no longer shows a count when the list is empty\nDelete local data clears sample salary and grocery amounts\n\nImprovements\n\nSplash checks for updates and can open the Play Store\nSplash asks for notification access so bank alerts can be captured\nPayment alerts say Payment detected and use the F.F.S icon",
-    "sizeLabel":  "86.1 MB",
+    "releaseNotes":  "Planning is back — set a monthly Needs, Wants, and Savings budget and see how you’re tracking.\n\nHome is clearer: money in, money out, and net, plus your budget at a glance. Transfers between your own accounts no longer look like income.\n\nTransactions now group by day with category icons. Reports lead with spending by category. Settings is easier to scan.\n\nJump around with the new bar at the bottom. Open the menu for Planning and Settings.",
+    "sizeLabel":  "87.6 MB",
     "storeUrl":  "https://play.google.com/store/apps/details?id=dev.marcellvn.ffs",
-    "build":  17,
+    "build":  18,
     "version":  "1.1.0",
     "apkUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs.apk",
     "distribution":  "both",
-    "sizeBytes":  90287145
+    "sizeBytes":  91876393
 }
