@@ -132,37 +132,39 @@
     var backHref = scope === 'section' ? '../index.html' : 'index.html';
     var homeHref = scope === 'section' ? '../index.html' : 'index.html';
     var backTitle = scope === 'section' ? 'Back to The Den home' : 'The Den home';
-    var labsUrl = 'https://marcell0805.github.io/foxbyte-labs/';
+    var labsUrl = 'https://foxbytelabs.co.za/';
+    var githubUrl = 'https://github.com/Marcell0805';
     var menuBtn = scope === 'section' && !secret
       ? '<button type="button" class="toolbar-btn toolbar-menu" id="toolbar-menu-btn" title="Menu" aria-label="Open menu">' + SVG_MENU + '</button>'
       : '';
     var brand =
       '<a class="toolbar-brand" href="' + homeHref + '" title="The Fox\'s Den">' +
-        '<img class="toolbar-brand-logo" src="' + assetPrefix + 'assets/logo.png" alt="" width="28" height="28" onerror="this.onerror=null;this.src=\'' + assetPrefix + 'assets/logo.svg\';">' +
-        '<span class="toolbar-brand-text">' +
-          '<span class="toolbar-brand-labs">Foxbyte Labs</span>' +
-          '<span class="toolbar-brand-den">The Fox\'s Den</span>' +
-        '</span>' +
+        '<img class="toolbar-brand-logo" src="' + assetPrefix + 'assets/logo.png?v=denfox1" alt="" width="36" height="36" onerror="this.onerror=null;this.src=\'' + assetPrefix + 'assets/logo.svg\';">' +
+        '<span class="toolbar-brand-name">The Fox\'s Den</span>' +
       '</a>';
-    var labsLink =
-      '<a class="toolbar-labs-link" href="' + labsUrl + '" target="_blank" rel="noopener noreferrer" title="Back to Foxbyte Labs">' +
-        '<span class="toolbar-labs-full">← Back to Foxbyte Labs</span>' +
-        '<span class="toolbar-labs-short">← Labs</span>' +
-      '</a>';
+    var ext = '<span class="toolbar-ext" aria-hidden="true">↗</span>';
+    var links =
+      '<nav class="toolbar-links" aria-label="Foxbyte Labs">' +
+        '<a class="toolbar-link" href="' + labsUrl + '#enter" target="_blank" rel="noopener noreferrer">Destinations ' + ext + '</a>' +
+        '<a class="toolbar-link" href="' + labsUrl + '#lab" target="_blank" rel="noopener noreferrer">Projects ' + ext + '</a>' +
+        '<a class="toolbar-link" href="' + labsUrl + '#about" target="_blank" rel="noopener noreferrer">About ' + ext + '</a>' +
+        '<a class="toolbar-link is-current" href="' + homeHref + '"' + (scope === 'landing' ? ' aria-current="page"' : '') + '>The Den</a>' +
+        '<a class="toolbar-link" href="' + githubUrl + '" target="_blank" rel="noopener noreferrer">GitHub ' + ext + '</a>' +
+      '</nav>';
     mount.outerHTML =
       '<header class="portal-toolbar no-print" aria-label="Page tools">' +
         '<div class="toolbar-inner">' +
           '<div class="toolbar-start">' +
             menuBtn +
             (scope === 'section'
-              ? '<a href="' + backHref + '" class="toolbar-btn" title="' + backTitle + '">' + SVG_BACK + '</a>'
+              ? '<a href="' + backHref + '" class="toolbar-btn" title="' + backTitle + '" aria-label="' + backTitle + '">' + SVG_BACK + '</a>'
               : '') +
             brand +
           '</div>' +
           '<div class="toolbar-end">' +
-            labsLink +
-            (secret ? '' : '<button type="button" class="toolbar-btn" id="toolbar-search-btn" title="Search (Ctrl+K)">' + SVG_SEARCH + '</button>') +
-            (secret ? '' : '<button type="button" class="toolbar-btn toolbar-print" title="Print (Ctrl+P)">' + SVG_PRINT + '</button>') +
+            links +
+            (secret ? '' : '<button type="button" class="toolbar-btn" id="toolbar-search-btn" title="Search (Ctrl+K)" aria-label="Search">' + SVG_SEARCH + '</button>') +
+            (secret ? '' : '<button type="button" class="toolbar-btn toolbar-print" title="Print (Ctrl+P)" aria-label="Print">' + SVG_PRINT + '</button>') +
           '</div>' +
         '</div>' +
       '</header>';

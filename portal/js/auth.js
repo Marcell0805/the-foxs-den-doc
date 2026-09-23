@@ -28,7 +28,7 @@
   }
   function showGate() {
     var script = document.querySelector('script[src*="auth.js"]');
-    var logoUrl = script ? new URL('../assets/logo.png', script.src).href : '../assets/logo.png';
+    var logoUrl = script ? new URL('../assets/logo.png?v=denfox1', script.src).href : '../assets/logo.png?v=denfox1';
     var logoFallback = script ? new URL('../assets/logo.svg', script.src).href : '../assets/logo.svg';
     var s = getSettings();
     var title = s.portalName || 'DeltaCore Engineering Portal';

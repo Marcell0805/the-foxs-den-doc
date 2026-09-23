@@ -216,91 +216,119 @@ a.sidebar-footer-link:hover {
   border: 1px solid var(--border);
 }
 
-/* Toolbar ecosystem chrome */
+/* Toolbar — same quiet bar as Foxbyte Labs, with The Den's own mark */
 .portal-toolbar {
-  background: rgba(12, 20, 16, 0.9) !important;
-  border-bottom: 1px solid var(--border);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(8, 12, 10, 0.55) !important;
+  border-bottom: 1px solid transparent;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 0 !important;
+}
+
+.toolbar-inner {
+  max-width: none;
+  min-height: 73px;
+  padding: 0 2.25rem;
+  gap: 1.5rem;
+}
+
+.toolbar-start,
+.toolbar-end {
+  gap: 0.35rem;
+  flex-wrap: nowrap;
+}
+
+.toolbar-end {
+  margin-left: auto;
+  gap: 1.15rem;
 }
 
 .toolbar-btn {
   background: transparent !important;
-  border: 1px solid var(--border) !important;
-  color: var(--text) !important;
+  border: none !important;
+  color: var(--muted) !important;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
 }
 
 .toolbar-btn:hover {
-  background: rgba(224, 138, 69, 0.1) !important;
-  border-color: rgba(224, 138, 69, 0.35) !important;
-  color: var(--accent-soft) !important;
+  background: transparent !important;
+  border: none !important;
+  color: var(--text) !important;
 }
 
 .toolbar-brand {
   display: inline-flex;
   align-items: center;
-  gap: 0.55rem;
-  margin-left: 0.35rem;
+  gap: 0.75rem;
+  margin-left: 0;
   color: var(--text);
   text-decoration: none;
-  min-height: 44px;
-  padding: 0.25rem 0.4rem;
+  min-height: 38px;
+  padding: 0;
   border-radius: 8px;
 }
 
 .toolbar-brand:hover {
-  color: var(--accent-soft);
+  color: var(--text);
 }
 
 .toolbar-brand-logo {
-  width: 28px;
-  height: 28px;
-  border-radius: 6px;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
   object-fit: cover;
 }
 
-.toolbar-brand-text {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.15;
-  gap: 0.1rem;
-}
-
-.toolbar-brand-labs {
+.toolbar-brand-name {
   font-family: var(--font-display);
-  font-size: 0.82rem;
+  font-size: 1.4rem;
   font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--text);
 }
 
-.toolbar-brand-den {
-  font-size: 0.68rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--accent-soft);
-}
-
-.toolbar-labs-link {
-  display: inline-flex;
+.toolbar-links {
+  display: flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 1.65rem;
+}
+
+.toolbar-link {
   color: var(--muted);
   text-decoration: none;
-  font-size: 0.85rem;
-  font-weight: 500;
-  padding: 0.45rem 0.7rem;
-  border-radius: 999px;
-  border: 1px solid transparent;
-  min-height: 40px;
+  font-family: var(--font-body);
+  font-size: 1.08rem;
+  font-weight: 600;
+  line-height: 1;
   white-space: nowrap;
 }
 
-.toolbar-labs-link:hover {
-  color: var(--accent-soft);
-  border-color: var(--border-strong);
+.toolbar-link:hover {
+  color: var(--text);
 }
 
-.toolbar-labs-link span.toolbar-labs-short {
-  display: none;
+.toolbar-link.is-current {
+  color: var(--text);
+}
+
+.toolbar-ext {
+  font-size: 0.75em;
+  margin-left: 0.12em;
+}
+
+.landing-logo {
+  width: 128px;
+  height: 128px;
+  border-radius: 22%;
+  object-fit: cover;
+}
+
+.auth-gate-logo {
+  border-radius: 22%;
+  object-fit: cover;
 }
 
 /* Landing identity */
@@ -442,17 +470,40 @@ body.dedication-page {
   color: var(--accent-soft) !important;
 }
 
+@media (max-width: 980px) {
+  .toolbar-inner {
+    padding: 0 1rem;
+  }
+
+  .toolbar-links {
+    gap: 0.9rem;
+  }
+
+  .toolbar-link {
+    font-size: 0.92rem;
+  }
+
+  .toolbar-brand-name {
+    font-size: 1.15rem;
+  }
+}
+
 @media (max-width: 720px) {
-  .toolbar-brand-text {
-    display: none;
+  .toolbar-brand-name {
+    font-size: 1.05rem;
   }
 
-  .toolbar-labs-link span.toolbar-labs-full {
-    display: none;
+  .toolbar-links {
+    gap: 0.75rem;
   }
 
-  .toolbar-labs-link span.toolbar-labs-short {
-    display: inline;
+  .toolbar-link {
+    font-size: 0.85rem;
+  }
+
+  .landing-logo {
+    width: 104px;
+    height: 104px;
   }
 }
 
