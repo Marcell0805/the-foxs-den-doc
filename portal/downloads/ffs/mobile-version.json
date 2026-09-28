@@ -1,11 +1,11 @@
 {
     "channel":  "live",
-    "releaseNotes":  "Planning is back — set a monthly Needs, Wants, and Savings budget and see how you’re tracking.\n\nHome is clearer: money in, money out, and net, plus your budget at a glance. Transfers between your own accounts no longer look like income.\n\nTransactions now group by day with category icons. Reports lead with spending by category. Settings is easier to scan.\n\nJump around with the new bar at the bottom. Open the menu for Planning and Settings.",
-    "sizeLabel":  "87.6 MB",
+    "releaseNotes":  "What’s new\n\n• Same purchase, one transaction — Wallet and bank alerts for one tap are no longer saved twice\n• Turn banks on or off from the list — no need to open Edit\n• New bank found — we ask before capturing a bank you haven’t enabled\n• Capitec import — pending amounts now match the statement\n• Demo simulate in Settings works again\n\nF.F.S stays on your phone. You confirm or ignore anything we capture.",
+    "sizeLabel":  "87.7 MB",
     "storeUrl":  "https://play.google.com/store/apps/details?id=dev.marcellvn.ffs",
-    "build":  18,
+    "build":  19,
     "version":  "1.1.0",
     "apkUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs.apk",
     "distribution":  "both",
-    "sizeBytes":  91876393
+    "sizeBytes":  91909161
 }
