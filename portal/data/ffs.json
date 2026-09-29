@@ -24,8 +24,8 @@
                ],
     "sidebarNote":  "Official APK is hosted on GitHub Pages.",
     "version":  "1.1.0",
-    "build":  19,
-    "releaseNotes":  "What’s new\n\n• Same purchase, one transaction — Wallet and bank alerts for one tap are no longer saved twice\n• Turn banks on or off from the list — no need to open Edit\n• New bank found — we ask before capturing a bank you haven’t enabled\n• Capitec import — pending amounts now match the statement\n• Demo simulate in Settings works again\n\nF.F.S stays on your phone. You confirm or ignore anything we capture.",
+    "build":  20,
+    "releaseNotes":  "• Import a statement and we’ll ask to rename your account and turn on that bank’s reader\n• Tap Money in or Money out on Home to open matching transactions for this month\n• Cleaner Transactions filters — direction and date pickers, plus Account/Category under Filters\n• Quickly enable or disable accounts from the Accounts list\n• Fixed account type dropdown overflow on Edit account\n\nF.F.S stays on your phone. You confirm or ignore anything we capture.",
     "updateCheckUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs/mobile-version.json",
     "codeProtected":  true,
     "unlock":  {
@@ -71,13 +71,13 @@
                     ],
     "apk":  {
                 "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs.apk",
-                "build":  19,
+                "build":  20,
                 "fileName":  "ffs.apk",
                 "version":  "1.1.0",
                 "label":  "Download Live APK",
                 "available":  true,
                 "channel":  "live",
-                "sizeLabel":  "87.7 MB",
-                "sizeBytes":  91909161
+                "sizeLabel":  "87.9 MB",
+                "sizeBytes":  92154921
             }
 }
