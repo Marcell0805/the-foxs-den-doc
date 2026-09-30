@@ -23,9 +23,9 @@
                    }
                ],
     "sidebarNote":  "Official APK is hosted on GitHub Pages.",
-    "version":  "1.0.0",
-    "build":  3,
-    "releaseNotes":  "FFS 1.0.0 — Internal test build\n\n• Reliable Android back navigation (tabs return to Home)\n• Clearer Home, Reports, and transaction list layout\n• Default account types \u0026 categories on first launch\n• Transfers excluded from spending reports\n• Improved goals progress and contribution screens\n• Demo bank notification can be simulated repeatedly\n• Local-first finance: transactions, reports, goals, OCR, CSV export\n\nThis is an internal testing release. Data stays on your device.",
+    "version":  "1.1.0",
+    "build":  22,
+    "releaseNotes":  "Reports now separate salary from other income, so payday stands out.\nSet the day or range you get paid, including the last week of the month.\nSalary paid in the last week counts at the start of the next month.\nThe trend chart follows the period you pick, with a daily view for this month.\nSwitch the chart between All, Both, In, Out, and what’s left.",
     "updateCheckUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs/mobile-version.json",
     "codeProtected":  true,
     "unlock":  {
@@ -71,13 +71,13 @@
                     ],
     "apk":  {
                 "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs.apk",
-                "build":  3,
+                "build":  22,
                 "fileName":  "ffs.apk",
-                "version":  "1.0.0",
+                "version":  "1.1.0",
                 "label":  "Download Live APK",
                 "available":  true,
                 "channel":  "live",
-                "sizeLabel":  "85,3 MB",
-                "sizeBytes":  89434174
+                "sizeLabel":  "88,2 MB",
+                "sizeBytes":  92498985
             }
 }
