@@ -24,8 +24,8 @@
                ],
     "sidebarNote":  "Official APK is hosted on GitHub Pages.",
     "version":  "1.1.0",
-    "build":  20,
-    "releaseNotes":  "• Import a statement and we’ll ask to rename your account and turn on that bank’s reader\n• Tap Money in or Money out on Home to open matching transactions for this month\n• Cleaner Transactions filters — direction and date pickers, plus Account/Category under Filters\n• Quickly enable or disable accounts from the Accounts list\n• Fixed account type dropdown overflow on Edit account\n\nF.F.S stays on your phone. You confirm or ignore anything we capture.",
+    "build":  21,
+    "releaseNotes":  "What’s new\n\n• Reports — the Other category now lines up with the rest of the spending list",
     "updateCheckUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs/mobile-version.json",
     "codeProtected":  true,
     "unlock":  {
@@ -60,24 +60,27 @@
     "packageName":  "dev.marcellvn.ffs",
     "screenshots":  [
                         "screenshots/ffs/01-home.png",
-                        "screenshots/ffs/02-menu.png",
-                        "screenshots/ffs/03-transactions.png",
-                        "screenshots/ffs/04-reports.png",
-                        "screenshots/ffs/05-goal-detail.png",
-                        "screenshots/ffs/06-more.png",
-                        "screenshots/ffs/07-categories.png",
-                        "screenshots/ffs/08-accounts.png",
-                        "screenshots/ffs/09-banks-sources.png"
+                        "screenshots/ffs/02-transactions.png",
+                        "screenshots/ffs/03-reports.png",
+                        "screenshots/ffs/04-budget.png",
+                        "screenshots/ffs/05-planning-budget.png",
+                        "screenshots/ffs/06-goals.png",
+                        "screenshots/ffs/07-settings.png",
+                        "screenshots/ffs/08-banks.png",
+                        "screenshots/ffs/09-planning-goals.png",
+                        "screenshots/ffs/10-budget-vs-actual.png",
+                        "screenshots/ffs/11-settings.png",
+                        "screenshots/ffs/12-drawer.png"
                     ],
     "apk":  {
                 "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs.apk",
-                "build":  20,
+                "build":  21,
                 "fileName":  "ffs.apk",
                 "version":  "1.1.0",
                 "label":  "Download Live APK",
                 "available":  true,
                 "channel":  "live",
-                "sizeLabel":  "87.9 MB",
-                "sizeBytes":  92154921
+                "sizeLabel":  "88.1 MB",
+                "sizeBytes":  92367913
             }
 }
