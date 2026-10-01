@@ -1,11 +1,11 @@
 {
     "channel":  "live",
-    "releaseNotes":  "Reports asks once if your salary date is missing, and you can set it from the trend. In, Out, and Net match in size and open those transactions. Salary paid in the last week of the month shows on the 1st, on the cards and the charts. Cash-flow dates read downward, and you can pinch the charts to zoom in. Separate inter-account transfers are saved as transfers.",
-    "sizeLabel":  "88.2 MB",
+    "releaseNotes":  "The app locks with your phone fingerprint, face, or PIN when you open it and when you leave it.\nImporting a statement warns you if that lock is off.\nThe home-screen icon fills the circle.\nPayday sits with your accounts.\nThe lock screen matches the F.F.S splash.",
+    "sizeLabel":  "88.7 MB",
     "storeUrl":  "https://play.google.com/store/apps/details?id=dev.marcellvn.ffs",
-    "build":  23,
+    "build":  24,
     "version":  "1.1.0",
     "apkUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs.apk",
     "distribution":  "both",
-    "sizeBytes":  92515369
+    "sizeBytes":  92970718
 }
