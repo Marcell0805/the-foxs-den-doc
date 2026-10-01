@@ -770,7 +770,9 @@
       '<div class="screenshot-carousel" tabindex="0" role="region" aria-label="Screenshots">';
     shots.forEach(function (shot, i) {
       html += '<figure class="screenshot-slide">' +
-        '<img src="' + esc(prefix + shot) + '" alt="Screenshot ' + (i + 1) + '" loading="lazy">' +
+        '<button type="button" class="screenshot-open" data-shot-index="' + i + '" aria-label="Open screenshot ' + (i + 1) + ' of ' + shots.length + '">' +
+          '<img src="' + esc(prefix + shot) + '" alt="Screenshot ' + (i + 1) + '" loading="lazy">' +
+        '</button>' +
       '</figure>';
     });
     html += '</div></section>';
@@ -1055,6 +1057,110 @@
     el.hidden = !isAboutVisible();
   }
 
+  var shotLightbox = null;
+  var shotItems = [];
+  var shotIndex = 0;
+  var shotReturnFocus = null;
+
+  function ensureScreenshotLightbox() {
+    if (shotLightbox) return shotLightbox;
+    var root = document.createElement('div');
+    root.className = 'shot-lightbox';
+    root.hidden = true;
+    root.innerHTML =
+      '<div class="shot-lightbox__backdrop" data-shot-close></div>' +
+      '<div class="shot-lightbox__dialog" role="dialog" aria-modal="true" aria-label="Screenshot viewer" tabindex="-1">' +
+        '<button type="button" class="shot-lightbox__close" data-shot-close aria-label="Close">×</button>' +
+        '<button type="button" class="shot-lightbox__nav shot-lightbox__nav--prev" data-shot-prev aria-label="Previous screenshot">‹</button>' +
+        '<figure class="shot-lightbox__stage">' +
+          '<img alt="">' +
+          '<figcaption class="shot-lightbox__caption"></figcaption>' +
+        '</figure>' +
+        '<button type="button" class="shot-lightbox__nav shot-lightbox__nav--next" data-shot-next aria-label="Next screenshot">›</button>' +
+      '</div>';
+    document.body.appendChild(root);
+
+    root.addEventListener('click', function (e) {
+      if (e.target.closest('[data-shot-close]')) closeScreenshotLightbox();
+      else if (e.target.closest('[data-shot-prev]')) stepScreenshot(-1);
+      else if (e.target.closest('[data-shot-next]')) stepScreenshot(1);
+    });
+
+    var stage = root.querySelector('.shot-lightbox__stage');
+    var swipeX = 0;
+    var swiping = false;
+    stage.addEventListener('pointerdown', function (e) {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      swiping = true;
+      swipeX = e.clientX;
+    });
+    stage.addEventListener('pointerup', function (e) {
+      if (!swiping) return;
+      swiping = false;
+      var dx = e.clientX - swipeX;
+      if (dx > 48) stepScreenshot(-1);
+      else if (dx < -48) stepScreenshot(1);
+    });
+    stage.addEventListener('pointercancel', function () { swiping = false; });
+
+    document.addEventListener('keydown', function (e) {
+      if (!shotLightbox || shotLightbox.hidden) return;
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        closeScreenshotLightbox();
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        stepScreenshot(1);
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        stepScreenshot(-1);
+      }
+    });
+
+    shotLightbox = root;
+    return root;
+  }
+
+  function showScreenshot(index) {
+    if (!shotItems.length) return;
+    shotIndex = (index + shotItems.length) % shotItems.length;
+    var item = shotItems[shotIndex];
+    var root = ensureScreenshotLightbox();
+    var img = root.querySelector('.shot-lightbox__stage img');
+    var caption = root.querySelector('.shot-lightbox__caption');
+    img.src = item.src;
+    img.alt = item.alt;
+    caption.textContent = (shotIndex + 1) + ' of ' + shotItems.length;
+    var single = shotItems.length < 2;
+    root.querySelector('[data-shot-prev]').hidden = single;
+    root.querySelector('[data-shot-next]').hidden = single;
+  }
+
+  function stepScreenshot(delta) {
+    showScreenshot(shotIndex + delta);
+  }
+
+  function openScreenshotLightbox(items, index, returnFocus) {
+    shotItems = items;
+    shotReturnFocus = returnFocus || null;
+    var root = ensureScreenshotLightbox();
+    showScreenshot(index);
+    root.hidden = false;
+    document.body.classList.add('shot-lightbox-open');
+    var dialog = root.querySelector('.shot-lightbox__dialog');
+    if (dialog) dialog.focus();
+  }
+
+  function closeScreenshotLightbox() {
+    if (!shotLightbox || shotLightbox.hidden) return;
+    shotLightbox.hidden = true;
+    document.body.classList.remove('shot-lightbox-open');
+    var img = shotLightbox.querySelector('.shot-lightbox__stage img');
+    if (img) img.removeAttribute('src');
+    if (shotReturnFocus && shotReturnFocus.focus) shotReturnFocus.focus();
+    shotReturnFocus = null;
+  }
+
   function enhanceScreenshotCarousels() {
     document.querySelectorAll('.screenshot-carousel').forEach(function (carousel) {
       if (carousel.dataset.swipeReady === '1') return;
@@ -1064,6 +1170,19 @@
       var startX = 0;
       var startScroll = 0;
       var moved = false;
+      var suppressClick = false;
+
+      function openFromButton(btn) {
+        var buttons = carousel.querySelectorAll('.screenshot-open');
+        var items = [];
+        buttons.forEach(function (el) {
+          var img = el.querySelector('img');
+          if (!img) return;
+          items.push({ src: img.getAttribute('src') || '', alt: img.getAttribute('alt') || 'Screenshot' });
+        });
+        var index = Number(btn.getAttribute('data-shot-index')) || 0;
+        openScreenshotLightbox(items, index, btn);
+      }
 
       carousel.addEventListener('pointerdown', function (e) {
         if (e.pointerType === 'mouse' && e.button !== 0) return;
@@ -1086,18 +1205,27 @@
         if (!dragging) return;
         dragging = false;
         carousel.classList.remove('is-dragging');
+        if (!moved && e.type === 'pointerup') {
+          var hit = document.elementFromPoint(e.clientX, e.clientY);
+          var btn = hit && hit.closest ? hit.closest('.screenshot-open') : null;
+          if (btn && carousel.contains(btn)) {
+            suppressClick = true;
+            openFromButton(btn);
+          }
+        }
         try { carousel.releasePointerCapture(e.pointerId); } catch (err) { /* ignore */ }
       }
 
       carousel.addEventListener('pointerup', endDrag);
       carousel.addEventListener('pointercancel', endDrag);
 
-      // Prevent accidental image click/drag after a swipe
+      // Swallow the click that follows a swipe or an already-opened viewer.
       carousel.addEventListener('click', function (e) {
-        if (moved) {
+        if (moved || suppressClick) {
           e.preventDefault();
           e.stopPropagation();
           moved = false;
+          suppressClick = false;
         }
       }, true);
 

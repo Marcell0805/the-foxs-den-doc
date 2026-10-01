@@ -24,8 +24,8 @@
                ],
     "sidebarNote":  "Official APK is hosted on GitHub Pages.",
     "version":  "1.1.0",
-    "build":  21,
-    "releaseNotes":  "What’s new\n\n• Reports — the Other category now lines up with the rest of the spending list",
+    "build":  23,
+    "releaseNotes":  "Reports asks once if your salary date is missing, and you can set it from the trend. In, Out, and Net match in size and open those transactions. Salary paid in the last week of the month shows on the 1st, on the cards and the charts. Cash-flow dates read downward, and you can pinch the charts to zoom in. Separate inter-account transfers are saved as transfers.",
     "updateCheckUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs/mobile-version.json",
     "codeProtected":  true,
     "unlock":  {
@@ -74,13 +74,13 @@
                     ],
     "apk":  {
                 "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs.apk",
-                "build":  21,
+                "build":  23,
                 "fileName":  "ffs.apk",
                 "version":  "1.1.0",
                 "label":  "Download Live APK",
                 "available":  true,
                 "channel":  "live",
-                "sizeLabel":  "88.1 MB",
-                "sizeBytes":  92367913
+                "sizeLabel":  "88.2 MB",
+                "sizeBytes":  92515369
             }
 }

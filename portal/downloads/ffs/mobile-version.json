@@ -1,11 +1,11 @@
 {
     "channel":  "live",
-    "releaseNotes":  "What’s new\n\n• Reports — the Other category now lines up with the rest of the spending list",
-    "sizeLabel":  "88.1 MB",
+    "releaseNotes":  "Reports asks once if your salary date is missing, and you can set it from the trend. In, Out, and Net match in size and open those transactions. Salary paid in the last week of the month shows on the 1st, on the cards and the charts. Cash-flow dates read downward, and you can pinch the charts to zoom in. Separate inter-account transfers are saved as transfers.",
+    "sizeLabel":  "88.2 MB",
     "storeUrl":  "https://play.google.com/store/apps/details?id=dev.marcellvn.ffs",
-    "build":  21,
+    "build":  23,
     "version":  "1.1.0",
     "apkUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs.apk",
     "distribution":  "both",
-    "sizeBytes":  92367913
+    "sizeBytes":  92515369
 }
