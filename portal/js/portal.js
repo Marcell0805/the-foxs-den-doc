@@ -373,6 +373,23 @@
     });
   }
 
+  function bindAboutFilter(mount) {
+    var input = mount.querySelector('.about-faq-filter');
+    if (!input) return;
+    var items = mount.querySelectorAll('.about-filter-item');
+    var empty = mount.querySelector('.about-filter-empty');
+    input.addEventListener('input', function () {
+      var q = input.value.trim().toLowerCase();
+      var shown = 0;
+      items.forEach(function (el) {
+        var hit = !q || (el.getAttribute('data-filter') || '').indexOf(q) !== -1;
+        el.hidden = !hit;
+        if (hit) shown += 1;
+      });
+      if (empty) empty.hidden = shown !== 0;
+    });
+  }
+
   function bindCodeGates(root, section) {
     if (!root || !section || !section.codeProtected) return;
     root.querySelectorAll('[data-code-gate]').forEach(function (el) {
@@ -932,43 +949,51 @@
     }
 
     var blocks = section.blocks || [];
-    var hasAboutBlocks = blocks.some(function (b) {
-      var blockText = (b.content || '').trim();
-      var summaryText = (section.summary || '').trim();
-      var onlyDupSummary = blockText && summaryText && blockText === summaryText && !(b.bullets && b.bullets.length);
-      return !onlyDupSummary;
-    });
-    if (hasAboutBlocks) {
-      html += '<section class="about-app-section"><h2>About this app</h2>';
-    }
-
+    var faq = section.faq || [];
+    var aboutParts = [];
     blocks.forEach(function (b) {
       var blockText = (b.content || '').trim();
       var summaryText = (section.summary || '').trim();
       var onlyDupSummary = blockText && summaryText && blockText === summaryText &&
         !(b.bullets && b.bullets.length);
       if (onlyDupSummary) return;
-      html += '<section class="content-block" id="' + esc(b.id || '') + '">';
-      if (b.heading) html += '<h3>' + esc(b.heading) + '</h3>';
-      if (b.content) {
-        html += '<p>' + esc(b.content) + '</p>';
-      }
+      var search = ((b.heading || '') + ' ' + (b.content || '') + ' ' + ((b.bullets || []).join(' '))).toLowerCase();
+      var part = '<section class="content-block about-filter-item" data-filter="' + esc(search) + '" id="' + esc(b.id || '') + '">';
+      if (b.heading) part += '<h3>' + esc(b.heading) + '</h3>';
+      if (b.content) part += '<p>' + esc(b.content) + '</p>';
       if (b.bullets && b.bullets.length) {
-        html += '<ul>';
-        b.bullets.forEach(function (li) {
-          html += '<li>' + esc(li) + '</li>';
-        });
-        html += '</ul>';
+        part += '<ul>';
+        b.bullets.forEach(function (li) { part += '<li>' + esc(li) + '</li>'; });
+        part += '</ul>';
       }
-      html += '</section>';
+      part += '</section>';
+      aboutParts.push(part);
     });
-
-    if (hasAboutBlocks) {
-      html += '</section>';
+    faq.forEach(function (item) {
+      var heading = item.heading || '';
+      var content = item.content || '';
+      var search = (heading + ' ' + content).toLowerCase();
+      var part = '<section class="content-block about-filter-item faq-block" id="' + esc(item.id || '') + '" data-filter="' + esc(search) + '">';
+      if (heading) part += '<h3>' + esc(heading) + '</h3>';
+      if (content) part += '<p>' + esc(content).replace(/\n/g, '<br>') + '</p>';
+      part += '</section>';
+      aboutParts.push(part);
+    });
+    if (aboutParts.length) {
+      html += '<section class="about-app-section"><div class="about-app-layout' + (faq.length ? ' has-faq' : '') + '">';
+      html += '<div class="about-app-main"><h2>About this app</h2>' + aboutParts.join('');
+      html += '<p class="about-filter-empty" hidden>No matching details.</p></div>';
+      if (faq.length) {
+        html += '<aside class="about-faq-panel"><h2>FAQs</h2>';
+        html += '<input type="search" class="about-faq-filter" placeholder="Filter these details" aria-label="Filter about this app">';
+        html += '</aside>';
+      }
+      html += '</div></section>';
     }
 
     html += renderTechDetails(section);
     mount.innerHTML = html;
+    bindAboutFilter(mount);
     bindCodeGates(mount, section);
   }
 

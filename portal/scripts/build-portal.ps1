@@ -578,6 +578,23 @@ function Sync-AppsFromManifest {
         $shots = Get-AppScreenshots -AssetsDir $assetsDir -AppId $id
         if ($shots.Count -gt 0) { $section.screenshots = $shots }
 
+        $faqBlocks = [System.Collections.Generic.List[object]]::new()
+        if ($app.faq) {
+            $fi = 0
+            foreach ($item in @($app.faq)) {
+                $heading = if ($item.heading) { [string]$item.heading } else { "" }
+                $content = if ($item.content) { [string]$item.content } else { "" }
+                if ([string]::IsNullOrWhiteSpace($heading)) { continue }
+                $fi++
+                $faqBlocks.Add([ordered]@{
+                    id = "faq-$fi"
+                    heading = $heading.Trim()
+                    content = $content
+                })
+            }
+        }
+        if ($faqBlocks.Count -gt 0) { $section.faq = @($faqBlocks) }
+
         if ($kind -eq 'website') {
             if ($app.externalUrl) {
                 $section.externalUrl = $app.externalUrl
@@ -753,6 +770,12 @@ function Sync-AppsFromManifest {
             if ($b.bullets) { foreach ($x in $b.bullets) { $parts.Add($x) } }
         }
     }
+    if ($doc.faq) {
+        foreach ($f in $doc.faq) {
+            if ($f.heading) { $parts.Add($f.heading) }
+            if ($f.content) { $parts.Add($f.content) }
+        }
+    }
     return ($parts -join ' ')
 }
 
@@ -818,6 +841,23 @@ Get-ChildItem $dataDir -Filter "*.json" | ForEach-Object {
                 section = $doc.title
                 url = "sections/$id.html#$($b.id)"
                 text = ($blockText -join ' ')
+                tags = @($doc.tags)
+                status = $doc.status
+            }
+        }
+    }
+    if ($doc.faq) {
+        foreach ($f in $doc.faq) {
+            $faqId = if ($f.id) { "$id-$($f.id)" } else { "$id-faq" }
+            $faqText = @()
+            if ($f.heading) { $faqText += $f.heading }
+            if ($f.content) { $faqText += $f.content }
+            $searchEntries += [ordered]@{
+                id = $faqId
+                title = if ($f.heading) { $f.heading } else { $doc.title }
+                section = $doc.title
+                url = "sections/$id.html#$($f.id)"
+                text = ($faqText -join ' ')
                 tags = @($doc.tags)
                 status = $doc.status
             }
