@@ -44,6 +44,14 @@
                      }
                  ],
     "whatsNew":  "• Searchable country picker (type to find your country)\n• Phone field hint follows your country dial code (+1, +44, +27, …)\n• New profiles start with a country from your browser language\n• Address labels adapt (State/ZIP, County/Postcode, or Province/Postal Code)\n• Clearer tips — less South Africa–only wording",
+    "screenshots":  [
+                        "screenshots/foxfill/01-scan-certain.jpg",
+                        "screenshots/foxfill/02-scan-review.jpg",
+                        "screenshots/foxfill/03-fill-complete.jpg",
+                        "screenshots/foxfill/04-fill-contact.jpg",
+                        "screenshots/foxfill/05-settings.jpg",
+                        "screenshots/foxfill/06-PopUp-Icon-1280x800.png"
+                    ],
     "faq":  [
                 {
                     "id":  "faq-1",
@@ -81,14 +89,6 @@
                     "content":  "Download the zip from this page, extract it, and load the folder in Chrome under Extensions with Developer mode on. To update, download the newer zip and load that folder again. Your profiles stay in Chrome."
                 }
             ],
-    "screenshots":  [
-                        "screenshots/foxfill/01-scan-certain.jpg",
-                        "screenshots/foxfill/02-scan-review.jpg",
-                        "screenshots/foxfill/03-fill-complete.jpg",
-                        "screenshots/foxfill/04-fill-contact.jpg",
-                        "screenshots/foxfill/05-settings.jpg",
-                        "screenshots/foxfill/06-PopUp-Icon-1280x800.png"
-                    ],
     "package":  {
                     "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/foxfill.zip",
                     "build":  7,

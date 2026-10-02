@@ -45,6 +45,14 @@
                      }
                  ],
     "whatsNew":  "Service Diagnostics in Settings — see if Steam, RAWG, Discord, or updates are down, then Configure / Re-login / Retry from that row.\n• Guild emoji picker in announcements — insert :name: and they resolve when you send.\n• Tag roles and specific users in the Discord ping list.\n• More reliable Discord setup (fresh login, clearer bot-token errors).\n• UI polish: stream-day dropdown and diagnostics spacing.",
+    "screenshots":  [
+                        "screenshots/streamforge/01-SetupWizard.png",
+                        "screenshots/streamforge/02-RAWGService.png",
+                        "screenshots/streamforge/03-DiscordWebHook.png",
+                        "screenshots/streamforge/04-MainScreen.png",
+                        "screenshots/streamforge/05-CustomizeOptions.png",
+                        "screenshots/streamforge/06-UserConfigScreen.png"
+                    ],
     "faq":  [
                 {
                     "id":  "faq-1",
@@ -82,14 +90,6 @@
                     "content":  "StreamForge can check for a newer build. Download the latest zip from this page, extract it, and run the new copy. The schedule stays in AppData."
                 }
             ],
-    "screenshots":  [
-                        "screenshots/streamforge/01-SetupWizard.png",
-                        "screenshots/streamforge/02-RAWGService.png",
-                        "screenshots/streamforge/03-DiscordWebHook.png",
-                        "screenshots/streamforge/04-MainScreen.png",
-                        "screenshots/streamforge/05-CustomizeOptions.png",
-                        "screenshots/streamforge/06-UserConfigScreen.png"
-                    ],
     "package":  {
                     "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/streamforge-win-x64.zip",
                     "build":  12,
