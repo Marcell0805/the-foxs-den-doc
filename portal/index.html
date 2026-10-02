@@ -10,6 +10,7 @@
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=denfox1">
   <link rel="stylesheet" href="css/portal.css">
   <link rel="stylesheet" href="css/theme-overrides.css">
+  <link rel="stylesheet" href="css/den-home.css">
 
   <style>html:not(.auth-ok) body > :not(#auth-gate) { display: none; }</style>
   <script src="js/auth.js"></script>
@@ -17,32 +18,39 @@
 </head>
 <body data-nav-scope="landing">
   <div id="portal-toolbar"></div>
-  <div class="landing">
-    <div class="landing-brand">
-      <img class="landing-logo" src="assets/logo.png?v=denfox1" alt="The Fox's Den" width="128" height="128" onerror="this.onerror=null;this.src='assets/logo.svg';">
-      <p class="landing-eyebrow">The Den</p>
-      <h1 data-portal-title>The Fox's Den</h1>
-    </div>
-    <p class="subtitle" data-portal-tagline>The collection of things that escaped the workshop.</p>
-    <p class="landing-descriptor" data-portal-descriptor hidden></p>
+  <div class="den-home">
+    <section class="den-hero">
+      <div class="den-hero-copy">
+        <p class="landing-eyebrow">The Den</p>
+        <h1 data-portal-title>The Fox's Den</h1>
+        <p class="subtitle" data-portal-tagline>The collection of things that escaped the workshop.</p>
+        <p class="landing-descriptor" data-portal-descriptor>Apps, websites, desktop tools &amp; browser add-ons built by Marcell.</p>
+        <div class="landing-search-wrap no-print">
+          <input type="search" id="landing-search" class="landing-search" placeholder="Search projects, features, or FAQs…" readonly>
+          <kbd class="landing-search-kbd">Ctrl + K</kbd>
+        </div>
+      </div>
+      <div class="den-hero-art" aria-hidden="true">
+        <img src="assets/den-banner.jpg" alt="">
+      </div>
+    </section>
 
-    <div class="landing-search-wrap no-print">
-      <input type="search" id="landing-search" class="landing-search" placeholder="Search projects… (Ctrl+K)" readonly>
+    <div class="den-workshop" data-den-workshop>
+      <aside class="den-rail" data-den-rail></aside>
+      <div class="den-catalog" data-portal-landing-nav></div>
+      <aside class="den-detail" data-den-detail></aside>
     </div>
-
-    <div class="landing-nav-groups" data-portal-landing-nav></div>
 
     <p class="landing-learn-more">
       <a href="sections/about.html">Learn more</a>
     </p>
-
     <footer class="landing-footer" data-portal-contact-footer></footer>
   </div>
 
   <script src="js/vendor/fuse.min.js"></script>
-  <script src="js/search-index.js?v=734571d54bfb"></script>
+  <script src="js/search-index.js?v=8286d1354203"></script>
   <script src="js/search.js"></script>
-  <script src="js/portal-data.js?v=734571d54bfb"></script>
+  <script src="js/portal-data.js?v=8286d1354203"></script>
   <script src="js/portal.js"></script>
 </body>
 </html>

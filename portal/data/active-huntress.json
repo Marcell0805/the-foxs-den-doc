@@ -55,6 +55,61 @@
                      }
                  ],
     "whatsNew":  "Version 1.0.0 — Live release\n• Initial live release\n• Workout history tracking\n• Progress trends\n• Backup functionality",
+    "screenshots":  [
+                        "screenshots/active-huntress/01-loading.png",
+                        "screenshots/active-huntress/02-drawer.png",
+                        "screenshots/active-huntress/03-exercises.png",
+                        "screenshots/active-huntress/04-trends.png",
+                        "screenshots/active-huntress/05-history.png",
+                        "screenshots/active-huntress/06-account.png"
+                    ],
+    "faq":  [
+                {
+                    "id":  "faq-1",
+                    "heading":  "What is Active Huntress?",
+                    "content":  "An offline workout checklist for a weekly plan. You set exercises for each day, start a session, tick lines off, and look back at history and trends. Daily use does not need a website or an account."
+                },
+                {
+                    "id":  "faq-2",
+                    "heading":  "Do I need the internet?",
+                    "content":  "No, for workouts, history, and trends. A connection is only needed if you sign in to back up to Google Drive, or when you download a newer APK from this page."
+                },
+                {
+                    "id":  "faq-3",
+                    "heading":  "Where is my data stored?",
+                    "content":  "Workouts, plans, and notes stay in a database on this phone. Nothing is uploaded unless you choose Google Drive backup from Account. Uninstalling the app removes that database, so export a backup first if you want to keep it."
+                },
+                {
+                    "id":  "faq-4",
+                    "heading":  "How does the weekly plan work?",
+                    "content":  "Home shows Monday to Sunday. Set up or edit the exercises for a day, then Start. Sunday is left open until you add something. Editing a day does not wipe the other days."
+                },
+                {
+                    "id":  "faq-5",
+                    "heading":  "How do I run a workout?",
+                    "content":  "Start the day from Home. Tick the lines as you go, including nested steps, and add a note if you want. Optional rest or plank timers can beep and check the line when they finish. Finish workout ends the session. If you leave one in progress, you can resume it later, or discard it."
+                },
+                {
+                    "id":  "faq-6",
+                    "heading":  "What happens after I finish?",
+                    "content":  "The app shows a short encouragement, then you can score the session from 1 to 5 and add how it felt. You can skip that. The score shows in History and on the Trends mood chart."
+                },
+                {
+                    "id":  "faq-7",
+                    "heading":  "What do History and Trends show?",
+                    "content":  "History lists past sessions. Trends shows this week’s completed lines, and the last eight weeks of lines, workouts, and mood once you have rated a session."
+                },
+                {
+                    "id":  "faq-8",
+                    "heading":  "How do I back up?",
+                    "content":  "From Account you can export a JSON file and import it later on this phone. If you sign in with Google, you can also keep a backup in Drive. Restore puts the plan, history, and ratings back."
+                },
+                {
+                    "id":  "faq-9",
+                    "heading":  "How do I update?",
+                    "content":  "Download the latest APK from this page and install it over the app you already have. Your workouts stay on the phone. This build does not check for updates by itself."
+                }
+            ],
     "apk":  {
                 "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/active-huntress.apk",
                 "build":  5,

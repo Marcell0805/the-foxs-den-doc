@@ -45,6 +45,43 @@
                      }
                  ],
     "whatsNew":  "Service Diagnostics in Settings — see if Steam, RAWG, Discord, or updates are down, then Configure / Re-login / Retry from that row.\n• Guild emoji picker in announcements — insert :name: and they resolve when you send.\n• Tag roles and specific users in the Discord ping list.\n• More reliable Discord setup (fresh login, clearer bot-token errors).\n• UI polish: stream-day dropdown and diagnostics spacing.",
+    "faq":  [
+                {
+                    "id":  "faq-1",
+                    "heading":  "What is StreamForge?",
+                    "content":  "A Windows app for building a weekly stream schedule and posting an announcement to Discord. Search games, set the day and time, then send when you are ready. There is no installer: download the zip, extract it, and run it."
+                },
+                {
+                    "id":  "faq-2",
+                    "heading":  "Do I need an account with Foxbyte?",
+                    "content":  "No. Steam search, RAWG search, and the Discord webhook are configured in the app. The schedule and those settings are saved on this PC."
+                },
+                {
+                    "id":  "faq-3",
+                    "heading":  "Where is my data stored?",
+                    "content":  "In %APPDATA%\\StreamForge on this PC, separate from the extracted program. A newer zip can replace the program without wiping the schedule. Nothing is uploaded except the Discord message you choose to send."
+                },
+                {
+                    "id":  "faq-4",
+                    "heading":  "How do announcements work?",
+                    "content":  "Add a Discord webhook in setup. StreamForge formats the game, time, and details. It posts only when you send. You can add guild emoji and mention roles or people if the Discord setup is connected."
+                },
+                {
+                    "id":  "faq-5",
+                    "heading":  "Can I schedule more than one game on the same day?",
+                    "content":  "Yes. Each game keeps its own time, and games on the same day are listed from earliest to latest."
+                },
+                {
+                    "id":  "faq-6",
+                    "heading":  "What if Steam, RAWG, or Discord fails?",
+                    "content":  "Open Settings and use Service Diagnostics. That row shows whether Steam, RAWG, Discord, or the update check is down, and you can configure, sign in again, or retry from there."
+                },
+                {
+                    "id":  "faq-7",
+                    "heading":  "How do I update?",
+                    "content":  "StreamForge can check for a newer build. Download the latest zip from this page, extract it, and run the new copy. The schedule stays in AppData."
+                }
+            ],
     "screenshots":  [
                         "screenshots/streamforge/01-SetupWizard.png",
                         "screenshots/streamforge/02-RAWGService.png",

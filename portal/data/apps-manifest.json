@@ -41,7 +41,45 @@
           "description": "Support consistency and long-term improvement."
         }
       ],
-      "whatsNew": "Version 1.0.0 \u2014 Live release\n\u2022 Initial live release\n\u2022 Workout history tracking\n\u2022 Progress trends\n\u2022 Backup functionality"
+      "whatsNew": "Version 1.0.0 \u2014 Live release\n\u2022 Initial live release\n\u2022 Workout history tracking\n\u2022 Progress trends\n\u2022 Backup functionality",
+      "faq": [
+        {
+          "heading": "What is Active Huntress?",
+          "content": "An offline workout checklist for a weekly plan. You set exercises for each day, start a session, tick lines off, and look back at history and trends. Daily use does not need a website or an account."
+        },
+        {
+          "heading": "Do I need the internet?",
+          "content": "No, for workouts, history, and trends. A connection is only needed if you sign in to back up to Google Drive, or when you download a newer APK from this page."
+        },
+        {
+          "heading": "Where is my data stored?",
+          "content": "Workouts, plans, and notes stay in a database on this phone. Nothing is uploaded unless you choose Google Drive backup from Account. Uninstalling the app removes that database, so export a backup first if you want to keep it."
+        },
+        {
+          "heading": "How does the weekly plan work?",
+          "content": "Home shows Monday to Sunday. Set up or edit the exercises for a day, then Start. Sunday is left open until you add something. Editing a day does not wipe the other days."
+        },
+        {
+          "heading": "How do I run a workout?",
+          "content": "Start the day from Home. Tick the lines as you go, including nested steps, and add a note if you want. Optional rest or plank timers can beep and check the line when they finish. Finish workout ends the session. If you leave one in progress, you can resume it later, or discard it."
+        },
+        {
+          "heading": "What happens after I finish?",
+          "content": "The app shows a short encouragement, then you can score the session from 1 to 5 and add how it felt. You can skip that. The score shows in History and on the Trends mood chart."
+        },
+        {
+          "heading": "What do History and Trends show?",
+          "content": "History lists past sessions. Trends shows this week’s completed lines, and the last eight weeks of lines, workouts, and mood once you have rated a session."
+        },
+        {
+          "heading": "How do I back up?",
+          "content": "From Account you can export a JSON file and import it later on this phone. If you sign in with Google, you can also keep a backup in Drive. Restore puts the plan, history, and ratings back."
+        },
+        {
+          "heading": "How do I update?",
+          "content": "Download the latest APK from this page and install it over the app you already have. Your workouts stay on the phone. This build does not check for updates by itself."
+        }
+      ]
     },
     {
       "id": "huntresscookbook-mobile",
@@ -84,6 +122,32 @@
           "title": "Search \u0026 Guides",
           "description": "Find ingredients quickly and view dietary guides in-app."
         }
+      ],
+      "faq": [
+        {
+          "heading": "What is Huntress Cookbook Mobile?",
+          "content": "An offline cookbook for the phone. After you install it, you can browse chapters, open recipes with photos, search ingredients, and read the dietary guides without a network connection."
+        },
+        {
+          "heading": "Do I need an account or the internet?",
+          "content": "No account. The bundled recipes are already in the app. Internet is only needed to download a newer APK, or when the app checks for an update."
+        },
+        {
+          "heading": "Is this the same as the website?",
+          "content": "The recipes start from the same cookbook. The phone keeps its own copy. Recipes you add or change on the phone do not appear on the website, and edits on the website do not change the phone until you install a newer build."
+        },
+        {
+          "heading": "Who can add or edit recipes?",
+          "content": "Anyone in the family can add a recipe. Only the person who added it can edit or delete it. The recipes that came with the cookbook stay editable by MasterChef and Huntress."
+        },
+        {
+          "heading": "Where is my data stored?",
+          "content": "Added recipes and local edits stay on this phone. Uninstalling the app removes them, so keep a copy of anything you wrote yourself before you uninstall."
+        },
+        {
+          "heading": "How do I update?",
+          "content": "The app can check for a newer build. If one is available, download the APK from the prompt or from this page and install it over the current app."
+        }
       ]
     },
     {
@@ -103,6 +167,28 @@
         "website",
         "recipes",
         "cookbook"
+      ],
+      "faq": [
+        {
+          "heading": "What is The Huntress Cookbook?",
+          "content": "A website of gluten-free, onion-free, IBS-conscious recipes. Browse chapters, open a recipe, and read the notes. It is meant to be read in the browser."
+        },
+        {
+          "heading": "Do I need an account?",
+          "content": "No. The chapters are open to read. There is nothing to sign in to."
+        },
+        {
+          "heading": "What is in the cookbook?",
+          "content": "Breakfast, lunch, dinner, braai, soups and comfort foods, desserts, snacks and picnic foods, drinks, and approved Huntress meals, plus an introduction, a dietary guide, pantry essentials, and recipes still to try."
+        },
+        {
+          "heading": "Can I print a recipe?",
+          "content": "Yes. Open the recipe and print the page, or save it as a PDF from the print dialog."
+        },
+        {
+          "heading": "Is this the same as the phone app?",
+          "content": "No. The website and Huntress Cookbook Mobile are separate. Recipes you add on the phone stay on the phone. Reading the site does not change the app."
+        }
       ]
     },
     {
@@ -141,7 +227,37 @@
           "description": "See if Steam, RAWG, Discord, or updates are down and retry from Settings."
         }
       ],
-      "whatsNew": "Service Diagnostics in Settings \u2014 see if Steam, RAWG, Discord, or updates are down, then Configure / Re-login / Retry from that row.\n\u2022 Guild emoji picker in announcements \u2014 insert :name: and they resolve when you send.\n\u2022 Tag roles and specific users in the Discord ping list.\n\u2022 More reliable Discord setup (fresh login, clearer bot-token errors).\n\u2022 UI polish: stream-day dropdown and diagnostics spacing."
+      "whatsNew": "Service Diagnostics in Settings \u2014 see if Steam, RAWG, Discord, or updates are down, then Configure / Re-login / Retry from that row.\n\u2022 Guild emoji picker in announcements \u2014 insert :name: and they resolve when you send.\n\u2022 Tag roles and specific users in the Discord ping list.\n\u2022 More reliable Discord setup (fresh login, clearer bot-token errors).\n\u2022 UI polish: stream-day dropdown and diagnostics spacing.",
+      "faq": [
+        {
+          "heading": "What is StreamForge?",
+          "content": "A Windows app for building a weekly stream schedule and posting an announcement to Discord. Search games, set the day and time, then send when you are ready. There is no installer: download the zip, extract it, and run it."
+        },
+        {
+          "heading": "Do I need an account with Foxbyte?",
+          "content": "No. Steam search, RAWG search, and the Discord webhook are configured in the app. The schedule and those settings are saved on this PC."
+        },
+        {
+          "heading": "Where is my data stored?",
+          "content": "In %APPDATA%\\StreamForge on this PC, separate from the extracted program. A newer zip can replace the program without wiping the schedule. Nothing is uploaded except the Discord message you choose to send."
+        },
+        {
+          "heading": "How do announcements work?",
+          "content": "Add a Discord webhook in setup. StreamForge formats the game, time, and details. It posts only when you send. You can add guild emoji and mention roles or people if the Discord setup is connected."
+        },
+        {
+          "heading": "Can I schedule more than one game on the same day?",
+          "content": "Yes. Each game keeps its own time, and games on the same day are listed from earliest to latest."
+        },
+        {
+          "heading": "What if Steam, RAWG, or Discord fails?",
+          "content": "Open Settings and use Service Diagnostics. That row shows whether Steam, RAWG, Discord, or the update check is down, and you can configure, sign in again, or retry from there."
+        },
+        {
+          "heading": "How do I update?",
+          "content": "StreamForge can check for a newer build. Download the latest zip from this page, extract it, and run the new copy. The schedule stays in AppData."
+        }
+      ]
     },
     {
       "id": "ffs",
@@ -186,7 +302,7 @@
           "description": "Export your data when you need it elsewhere."
         }
       ],
-      "whatsNew": "Version 1.0.0 \u2014 Initial release for testing\n\u2022 Local-first transactions and reports\n\u2022 Goals scaffold\n\u2022 OCR receipt entry\n\u2022 CSV export",
+      "whatsNew": "Version 1.1.0\n\u2022 The app locks with your phone fingerprint, face, or PIN when you open it and when you leave it.\n\u2022 Importing a statement warns you if that lock is off.\n\u2022 The home-screen icon fills the circle.\n\u2022 Payday sits with your accounts.\n\u2022 The lock screen matches the F.F.S splash.",
       "faq": [
         {
           "heading": "How do I update?",
@@ -267,7 +383,37 @@
           "description": "Keep Personal, Work, and more \u2014 switch anytime."
         }
       ],
-      "publishedAt": "2026-10-01"
+      "publishedAt": "2026-10-01",
+      "faq": [
+        {
+          "heading": "What is FoxFill?",
+          "content": "A Chrome add-on that fills web forms from a profile stored on this computer. You scan the page, review what it matched, then fill. It does not send your details to a FoxFill server."
+        },
+        {
+          "heading": "Do I need an account?",
+          "content": "No. Profiles stay in Chrome on this device. You can keep more than one, such as Personal and Work, and switch between them."
+        },
+        {
+          "heading": "How do I fill a form?",
+          "content": "Open a page with a form, open FoxFill, and choose Scan Form. Review the matches, untick anything you do not want, then fill. It does not submit the form for you, and it does not fill passwords."
+        },
+        {
+          "heading": "What does it skip?",
+          "content": "Bank, emergency, insurance, employer, and similar sections are left alone. Boxes it is not sure about stay for you to review instead of being guessed."
+        },
+        {
+          "heading": "Can I lock the profile?",
+          "content": "Yes. In full settings, under Privacy, you can set a passphrase so the saved profile is encrypted on this device. FoxFill cannot recover that passphrase if you forget it."
+        },
+        {
+          "heading": "Where is my data stored?",
+          "content": "In Chrome’s local storage for this add-on. Removing FoxFill removes those profiles. Write down anything you still need before you remove it."
+        },
+        {
+          "heading": "How do I install or update?",
+          "content": "Download the zip from this page, extract it, and load the folder in Chrome under Extensions with Developer mode on. To update, download the newer zip and load that folder again. Your profiles stay in Chrome."
+        }
+      ]
     },
     {
       "id": "wid",
@@ -299,6 +445,36 @@
         {
           "title": "Daily \u0026 Weekly Reports",
           "description": "Review where your time went \u2014 data stays on your PC."
+        }
+      ],
+      "faq": [
+        {
+          "heading": "What is What Was I Doing?",
+          "content": "A Windows time tracker you start and stop yourself. It records activities, projects, and reports. It does not take screenshots, read keystrokes, or watch which apps you use."
+        },
+        {
+          "heading": "Do I need an account or the internet?",
+          "content": "No account. Tracking works offline. A connection is only used when you check for an update."
+        },
+        {
+          "heading": "Where is my data stored?",
+          "content": "Under %LOCALAPPDATA%\\WID\\ on this PC: activities, projects, categories, and settings. The app also keeps about two weeks of daily backup copies. Uninstalling the program does not delete that folder."
+        },
+        {
+          "heading": "How do I log time?",
+          "content": "Start activity, pick a category, and add a project or description if you want. The timer starts immediately. Stop activity ends it. If you forgot to start, add a manual entry for the past period."
+        },
+        {
+          "heading": "What do the reports mean?",
+          "content": "Reports show daily and weekly totals. Unallocated time is your available working hours minus what you tracked. It is only a gap in the log, not a judgement. Lunch is taken out of available hours and is not an activity unless you record it."
+        },
+        {
+          "heading": "What happens at the end of the day?",
+          "content": "At 17:00, if something is still running, WID asks if you are still working. No answer within 60 seconds stops it and caps that entry at 16:30. On the next start, older sessions that ran past 17:00 are capped the same way."
+        },
+        {
+          "heading": "How do I update or move my data?",
+          "content": "Help, then Check for updates, compares the build number. Installing a newer zip does not replace your tracked data. File, Export and File, Import move the JSON files if you want a copy."
         }
       ]
     }

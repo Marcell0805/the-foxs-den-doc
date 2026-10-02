@@ -30,6 +30,33 @@
     "icon":  "icons/huntress-cookbook.png",
     "platform":  "Website",
     "whatsNew":  "Gluten-free, onion-free, IBS-conscious recipes for the Huntress — browse chapters online.",
+    "faq":  [
+                {
+                    "id":  "faq-1",
+                    "heading":  "What is The Huntress Cookbook?",
+                    "content":  "A website of gluten-free, onion-free, IBS-conscious recipes. Browse chapters, open a recipe, and read the notes. It is meant to be read in the browser."
+                },
+                {
+                    "id":  "faq-2",
+                    "heading":  "Do I need an account?",
+                    "content":  "No. The chapters are open to read. There is nothing to sign in to."
+                },
+                {
+                    "id":  "faq-3",
+                    "heading":  "What is in the cookbook?",
+                    "content":  "Breakfast, lunch, dinner, braai, soups and comfort foods, desserts, snacks and picnic foods, drinks, and approved Huntress meals, plus an introduction, a dietary guide, pantry essentials, and recipes still to try."
+                },
+                {
+                    "id":  "faq-4",
+                    "heading":  "Can I print a recipe?",
+                    "content":  "Yes. Open the recipe and print the page, or save it as a PDF from the print dialog."
+                },
+                {
+                    "id":  "faq-5",
+                    "heading":  "Is this the same as the phone app?",
+                    "content":  "No. The website and Huntress Cookbook Mobile are separate. Recipes you add on the phone stay on the phone. Reading the site does not change the app."
+                }
+            ],
     "externalUrl":  "https://marcell0805.github.io/huntress-cookbook/",
     "publishedAt":  "2026-07-22",
     "note":  "Gluten-free, onion-free, IBS-conscious recipes for the Huntress — browse chapters online."

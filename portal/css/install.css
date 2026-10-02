@@ -1,0 +1,93 @@
+.install-page {
+  width: min(46rem, calc(100% - 2rem));
+  margin: 1.5rem auto 3rem;
+}
+
+.install-back {
+  color: var(--accent-soft);
+  text-decoration: none;
+  font-weight: 650;
+  font-size: 0.92rem;
+}
+
+.install-page h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 2.8rem);
+  margin: 0.8rem 0 0.4rem;
+}
+
+.install-lede {
+  color: var(--muted);
+  margin: 0 0 1.25rem;
+}
+
+.install-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 1.5rem;
+}
+
+.install-nav a {
+  text-decoration: none;
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.88rem;
+}
+
+.install-nav a.is-active,
+.install-nav a:hover {
+  border-color: rgba(224, 138, 69, 0.55);
+  color: #f3ebe0;
+  background: rgba(224, 138, 69, 0.1);
+}
+
+.install-guide {
+  background: rgba(28, 42, 34, 0.72);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.25rem 1.3rem 1.4rem;
+  margin-bottom: 1rem;
+}
+
+.install-guide h2 {
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  margin: 0 0 0.45rem;
+}
+
+.install-guide h3 {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  margin: 1.15rem 0 0.4rem;
+}
+
+.install-guide p,
+.install-guide li {
+  color: #d9d3c8;
+}
+
+.install-guide ol,
+.install-guide ul {
+  margin: 0.4rem 0 0.2rem;
+  padding-left: 1.2rem;
+}
+
+.install-guide li + li {
+  margin-top: 0.35rem;
+}
+
+.install-guide a {
+  color: #e0b15a;
+}
+
+.install-note {
+  margin-top: 0.9rem;
+  padding: 0.75rem 0.85rem;
+  border-left: 3px solid #e08a45;
+  background: rgba(224, 138, 69, 0.08);
+  border-radius: 0 8px 8px 0;
+  color: #e7e1d6;
+}

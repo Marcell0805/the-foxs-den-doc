@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0c1410">
+  <title>Install help · The Fox's Den</title>
+  <link rel="icon" type="image/png" href="assets/favicon-32.png">
+  <link rel="stylesheet" href="css/portal.css">
+  <link rel="stylesheet" href="css/theme-overrides.css">
+  <link rel="stylesheet" href="css/install.css">
+</head>
+<body>
+  <header class="portal-toolbar">
+    <div class="toolbar-inner">
+      <a class="toolbar-brand" href="index.html">
+        <img class="toolbar-brand-logo" src="assets/logo.png" alt="" width="36" height="36">
+        <span class="toolbar-brand-text">
+          <span class="toolbar-brand-name">The Fox's Den</span>
+          <span class="toolbar-brand-kicker">Install help</span>
+        </span>
+      </a>
+      <a class="install-back" href="index.html">← Back to The Den</a>
+    </div>
+  </header>
+
+  <main class="install-page">
+    <h1>Install help</h1>
+    <p class="install-lede">One guide for everything published from the workshop. Pick the kind of download you have.</p>
+
+    <nav class="install-nav" aria-label="Install guides">
+      <a href="#android" data-guide="android">Android apps</a>
+      <a href="#windows" data-guide="windows">Windows tools</a>
+      <a href="#addon" data-guide="addon">Browser add-ons</a>
+    </nav>
+
+    <article class="install-guide" id="android">
+      <h2>Android apps</h2>
+      <p>Download APKs only from this site, using the button on each app’s page. Android will ask extra questions because the app is not coming from the Play Store. That is normal for these builds.</p>
+      <p>Some apps, such as FFS, also have <strong>Get it on Google Play</strong>. Play Store copies update through Play. Sideloaded copies update from the APK link on the project page.</p>
+      <ol>
+        <li>Open the app’s page and tap <strong>Download</strong>.</li>
+        <li>Open the file from Chrome, Files, or Google Drive.</li>
+        <li>If asked, allow <strong>Install unknown apps</strong> for the app you used to open it.</li>
+        <li>If Play Protect says the app is uncommon, choose <strong>Install anyway</strong> or <strong>More details</strong>, then continue.</li>
+        <li>Open the app. The name and icon should match the listing in The Den.</li>
+      </ol>
+      <h3>Updating</h3>
+      <p>If an older test build with the same package name is already installed, uninstall it first, then install the new release.</p>
+      <p>Some apps check for a newer build when they are online and show release notes with a download link. Content-only updates, such as cookbook recipes, can arrive separately from the app itself.</p>
+    </article>
+
+    <article class="install-guide" id="windows">
+      <h2>Windows tools</h2>
+      <p>Desktop tools are a zip file. There is no installer.</p>
+      <ol>
+        <li>On the project page, download the zip.</li>
+        <li>Extract it to a folder you can find again.</li>
+        <li>Run the <strong>.exe</strong> inside that folder.</li>
+      </ol>
+      <div class="install-note">StreamForge does not include Discord secrets in the download. After it opens, sign in or add a bot token from Settings. Keep tokens on your PC only.</div>
+    </article>
+
+    <article class="install-guide" id="addon">
+      <h2>Browser add-ons</h2>
+      <p>Use the Chrome Web Store button when the project page offers one. That is the simplest install and the one that receives store updates.</p>
+      <h3>Install from the zip</h3>
+      <ol>
+        <li>Download the zip from the project page and extract it.</li>
+        <li>Open <strong>chrome://extensions</strong>.</li>
+        <li>Turn on <strong>Developer mode</strong>.</li>
+        <li>Choose <strong>Load unpacked</strong> and select the extracted folder.</li>
+      </ol>
+      <p>If the zip includes an <strong>INSTALL-CHROME.md</strong> file, follow that for anything specific to the add-on.</p>
+    </article>
+  </main>
+
+  <script>
+    (function () {
+      function mark() {
+        var id = (location.hash || '#android').slice(1);
+        document.querySelectorAll('.install-nav a').forEach(function (link) {
+          link.classList.toggle('is-active', link.getAttribute('data-guide') === id);
+        });
+      }
+      window.addEventListener('hashchange', mark);
+      mark();
+    })();
+  </script>
+</body>
+</html>

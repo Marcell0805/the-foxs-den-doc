@@ -1,0 +1,482 @@
+/* Landing layout matched to the workshop mockup. Loaded only on the home page. */
+
+body[data-nav-scope="landing"] {
+  background:
+    radial-gradient(ellipse 70% 45% at 12% -8%, rgba(74, 112, 88, 0.42), transparent 55%),
+    radial-gradient(ellipse 50% 35% at 88% 4%, rgba(224, 138, 69, 0.08), transparent 48%),
+    linear-gradient(180deg, #1e3028 0%, #18261f 100%) !important;
+}
+
+body[data-nav-scope="landing"] .toolbar-link.is-current {
+  display: none;
+}
+
+.toolbar-search {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-width: 11.5rem;
+  height: 38px;
+  padding: 0 0.55rem 0 0.7rem;
+  border-radius: 999px;
+  border: 1px solid rgba(243, 235, 224, 0.14);
+  background: #17241e;
+  color: #bbc0b7;
+  font: inherit;
+  font-size: 0.86rem;
+  cursor: pointer;
+}
+
+.toolbar-search kbd {
+  margin-left: auto;
+  font-size: 0.68rem;
+  border: 1px solid rgba(243, 235, 224, 0.16);
+  border-radius: 6px;
+  padding: 0.12rem 0.35rem;
+  color: #d4c4a8;
+}
+
+.toolbar-search svg {
+  width: 16px;
+  height: 16px;
+}
+
+.den-home {
+  width: min(1180px, calc(100% - 1.5rem));
+  margin: 0 auto 2.5rem;
+}
+
+.den-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(240px, 0.95fr);
+  min-height: 300px;
+  margin: 1rem 0 1rem;
+  border: 1px solid rgba(243, 235, 224, 0.08);
+  border-radius: 16px;
+  overflow: hidden;
+  background:
+    linear-gradient(90deg, #101916 0%, #101916 42%, rgba(16, 25, 22, 0.2) 68%, transparent 100%);
+  position: relative;
+}
+
+.den-hero-copy {
+  position: relative;
+  z-index: 1;
+  padding: 2.1rem 1.6rem 1.6rem;
+}
+
+.den-hero-copy h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 5vw, 3.4rem);
+  line-height: 0.95;
+  margin: 0 0 0.7rem;
+  color: #f6f1e8;
+}
+
+.den-hero-copy .subtitle {
+  color: #f3ebe0;
+  font-size: 1.05rem;
+  margin: 0 0 0.35rem;
+}
+
+.den-hero-copy .landing-descriptor {
+  color: #c9c2b4;
+  font-style: italic;
+  margin: 0 0 1.15rem;
+  max-width: 34rem;
+}
+
+.den-hero-copy .landing-search-wrap {
+  max-width: 28rem;
+  margin: 0;
+}
+
+.den-hero-copy .landing-search {
+  background: rgba(14, 22, 19, 0.72) !important;
+  border-color: rgba(243, 235, 224, 0.16) !important;
+  border-radius: 10px !important;
+}
+
+.den-hero-art {
+  position: absolute;
+  inset: 0 0 0 38%;
+}
+
+.den-hero-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 72% center;
+}
+
+.den-hero-art::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, #101916 0%, rgba(16, 25, 22, 0.55) 18%, rgba(16, 25, 22, 0.05) 46%, transparent 70%);
+}
+
+.den-workshop {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr) 300px;
+  gap: 0.85rem;
+  align-items: start;
+}
+
+.den-rail,
+.den-detail-card,
+.den-card,
+.den-filters {
+  background: #22362d;
+  border: 1px solid rgba(243, 235, 224, 0.08);
+  border-radius: 14px;
+}
+
+.den-rail {
+  padding: 0.7rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.den-rail-label {
+  margin: 0.85rem 0.45rem 0.25rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #9aa79c;
+}
+
+.den-rail-all,
+.den-rail-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  width: 100%;
+  text-align: left;
+  text-decoration: none;
+  color: #e7e1d6;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  padding: 0.55rem 0.65rem;
+  font: inherit;
+  font-size: 0.92rem;
+  cursor: pointer;
+}
+
+.den-rail-all em,
+.den-rail-link em {
+  font-style: normal;
+  color: #c9a06a;
+  font-size: 0.82rem;
+}
+
+.den-rail-all.is-active,
+.den-rail-link.is-active,
+.den-rail-all:hover,
+.den-rail-link:hover {
+  background: rgba(224, 158, 56, 0.1);
+  border-color: rgba(224, 158, 56, 0.35);
+  color: #f6f1e8;
+}
+
+.den-rail .den-aside-card {
+  margin: 0.8rem 0 0.2rem;
+}
+
+.den-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem;
+  margin-bottom: 0.85rem;
+}
+
+.den-filter {
+  border: 1px solid transparent;
+  background: transparent;
+  color: #d9d3c8;
+  border-radius: 999px;
+  padding: 0.4rem 0.75rem;
+  font: inherit;
+  font-size: 0.86rem;
+  cursor: pointer;
+}
+
+.den-filter.is-active {
+  background: #e08a45;
+  color: #1a1008;
+  font-weight: 700;
+}
+
+.den-filter-count {
+  margin-left: auto;
+  color: #9aa79c;
+  font-size: 0.82rem;
+  padding-right: 0.4rem;
+}
+
+.den-block-title {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 650;
+  margin: 0.2rem 0 0.55rem;
+  color: #f3ebe0;
+}
+
+.den-card {
+  position: relative;
+  margin-bottom: 0.75rem;
+  overflow: hidden;
+}
+
+.den-card.is-selected {
+  border-color: rgba(224, 158, 56, 0.55);
+  box-shadow: inset 0 0 0 1px rgba(224, 158, 56, 0.25);
+}
+
+.den-card-hit {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.75rem;
+  align-items: center;
+  width: 100%;
+  padding: 0.9rem 2.2rem 0.9rem 0.9rem;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+}
+
+.den-card-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.den-card-kicker {
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #c9a06a;
+}
+
+.den-card-title {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  color: #f6f1e8;
+}
+
+.den-card-summary,
+.den-card-meta,
+.den-detail-summary {
+  color: #c5beb2;
+  font-size: 0.86rem;
+  line-height: 1.45;
+}
+
+.den-card--feature {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 168px;
+}
+
+.den-card--feature .den-card-hit {
+  grid-template-columns: auto minmax(0, 1fr);
+}
+
+.den-card--feature .status-badge {
+  justify-self: start;
+  margin-top: 0.35rem;
+}
+
+.den-card-shot {
+  width: 100%;
+  height: 100%;
+  max-height: 180px;
+  object-fit: cover;
+  object-position: top center;
+}
+
+.den-card-open {
+  position: absolute;
+  right: 0.7rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #d4c4a8;
+  text-decoration: none;
+  font-size: 1.3rem;
+  line-height: 1;
+}
+
+.den-card--feature .den-card-open {
+  right: auto;
+  left: calc(100% - 168px - 1.6rem);
+}
+
+.den-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.7rem;
+}
+
+.den-grid .den-card {
+  margin: 0;
+}
+
+.den-grid .den-card-hit {
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+}
+
+.den-grid .status-badge {
+  grid-column: 2;
+  justify-self: start;
+}
+
+.den-detail-card {
+  padding: 0.95rem 0.95rem 1.1rem;
+  position: sticky;
+  top: 0.8rem;
+}
+
+.den-detail-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #9aa79c;
+  margin: 0 0 0.75rem;
+}
+
+.den-detail-head {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  margin-bottom: 0.7rem;
+}
+
+.den-detail-head h2 {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  margin: 0.15rem 0 0;
+  color: #f6f1e8;
+}
+
+.den-detail-actions .app-download-btn {
+  border-radius: 10px !important;
+}
+
+.den-related {
+  margin-top: 1rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid rgba(243, 235, 224, 0.08);
+}
+
+.den-related h2,
+.whats-new h2 {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #f3ebe0;
+}
+
+.den-related-item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.65rem;
+  align-items: center;
+  margin-top: 0.55rem;
+  padding: 0.45rem 0.15rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.den-related-item strong {
+  display: block;
+  color: #f6f1e8;
+  font-size: 0.92rem;
+}
+
+.den-related-item em {
+  display: block;
+  color: #b7b1a6;
+  font-style: normal;
+  font-size: 0.8rem;
+}
+
+.den-related-item .app-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+}
+
+.den-related-go {
+  color: #d4c4a8;
+  font-size: 1.2rem;
+}
+
+.den-detail-page {
+  display: inline-block;
+  margin-top: 0.85rem;
+  color: #e0b15a;
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.den-home .landing-learn-more,
+.den-home .landing-footer {
+  text-align: center;
+}
+
+@media (max-width: 980px) {
+  .den-hero {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+
+  .den-hero-art {
+    position: relative;
+    inset: auto;
+    height: 180px;
+  }
+
+  .den-hero-art::after {
+    background: linear-gradient(180deg, #101916 0%, transparent 40%);
+  }
+
+  .den-workshop {
+    grid-template-columns: 1fr;
+  }
+
+  .den-detail-card {
+    position: static;
+  }
+
+  .den-grid,
+  .den-card--feature {
+    grid-template-columns: 1fr;
+  }
+
+  .den-card-shot {
+    max-height: 220px;
+  }
+
+  .toolbar-search-label,
+  .toolbar-search kbd {
+    display: none;
+  }
+
+  .toolbar-search {
+    min-width: 0;
+    width: 38px;
+    padding: 0;
+    justify-content: center;
+    border-radius: 8px;
+  }
+}

@@ -50,6 +50,46 @@
                      }
                  ],
     "whatsNew":  "All family members can add recipes\nOnly the person who added a recipe can edit or delete it\nBundled cookbook recipes stay MasterChef / Huntress editable\nIn-app update check is more reliable on real phones\nSafer APK download with timeout and cleaner retry",
+    "screenshots":  [
+                        "screenshots/huntresscookbook-mobile/01-loading.png",
+                        "screenshots/huntresscookbook-mobile/02-menu.png",
+                        "screenshots/huntresscookbook-mobile/03-drawer.png",
+                        "screenshots/huntresscookbook-mobile/04-breakfast.png",
+                        "screenshots/huntresscookbook-mobile/05-soups.png",
+                        "screenshots/huntresscookbook-mobile/06-recipes-to-try.png"
+                    ],
+    "faq":  [
+                {
+                    "id":  "faq-1",
+                    "heading":  "What is Huntress Cookbook Mobile?",
+                    "content":  "An offline cookbook for the phone. After you install it, you can browse chapters, open recipes with photos, search ingredients, and read the dietary guides without a network connection."
+                },
+                {
+                    "id":  "faq-2",
+                    "heading":  "Do I need an account or the internet?",
+                    "content":  "No account. The bundled recipes are already in the app. Internet is only needed to download a newer APK, or when the app checks for an update."
+                },
+                {
+                    "id":  "faq-3",
+                    "heading":  "Is this the same as the website?",
+                    "content":  "The recipes start from the same cookbook. The phone keeps its own copy. Recipes you add or change on the phone do not appear on the website, and edits on the website do not change the phone until you install a newer build."
+                },
+                {
+                    "id":  "faq-4",
+                    "heading":  "Who can add or edit recipes?",
+                    "content":  "Anyone in the family can add a recipe. Only the person who added it can edit or delete it. The recipes that came with the cookbook stay editable by MasterChef and Huntress."
+                },
+                {
+                    "id":  "faq-5",
+                    "heading":  "Where is my data stored?",
+                    "content":  "Added recipes and local edits stay on this phone. Uninstalling the app removes them, so keep a copy of anything you wrote yourself before you uninstall."
+                },
+                {
+                    "id":  "faq-6",
+                    "heading":  "How do I update?",
+                    "content":  "The app can check for a newer build. If one is available, download the APK from the prompt or from this page and install it over the current app."
+                }
+            ],
     "apk":  {
                 "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/huntresscookbook-mobile.apk",
                 "build":  18,

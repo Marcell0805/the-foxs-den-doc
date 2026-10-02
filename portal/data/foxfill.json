@@ -44,6 +44,43 @@
                      }
                  ],
     "whatsNew":  "• Searchable country picker (type to find your country)\n• Phone field hint follows your country dial code (+1, +44, +27, …)\n• New profiles start with a country from your browser language\n• Address labels adapt (State/ZIP, County/Postcode, or Province/Postal Code)\n• Clearer tips — less South Africa–only wording",
+    "faq":  [
+                {
+                    "id":  "faq-1",
+                    "heading":  "What is FoxFill?",
+                    "content":  "A Chrome add-on that fills web forms from a profile stored on this computer. You scan the page, review what it matched, then fill. It does not send your details to a FoxFill server."
+                },
+                {
+                    "id":  "faq-2",
+                    "heading":  "Do I need an account?",
+                    "content":  "No. Profiles stay in Chrome on this device. You can keep more than one, such as Personal and Work, and switch between them."
+                },
+                {
+                    "id":  "faq-3",
+                    "heading":  "How do I fill a form?",
+                    "content":  "Open a page with a form, open FoxFill, and choose Scan Form. Review the matches, untick anything you do not want, then fill. It does not submit the form for you, and it does not fill passwords."
+                },
+                {
+                    "id":  "faq-4",
+                    "heading":  "What does it skip?",
+                    "content":  "Bank, emergency, insurance, employer, and similar sections are left alone. Boxes it is not sure about stay for you to review instead of being guessed."
+                },
+                {
+                    "id":  "faq-5",
+                    "heading":  "Can I lock the profile?",
+                    "content":  "Yes. In full settings, under Privacy, you can set a passphrase so the saved profile is encrypted on this device. FoxFill cannot recover that passphrase if you forget it."
+                },
+                {
+                    "id":  "faq-6",
+                    "heading":  "Where is my data stored?",
+                    "content":  "In Chrome’s local storage for this add-on. Removing FoxFill removes those profiles. Write down anything you still need before you remove it."
+                },
+                {
+                    "id":  "faq-7",
+                    "heading":  "How do I install or update?",
+                    "content":  "Download the zip from this page, extract it, and load the folder in Chrome under Extensions with Developer mode on. To update, download the newer zip and load that folder again. Your profiles stay in Chrome."
+                }
+            ],
     "screenshots":  [
                         "screenshots/foxfill/01-scan-certain.jpg",
                         "screenshots/foxfill/02-scan-review.jpg",

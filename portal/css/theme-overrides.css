@@ -4,12 +4,12 @@
   --navy: #152019;
   --blue: #e08a45;
   --orange: #c9a06a;
-  --bg: #0c1410;
-  --bg-deep: #08100c;
-  --surface: #1c2a22;
-  --surface-raised: #24332a;
-  --text: #f2efe8;
-  --muted: #a3b0a8;
+  --bg: #1c2c25;
+  --bg-deep: #17241e;
+  --surface: #1a2821;
+  --surface-raised: #22332a;
+  --text: #f3ebe0;
+  --muted: #bbc0b7;
   --border: rgba(242, 239, 232, 0.12);
   --border-strong: rgba(242, 239, 232, 0.18);
   --heading: #f2efe8;
@@ -41,7 +41,7 @@ body::before {
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  opacity: 0.035;
+  opacity: 0.055;
   background-image:
     linear-gradient(rgba(242, 239, 232, 0.9) 1px, transparent 1px),
     linear-gradient(90deg, rgba(242, 239, 232, 0.9) 1px, transparent 1px);
@@ -281,6 +281,21 @@ a.sidebar-footer-link:hover {
   object-fit: cover;
 }
 
+.toolbar-brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+  gap: 0.12rem;
+}
+
+.toolbar-brand-kicker {
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-soft);
+}
+
 .toolbar-brand-name {
   font-family: var(--font-display);
   font-size: 1.4rem;
@@ -507,6 +522,289 @@ body.dedication-page {
   }
 }
 
+/* Workshop facelift — lighter panels, compact catalogue, product page */
+
+.page {
+  max-width: 1180px !important;
+  background: #17261f !important;
+  box-shadow: none !important;
+  border-radius: 14px !important;
+}
+
+.sidebar {
+  width: 300px !important;
+  background: #14211b !important;
+}
+
+.main {
+  background: transparent;
+}
+
+.landing {
+  max-width: 760px;
+}
+
+.landing-search-wrap {
+  position: relative;
+}
+
+.landing-search {
+  padding-right: 5.5rem !important;
+  border-radius: 10px !important;
+  background: #1d3027 !important;
+}
+
+.landing-search-kbd {
+  position: absolute;
+  right: 0.7rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  padding: 0.2rem 0.45rem;
+  background: rgba(18, 28, 24, 0.65);
+  pointer-events: none;
+}
+
+.landing-group {
+  border-radius: 12px !important;
+  box-shadow: none !important;
+}
+
+.landing-nav a,
+.sidebar-item-link,
+.sidebar-nav .active {
+  border-radius: 8px;
+  transition: background 140ms ease, color 140ms ease;
+}
+
+.product-header {
+  align-items: flex-start;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  margin-bottom: 0.85rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.product-kind {
+  letter-spacing: 0.14em;
+}
+
+.meta-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem 1.1rem;
+  list-style: none;
+  margin: 0 0 1.1rem;
+  padding: 0;
+}
+
+.meta-facts li {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: #d9d3c8;
+  font-size: 0.82rem;
+  line-height: 1.2;
+}
+
+.meta-facts-ico,
+.btn-ico {
+  display: inline-flex;
+  color: #c9b89a;
+}
+
+.meta-ico {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+.meta-ico--sm {
+  width: 14px;
+  height: 14px;
+}
+
+.meta-facts-label {
+  display: flex;
+  flex-direction: column;
+}
+
+.meta-facts-label small {
+  color: #9aa79c;
+  font-size: 0.75rem;
+}
+
+.app-download-btn,
+.app-download-btn-play {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  width: 100%;
+  border-radius: 12px !important;
+  min-height: 52px;
+}
+
+.btn-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.15;
+}
+
+.btn-label {
+  font-weight: 700;
+}
+
+.btn-sub {
+  font-size: 0.75rem;
+  font-weight: 500;
+  opacity: 0.85;
+}
+
+.google-play-badge {
+  display: inline-block;
+  line-height: 0;
+  width: auto;
+}
+
+.google-play-badge-img {
+  display: block;
+  height: 78px;
+  width: auto;
+}
+
+.google-play-badge.is-disabled {
+  opacity: 0.45;
+  filter: grayscale(1);
+}
+
+.app-install-help {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: #e0b15a !important;
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.whats-new-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.whats-new-all {
+  color: #e0b15a;
+  font-size: 0.82rem;
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.whats-new li::marker {
+  color: #e08a45;
+}
+
+.product-actions .app-download-btn {
+  border-radius: 10px !important;
+}
+
+.whats-new,
+.features-section,
+.screenshots-section,
+.about-app-section {
+  margin-top: 0.5rem;
+}
+
+.whats-new h2,
+.features-section h2,
+.screenshots-section h2,
+.about-app-section h2 {
+  font-size: 1.05rem;
+  letter-spacing: 0.01em;
+}
+
+.whats-new ul {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+
+.feature-card {
+  border-radius: 10px !important;
+  background: rgba(243, 235, 224, 0.03) !important;
+  box-shadow: none !important;
+}
+
+.feature-card:hover {
+  transform: none !important;
+  border-color: rgba(224, 138, 69, 0.35) !important;
+}
+
+.screenshot-slide img {
+  border-radius: 10px;
+}
+
+.about-faq-panel,
+.about-app-main {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem 1.05rem;
+  background: rgba(18, 28, 24, 0.35);
+}
+
+.about-faq-filter {
+  width: 100%;
+  margin-top: 0.65rem;
+  background: #1d3027;
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  min-height: 42px;
+  padding: 0.55rem 0.75rem;
+  font-family: var(--font-body);
+}
+
+.den-aside-card {
+  margin: 0.85rem 1rem 1rem;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  background: #14211b;
+}
+
+.den-aside-card img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.den-aside-card--landing {
+  margin: 1.5rem auto 0;
+  max-width: 280px;
+}
+
+@media (max-width: 900px) {
+  .sidebar {
+    width: min(300px, 88vw) !important;
+  }
+
+  .landing-search-kbd {
+    display: none;
+  }
+
+  .den-aside-card--landing {
+    max-width: 240px;
+  }
+}
+
 @media print {
   body::before { display: none !important; }
   body {
@@ -518,4 +816,5 @@ body.dedication-page {
     border: none !important;
     box-shadow: none !important;
   }
+  .den-aside-card { display: none !important; }
 }
