@@ -134,8 +134,12 @@
     return document.body.getAttribute('data-section-id') === 'berg-awaits';
   }
 
+  function isUnindexedPage() {
+    return document.body.getAttribute('data-section-id') === 'unindexed';
+  }
+
   function isSecretExperiencePage() {
-    return isDedicationPage() || isQuestPage();
+    return isDedicationPage() || isQuestPage() || isUnindexedPage();
   }
 
   function renderToolbar() {
@@ -265,7 +269,7 @@
   function renderSidebar() {
     var aside = document.querySelector('[data-portal-sidebar]');
     if (!aside) return;
-    if (isDedicationPage()) {
+    if (isDedicationPage() || isUnindexedPage()) {
       aside.innerHTML = '';
       aside.hidden = true;
       return;
@@ -607,6 +611,95 @@
     }
     document.querySelectorAll('.toolbar-brand, .toolbar-start a.toolbar-btn').forEach(function (el) {
       el.addEventListener('click', leave);
+    });
+  }
+
+  function loadUnindexedModule(done) {
+    var prefix = portalAssetPrefix();
+    var q = foxLockQuery() ? foxLockQuery() + '&unindexed=8' : '?unindexed=8';
+    var started = false;
+
+    function startScripts() {
+      if (started) return;
+      started = true;
+      loadChained();
+    }
+
+    function loadChained() {
+      function loadRoom() {
+        if (window.UnindexedRoom) {
+          done();
+          return;
+        }
+        var existing = document.getElementById('unindexed-js');
+        if (existing) {
+          existing.addEventListener('load', done);
+          return;
+        }
+        var script = document.createElement('script');
+        script.id = 'unindexed-js';
+        script.src = prefix + 'js/unindexed.js' + q;
+        script.onload = done;
+        script.onerror = function () { done(); };
+        document.body.appendChild(script);
+      }
+
+      if (window.UnindexedVerification) {
+        loadRoom();
+        return;
+      }
+      var verify = document.getElementById('unindexed-verify-js');
+      if (verify) {
+        verify.addEventListener('load', loadRoom);
+        return;
+      }
+      var script = document.createElement('script');
+      script.id = 'unindexed-verify-js';
+      script.src = prefix + 'js/unindexed-verify.js' + q;
+      script.onload = loadRoom;
+      script.onerror = loadRoom;
+      document.body.appendChild(script);
+    }
+
+    if (!document.getElementById('unindexed-css')) {
+      var link = document.createElement('link');
+      link.id = 'unindexed-css';
+      link.rel = 'stylesheet';
+      link.href = prefix + 'css/unindexed.css' + q;
+      link.onload = startScripts;
+      link.onerror = startScripts;
+      document.head.appendChild(link);
+      window.setTimeout(startScripts, 1500);
+    } else {
+      startScripts();
+    }
+  }
+
+  function bindUnindexedLeave() {
+    document.querySelectorAll('.toolbar-brand, .toolbar-start a.toolbar-btn').forEach(function (el) {
+      el.addEventListener('click', function () {
+        if (window.UnindexedRoom && typeof window.UnindexedRoom.destroy === 'function') {
+          window.UnindexedRoom.destroy();
+        }
+      });
+    });
+  }
+
+  function startUnindexed(mount, section) {
+    var unlock = (section && section.unlock) || {};
+    var lines = unlock.searchLines || ['UNINDEXED', 'A page the Den does not list.'];
+    document.body.classList.add('unindexed-page');
+    mount.innerHTML = '';
+    playTimedMessages(lines, { perMsg: 1800, lastHold: 1600, showHeartOnLast: false }, function () {
+      document.body.classList.remove('dedication-revealing');
+      loadUnindexedModule(function () {
+        if (window.UnindexedRoom && typeof window.UnindexedRoom.start === 'function') {
+          window.UnindexedRoom.start(mount, section);
+          bindUnindexedLeave();
+        } else {
+          mount.innerHTML = '<p>The Den could not open this page.</p>';
+        }
+      });
     });
   }
 
@@ -984,6 +1077,12 @@
     var section = getSection(id);
     if (!section) {
       mount.innerHTML = '<p>Section not found.</p>';
+      return;
+    }
+
+    if (id === 'unindexed' || section.kind === 'unindexed') {
+      document.body.classList.add('unindexed-page');
+      startUnindexed(mount, section);
       return;
     }
 
@@ -1783,6 +1882,7 @@
   function init() {
     if (isDedicationPage()) document.body.classList.add('dedication-page');
     if (isQuestPage()) document.body.classList.add('quest-page');
+    if (isUnindexedPage()) document.body.classList.add('unindexed-page');
     renderToolbar();
     renderSidebar();
     renderSection();

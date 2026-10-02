@@ -60,6 +60,14 @@
     container.innerHTML = html;
   }
 
+  function openSecret(secretPage) {
+    close();
+    var href = document.body.getAttribute('data-nav-scope') === 'landing'
+      ? 'sections/' + secretPage
+      : secretPage;
+    location.href = href;
+  }
+
   function ensureModal() {
     if (modal) return modal;
     modal = document.createElement('div');
@@ -92,11 +100,15 @@
         var secretPage = SECRET_PAGES[q] || SECRET_PAGES[q.replace(/\s+/g, '')];
         if (secretPage) {
           e.preventDefault();
-          close();
-          var href = document.body.getAttribute('data-nav-scope') === 'landing'
-            ? 'sections/' + secretPage
-            : secretPage;
-          location.href = href;
+          openSecret(secretPage);
+          return;
+        }
+        if (window.UnindexedSignal && typeof window.UnindexedSignal.matches === 'function') {
+          e.preventDefault();
+          var typed = String(input.value || '');
+          window.UnindexedSignal.matches(typed).then(function (hit) {
+            if (hit) openSecret(window.UnindexedSignal.page);
+          });
         }
       }
     });

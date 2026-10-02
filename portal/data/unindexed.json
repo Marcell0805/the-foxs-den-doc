@@ -1,0 +1,49 @@
+{
+  "id": "unindexed",
+  "title": "Unindexed",
+  "kind": "unindexed",
+  "status": "live",
+  "hidden": true,
+  "unlock": {
+    "searchLines": [
+      "UNINDEXED",
+      "A page the Den does not list."
+    ]
+  },
+  "room": {
+    "kicker": "The Den // Unindexed",
+    "lines": [
+      "Well... this is interesting.",
+      "Huntress detected.",
+      "You found something that isn't quite ready yet.",
+      "There are plans for this particular name...",
+      "...but not yet, my dear Huntress.",
+      "The Fox is still working on it."
+    ],
+    "statusLabel": "Status",
+    "statusValue": "Not yet",
+    "statusNote": "Some things need a little more time before they become real.",
+    "wait": "Wait...",
+    "question": "Are you actually her?",
+    "yesLabel": "Yes",
+    "noLabel": "No",
+    "noLines": [
+      "Oh... not the wife yet, I see.",
+      "Strange.",
+      "The Fox could have sworn otherwise. 🦊"
+    ],
+    "yesLines": [
+      "Oh.",
+      "You actually are.",
+      "Interesting.",
+      "Let me verify that..."
+    ],
+    "pendingLines": [
+      "The check has started.",
+      "Nothing is confirmed.",
+      "The Fox will need more than a yes."
+    ],
+    "pendingStatus": "Unconfirmed",
+    "returnLabel": "Return to the Den"
+  }
+}

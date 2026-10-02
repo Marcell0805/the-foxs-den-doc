@@ -1,0 +1,376 @@
+/* Unindexed — a hidden room in The Fox's Den. Scoped to this page. */
+
+body.unindexed-page {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100dvh;
+  background: #07110d;
+}
+
+body.unindexed-page .portal-toolbar {
+  flex-shrink: 0;
+  background: rgba(8, 16, 12, 0.55);
+  backdrop-filter: blur(10px);
+  border-bottom-color: rgba(242, 239, 232, 0.08);
+}
+
+body.unindexed-page .page {
+  display: block;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  max-width: none !important;
+  margin: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0;
+  overflow: hidden;
+}
+
+body.unindexed-page .sidebar {
+  display: none !important;
+}
+
+body.unindexed-page .main {
+  width: 100%;
+  max-width: none;
+  padding: 0;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+body.unindexed-page #section-content {
+  height: 100%;
+}
+
+.unindexed-room {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.unindexed-scene {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(8, 12, 10, 0.16) 0%, rgba(8, 12, 10, 0.02) 28%, rgba(8, 12, 10, 0.06) 68%, rgba(8, 12, 10, 0.28) 100%),
+    url("../assets/unindexed-den.jpg") center 42% / cover no-repeat;
+  overflow: hidden;
+}
+
+.unindexed-glow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(255, 196, 110, 0.34), transparent 30%, transparent 70%, rgba(255, 196, 110, 0.34));
+  opacity: 0;
+  pointer-events: none;
+}
+
+.unindexed-firefly {
+  position: absolute;
+  top: 8%;
+  left: 7%;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #fff6df;
+  box-shadow: 0 0 12px 5px rgba(255, 214, 140, 0.9);
+  opacity: 0;
+  z-index: 1;
+  animation: unindexed-firefly 6.4s ease-in-out 0.8s 1 forwards;
+}
+
+.unindexed-room.is-checking .unindexed-glow {
+  animation: unindexed-think 2.8s ease-in-out infinite;
+}
+
+.unindexed-room.is-no .unindexed-line {
+  animation: unindexed-rise 0.55s ease both;
+}
+
+.unindexed-room.is-no .unindexed-line:nth-child(1) { animation-delay: 0.08s; }
+.unindexed-room.is-no .unindexed-line:nth-child(2) { animation-delay: 0.55s; }
+.unindexed-room.is-no .unindexed-line:nth-child(3) { animation-delay: 1.05s; }
+
+.unindexed-room.is-no .unindexed-actions {
+  animation: unindexed-rise 0.55s ease both;
+  animation-delay: 1.45s;
+}
+
+.unindexed-panel {
+  position: relative;
+  z-index: 2;
+  width: min(30.5rem, calc(100vw - 2.25rem));
+  margin: 1.15rem auto;
+  padding: 1.45rem 1.7rem 1.3rem;
+  text-align: center;
+  color: #1c140c;
+  background:
+    radial-gradient(120% 70% at 50% 0%, rgba(255, 255, 255, 0.55), transparent 48%),
+    linear-gradient(180deg, #fbf7ef 0%, #f3ead8 100%);
+  border: 1px solid #ead9b4;
+  border-radius: 20px;
+  box-shadow: 0 26px 60px rgba(18, 10, 4, 0.42);
+  animation: unindexed-rise 0.55s ease both;
+}
+
+.unindexed-panel::before {
+  content: "";
+  position: absolute;
+  inset: 7px;
+  border: 1px solid rgba(184, 137, 74, 0.88);
+  border-radius: 14px;
+  pointer-events: none;
+}
+
+.unindexed-panel:focus {
+  outline: none;
+}
+
+.unindexed-panel:focus-visible {
+  outline: 2px solid #e08a45;
+  outline-offset: 3px;
+}
+
+.unindexed-panel h1 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #b8894a;
+  margin: 0.2rem 0 0;
+}
+
+.unindexed-mark,
+.unindexed-peaks {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.unindexed-mark {
+  margin-top: 0.45rem;
+  margin-bottom: 0.85rem;
+}
+
+.unindexed-peaks {
+  margin-top: 0.7rem;
+}
+
+.unindexed-copy p,
+.unindexed-pending p,
+.unindexed-note,
+.unindexed-wait,
+.unindexed-question {
+  color: #24180f;
+}
+
+.unindexed-line {
+  font-family: var(--font-display);
+  font-size: 1.02rem;
+  font-weight: 450;
+  line-height: 1.45;
+  margin: 0 0 0.28rem;
+  color: #2c2118;
+}
+
+.unindexed-line.is-lead {
+  font-size: clamp(1.6rem, 4vw, 2.05rem);
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  line-height: 1.18;
+  color: #16110c;
+  margin-bottom: 0.45rem;
+}
+
+.unindexed-line.is-strong {
+  font-size: 1.12rem;
+  font-weight: 700;
+  color: #16110c;
+  margin-bottom: 0.75rem;
+}
+
+.unindexed-line.is-accent {
+  color: #c47a28;
+  font-weight: 700;
+}
+
+.unindexed-note {
+  margin-top: 0.15rem;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 0.98rem;
+  line-height: 1.5;
+  color: #3a2c20;
+}
+
+.unindexed-rule {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  width: min(15rem, 72%);
+  margin: 0.85rem auto 0.15rem;
+}
+
+.unindexed-rule span {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #c4a36a 20%, #c4a36a 80%, transparent);
+}
+
+.unindexed-status {
+  display: inline-block;
+  margin-top: 0.85rem;
+  padding: 0.28rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid rgba(184, 137, 74, 0.75);
+  background: rgba(255, 250, 242, 0.35);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #8a6230;
+}
+
+.unindexed-status span {
+  opacity: 0.72;
+  margin-right: 0.35rem;
+}
+
+.unindexed-ask {
+  margin-top: 0.35rem;
+  animation: unindexed-rise 0.7s ease both;
+  animation-delay: 0.28s;
+}
+
+.unindexed-wait {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.05rem;
+  color: #8a6230;
+  margin-bottom: 0.15rem;
+}
+
+.unindexed-question {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.12rem;
+  color: #16110c;
+}
+
+.unindexed-pending {
+  margin-top: 1rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid rgba(138, 79, 22, 0.18);
+}
+
+.unindexed-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  margin-top: 1.25rem;
+}
+
+.unindexed-btn {
+  appearance: none;
+  border: 0;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.92rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  min-height: 48px;
+  min-width: 8.4rem;
+  padding: 0.75rem 1.6rem;
+  border-radius: 999px;
+  color: #fffaf4;
+  background: linear-gradient(180deg, #f0a24c 0%, #e1842e 100%);
+  box-shadow: 0 8px 18px rgba(176, 92, 24, 0.28);
+  transition: filter 0.2s ease, transform 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.unindexed-btn:hover { filter: brightness(1.05); }
+
+.unindexed-btn:focus-visible {
+  outline: 2px solid #8a4f16;
+  outline-offset: 3px;
+}
+
+.unindexed-no,
+.unindexed-return {
+  background: #fffaf3;
+  color: #3a2a18;
+  border: 1px solid #e4d2b0;
+  box-shadow: 0 4px 12px rgba(40, 24, 8, 0.06);
+  filter: none;
+}
+
+.unindexed-return {
+  text-transform: none;
+  letter-spacing: 0.02em;
+}
+
+.unindexed-no:hover,
+.unindexed-return:hover {
+  background: #fff;
+}
+
+@keyframes unindexed-rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes unindexed-firefly {
+  0% { opacity: 0; transform: translate(0, 6px); }
+  12% { opacity: 1; }
+  55% { opacity: 0.95; transform: translate(38vw, 10px); }
+  100% { opacity: 0; transform: translate(72vw, -6px); }
+}
+
+@keyframes unindexed-think {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 0.9; }
+}
+
+@media (max-width: 720px) {
+  .unindexed-panel {
+    padding: 1.35rem 1rem 1.25rem;
+    border-radius: 22px;
+  }
+
+  .unindexed-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .unindexed-btn {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .unindexed-panel,
+  .unindexed-ask,
+  .unindexed-firefly,
+  .unindexed-room.is-checking .unindexed-glow,
+  .unindexed-room.is-no .unindexed-line,
+  .unindexed-room.is-no .unindexed-actions {
+    animation: none;
+  }
+}

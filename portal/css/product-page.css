@@ -1,14 +1,14 @@
 /* Full project page. Section shells only — the Den home does not load this file. */
 
-body[data-nav-scope="section"]:not(.dedication-page):not(.quest-page) .page {
+body[data-nav-scope="section"]:not(.dedication-page):not(.quest-page):not(.unindexed-page) .page {
   max-width: 1720px;
 }
 
-body[data-nav-scope="section"]:not(.dedication-page):not(.quest-page) .sidebar {
+body[data-nav-scope="section"]:not(.dedication-page):not(.quest-page):not(.unindexed-page) .sidebar {
   width: 220px;
 }
 
-body[data-nav-scope="section"]:not(.dedication-page):not(.quest-page) .main {
+body[data-nav-scope="section"]:not(.dedication-page):not(.quest-page):not(.unindexed-page) .main {
   padding: 1.15rem 1.2rem 2rem;
   min-width: 0;
 }
