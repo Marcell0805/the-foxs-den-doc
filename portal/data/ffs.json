@@ -24,8 +24,8 @@
                ],
     "sidebarNote":  "Official APK is hosted on GitHub Pages.",
     "version":  "1.1.0",
-    "build":  22,
-    "releaseNotes":  "Reports now separate salary from other income, so payday stands out.\nSet the day or range you get paid, including the last week of the month.\nSalary paid in the last week counts at the start of the next month.\nThe trend chart follows the period you pick, with a daily view for this month.\nSwitch the chart between All, Both, In, Out, and what’s left.",
+    "build":  25,
+    "releaseNotes":  "Fixed a freeze when unlocking the app if a new bank sent a payment notification before that bank was turned on. Fingerprint and PIN unlock complete, and then you can choose whether to capture that bank.",
     "updateCheckUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs/mobile-version.json",
     "codeProtected":  true,
     "unlock":  {
@@ -71,13 +71,13 @@
                     ],
     "apk":  {
                 "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs.apk",
-                "build":  22,
+                "build":  25,
                 "fileName":  "ffs.apk",
                 "version":  "1.1.0",
                 "label":  "Download Live APK",
                 "available":  true,
                 "channel":  "live",
-                "sizeLabel":  "88,2 MB",
-                "sizeBytes":  92498985
+                "sizeLabel":  "88,7 MB",
+                "sizeBytes":  92970718
             }
 }
