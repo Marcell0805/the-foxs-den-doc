@@ -1,11 +1,11 @@
 {
     "channel":  "live",
-    "releaseNotes":  "Fixed a freeze when unlocking the app if a new bank sent a payment notification before that bank was turned on. Fingerprint and PIN unlock complete, and then you can choose whether to capture that bank.",
-    "sizeLabel":  "88,7 MB",
+    "releaseNotes":  "Saving a payment that needs review now confirms it.\n\nOn Needs review you can reject one payment, or reject all of them after a confirmation.\n\nPayments from different banks stay on their own accounts, so they are no longer grouped together.\n\nOn Reports you can choose which charts to show. Spending by category can show the top 5, the top 10, or every category. A money-out-by-bank chart is available when you turn it on.\n\nHelp \u0026 support opens the FFS questions on The Fox’s Den.",
+    "sizeLabel":  "88,9 MB",
     "storeUrl":  "https://play.google.com/store/apps/details?id=dev.marcellvn.ffs",
-    "build":  25,
+    "build":  26,
     "version":  "1.1.0",
     "apkUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs.apk",
     "distribution":  "both",
-    "sizeBytes":  92970718
+    "sizeBytes":  93200094
 }
