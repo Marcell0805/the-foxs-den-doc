@@ -1,11 +1,11 @@
 {
     "channel":  "live",
     "releaseNotes":  "Saving a payment that needs review now confirms it.\n\nOn Needs review you can reject one payment, or reject all of them after a confirmation.\n\nPayments from different banks stay on their own accounts, so they are no longer grouped together.\n\nOn Reports you can choose which charts to show. Spending by category can show the top 5, the top 10, or every category. A money-out-by-bank chart is available when you turn it on.\n\nHelp \u0026 support opens the FFS questions on The Fox’s Den.",
-    "sizeLabel":  "88,9 MB",
+    "sizeLabel":  "89,0 MB",
     "storeUrl":  "https://play.google.com/store/apps/details?id=dev.marcellvn.ffs",
-    "build":  26,
+    "build":  27,
     "version":  "1.1.0",
     "apkUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs.apk",
     "distribution":  "both",
-    "sizeBytes":  93200094
+    "sizeBytes":  93282014
 }
