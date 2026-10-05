@@ -24,7 +24,7 @@
                ],
     "sidebarNote":  "Official APK is hosted on GitHub Pages.",
     "version":  "1.1.0",
-    "build":  29,
+    "build":  30,
     "releaseNotes":  "Waiting payments stay in Needs review until you accept them\nThis month compares the same days last month\nWallet and your bank count as one payment, on the bank\nSwitched-off banks sit in Bank off and stay out of reports\nHourly reminder while payments are still waiting\nBudget rows open transactions or goals\nPayday salary can count in this month\nMark a payment towards a goal\nConfirm on a payment alert now confirms it\nChoose your bank from a list on an account",
     "updateCheckUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs/mobile-version.json",
     "codeProtected":  true,
@@ -71,13 +71,13 @@
                     ],
     "apk":  {
                 "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs.apk",
-                "build":  29,
+                "build":  30,
                 "fileName":  "ffs.apk",
                 "version":  "1.1.0",
                 "label":  "Download Live APK",
                 "available":  true,
                 "channel":  "live",
-                "sizeLabel":  "89,0 MB",
-                "sizeBytes":  93282014
+                "sizeLabel":  "89,2 MB",
+                "sizeBytes":  93495006
             }
 }
