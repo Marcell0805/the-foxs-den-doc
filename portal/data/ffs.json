@@ -24,8 +24,8 @@
                ],
     "sidebarNote":  "Official APK is hosted on GitHub Pages.",
     "version":  "1.1.0",
-    "build":  27,
-    "releaseNotes":  "Saving a payment that needs review now confirms it.\n\nOn Needs review you can reject one payment, or reject all of them after a confirmation.\n\nPayments from different banks stay on their own accounts, so they are no longer grouped together.\n\nOn Reports you can choose which charts to show. Spending by category can show the top 5, the top 10, or every category. A money-out-by-bank chart is available when you turn it on.\n\nHelp \u0026 support opens the FFS questions on The Fox’s Den.",
+    "build":  29,
+    "releaseNotes":  "Waiting payments stay in Needs review until you accept them\nThis month compares the same days last month\nWallet and your bank count as one payment, on the bank\nSwitched-off banks sit in Bank off and stay out of reports\nHourly reminder while payments are still waiting\nBudget rows open transactions or goals\nPayday salary can count in this month\nMark a payment towards a goal\nConfirm on a payment alert now confirms it\nChoose your bank from a list on an account",
     "updateCheckUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs/mobile-version.json",
     "codeProtected":  true,
     "unlock":  {
@@ -71,7 +71,7 @@
                     ],
     "apk":  {
                 "downloadUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs.apk",
-                "build":  27,
+                "build":  29,
                 "fileName":  "ffs.apk",
                 "version":  "1.1.0",
                 "label":  "Download Live APK",
