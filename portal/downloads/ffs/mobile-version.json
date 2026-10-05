@@ -1,11 +1,11 @@
 {
     "channel":  "live",
-    "releaseNotes":  "The app locks with your phone fingerprint, face, or PIN when you open it and when you leave it.\nImporting a statement warns you if that lock is off.\nThe home-screen icon fills the circle.\nPayday sits with your accounts.\nThe lock screen matches the F.F.S splash.",
-    "sizeLabel":  "88.7 MB",
+    "releaseNotes":  "Waiting payments stay in Needs review until you accept them\nThis month compares the same days last month\nWallet and your bank count as one payment, on the bank\nSwitched-off banks sit in Bank off and stay out of reports\nHourly reminder while payments are still waiting\nBudget rows open transactions or goals\nPayday salary can count in this month\nMark a payment towards a goal\nConfirm on a payment alert now confirms it\nChoose your bank from a list on an account",
+    "sizeLabel":  "89.2 MB",
     "storeUrl":  "https://play.google.com/store/apps/details?id=dev.marcellvn.ffs",
-    "build":  24,
+    "build":  28,
     "version":  "1.1.0",
     "apkUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs.apk",
     "distribution":  "both",
-    "sizeBytes":  92970718
+    "sizeBytes":  93495006
 }
