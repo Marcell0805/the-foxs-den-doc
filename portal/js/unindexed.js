@@ -3,12 +3,6 @@
 
   var live = null;
 
-  function esc(t) {
-    var d = document.createElement('div');
-    d.textContent = t == null ? '' : String(t);
-    return d.innerHTML;
-  }
-
   function prefersReducedMotion() {
     return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   }
@@ -75,20 +69,43 @@
     return base;
   }
 
-  function linesHtml(lines, className) {
-    return (lines || []).map(function (line) {
-      return '<p class="' + className + '">' + esc(line) + '</p>';
-    }).join('');
+  function el(tag, className, text) {
+    var node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text != null) node.textContent = text;
+    return node;
   }
 
-  function openingLines(lines) {
-    return (lines || []).map(function (line, i) {
-      var cls = 'unindexed-line';
-      if (i === 0) cls += ' is-lead';
-      else if (i === 1) cls += ' is-strong';
-      else if (String(line).toLowerCase().indexOf('not yet') !== -1) cls += ' is-accent';
-      return '<p class="' + cls + '">' + esc(line) + '</p>';
-    }).join('');
+  function fill(parent, nodes) {
+    parent.replaceChildren.apply(parent, nodes.filter(Boolean));
+  }
+
+  function fromMarkup(markup) {
+    var template = document.createElement('template');
+    template.innerHTML = markup.trim();
+    return template.content.firstElementChild;
+  }
+
+  function lineNodes(lines, className) {
+    return (lines || []).map(function (line) {
+      return el('p', className, line);
+    });
+  }
+
+  function openingNodes(lines) {
+    return (lines || []).map(function (line, index) {
+      var className = 'unindexed-line';
+      if (index === 0) className += ' is-lead';
+      else if (index === 1) className += ' is-strong';
+      else if (String(line).toLowerCase().indexOf('not yet') !== -1) className += ' is-accent';
+      return el('p', className, line);
+    });
+  }
+
+  function copyBlock(lines, className) {
+    var block = el('div', 'unindexed-copy');
+    fill(block, lineNodes(lines, className || 'unindexed-line'));
+    return block;
   }
 
   var FOX_MARK =
@@ -145,15 +162,22 @@
   };
 
   Room.prototype.renderShell = function () {
-    this.mount.innerHTML =
-      '<div class="unindexed-room" data-stage="' + esc(this.stage) + '" data-confirmed="false">' +
-        '<div class="unindexed-scene" aria-hidden="true">' +
-          '<div class="unindexed-glow"></div>' +
-          '<span class="unindexed-firefly"></span>' +
-        '</div>' +
-        '<div class="unindexed-panel" tabindex="-1" role="status" aria-live="polite"></div>' +
-      '</div>';
-    this.root = this.mount.querySelector('.unindexed-room');
+    var scene = el('div', 'unindexed-scene');
+    scene.setAttribute('aria-hidden', 'true');
+    scene.append(el('div', 'unindexed-glow'), el('span', 'unindexed-firefly'));
+
+    var panel = el('div', 'unindexed-panel');
+    panel.tabIndex = -1;
+    panel.setAttribute('role', 'status');
+    panel.setAttribute('aria-live', 'polite');
+
+    var room = el('div', 'unindexed-room');
+    room.setAttribute('data-stage', this.stage);
+    room.setAttribute('data-confirmed', 'false');
+    room.append(scene, panel);
+
+    this.mount.replaceChildren(room);
+    this.root = room;
     document.body.classList.add('unindexed-active');
     this.mark();
   };
@@ -169,58 +193,85 @@
     }
   };
 
-  Room.prototype.statusHtml = function (value) {
-    return '<p class="unindexed-status"><span>' + esc(this.cfg.statusLabel) + '</span> ' + esc(value) + '</p>';
+  Room.prototype.statusNode = function (value) {
+    var node = el('p', 'unindexed-status');
+    node.append(el('span', '', this.cfg.statusLabel), document.createTextNode(' ' + value));
+    return node;
   };
 
-  Room.prototype.returnHtml = function () {
-    return '<a class="unindexed-btn unindexed-return" href="' + esc(denHref()) + '">' + esc(this.cfg.returnLabel) + '</a>';
+  Room.prototype.returnLink = function () {
+    var link = el('a', 'unindexed-btn unindexed-return', this.cfg.returnLabel);
+    link.href = denHref();
+    return link;
+  };
+
+  Room.prototype.actionRow = function (nodes) {
+    var row = el('div', 'unindexed-actions');
+    fill(row, nodes);
+    return row;
+  };
+
+  Room.prototype.choiceButtons = function () {
+    var yes = el('button', 'unindexed-btn unindexed-yes', this.cfg.yesLabel);
+    var no = el('button', 'unindexed-btn unindexed-no', this.cfg.noLabel);
+    yes.type = 'button';
+    no.type = 'button';
+    return this.actionRow([yes, no]);
   };
 
   Room.prototype.renderNotYet = function () {
     var cfg = this.cfg;
-    this.panel().innerHTML =
-      '<h1>' + esc(cfg.kicker) + '</h1>' +
-      FOX_MARK +
-      '<div class="unindexed-copy">' + openingLines(cfg.lines) + '</div>' +
-      this.statusHtml(cfg.statusValue) +
-      PEAKS +
-      '<p class="unindexed-note">' + esc(cfg.statusNote) + '</p>' +
-      LEAF_RULE +
-      '<div class="unindexed-ask">' +
-        '<p class="unindexed-wait">' + esc(cfg.wait) + '</p>' +
-        '<p class="unindexed-question">' + esc(cfg.question) + '</p>' +
-        '<div class="unindexed-actions">' +
-          '<button type="button" class="unindexed-btn unindexed-yes">' + esc(cfg.yesLabel) + '</button>' +
-          '<button type="button" class="unindexed-btn unindexed-no">' + esc(cfg.noLabel) + '</button>' +
-        '</div>' +
-      '</div>';
+    var copy = el('div', 'unindexed-copy');
+    fill(copy, openingNodes(cfg.lines));
+
+    var ask = el('div', 'unindexed-ask');
+    ask.append(
+      el('p', 'unindexed-wait', cfg.wait),
+      el('p', 'unindexed-question', cfg.question),
+      this.choiceButtons()
+    );
+
+    fill(this.panel(), [
+      el('h1', '', cfg.kicker),
+      fromMarkup(FOX_MARK),
+      copy,
+      this.statusNode(cfg.statusValue),
+      fromMarkup(PEAKS),
+      el('p', 'unindexed-note', cfg.statusNote),
+      fromMarkup(LEAF_RULE),
+      ask
+    ]);
     this.focusPanel();
   };
 
   Room.prototype.renderNo = function () {
-    this.panel().innerHTML =
-      '<h1>' + esc(this.cfg.kicker) + '</h1>' +
-      '<div class="unindexed-copy">' + linesHtml(this.cfg.noLines, 'unindexed-line') + '</div>' +
-      '<div class="unindexed-actions">' + this.returnHtml() + '</div>';
+    fill(this.panel(), [
+      el('h1', '', this.cfg.kicker),
+      copyBlock(this.cfg.noLines),
+      this.actionRow([this.returnLink()])
+    ]);
     this.focusPanel();
   };
 
   Room.prototype.renderYes = function () {
-    this.panel().innerHTML =
-      '<h1>' + esc(this.cfg.kicker) + '</h1>' +
-      '<div class="unindexed-copy">' + linesHtml(this.cfg.yesLines, 'unindexed-line') + '</div>';
+    fill(this.panel(), [
+      el('h1', '', this.cfg.kicker),
+      copyBlock(this.cfg.yesLines)
+    ]);
     this.focusPanel();
   };
 
   Room.prototype.renderPending = function () {
     if (this.root) this.root.classList.remove('is-checking');
-    this.panel().innerHTML =
-      '<h1>' + esc(this.cfg.kicker) + '</h1>' +
-      '<div class="unindexed-copy">' + linesHtml(this.cfg.yesLines, 'unindexed-line') + '</div>' +
-      '<div class="unindexed-pending">' + linesHtml(this.cfg.pendingLines, 'unindexed-line') + '</div>' +
-      this.statusHtml(this.cfg.pendingStatus) +
-      '<div class="unindexed-actions">' + this.returnHtml() + '</div>';
+    var pending = el('div', 'unindexed-pending');
+    fill(pending, lineNodes(this.cfg.pendingLines, 'unindexed-line'));
+    fill(this.panel(), [
+      el('h1', '', this.cfg.kicker),
+      copyBlock(this.cfg.yesLines),
+      pending,
+      this.statusNode(this.cfg.pendingStatus),
+      this.actionRow([this.returnLink()])
+    ]);
     this.focusPanel();
   };
 
@@ -291,10 +342,7 @@
     if (this.root) this.root.classList.remove('is-checking');
     // Placeholder. Confirmed copy and FUTURE_UNLOCKED are not rendered yet.
     if (this.panel() && !this.panel().querySelector('.unindexed-return')) {
-      var actions = document.createElement('div');
-      actions.className = 'unindexed-actions';
-      actions.innerHTML = this.returnHtml();
-      this.panel().appendChild(actions);
+      this.panel().appendChild(this.actionRow([this.returnLink()]));
     }
   };
 

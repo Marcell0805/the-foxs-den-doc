@@ -11,20 +11,32 @@
     'drakensberg': 'berg-awaits.html'
   };
 
-  function esc(t) {
-    var d = document.createElement('div');
-    d.textContent = t == null ? '' : String(t);
-    return d.innerHTML;
+  var STATUS_LABELS = {
+    live: 'Live',
+    in_progress: 'In progress'
+  };
+
+  function el(tag, className, text) {
+    var node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text != null) node.textContent = text;
+    return node;
   }
 
-  function statusLabel(s) {
-    if (s === 'live') return 'Live';
-    if (s === 'in_progress') return 'In progress';
-    return 'Planned';
+  function statusLabel(status) {
+    return STATUS_LABELS[status] || 'Planned';
+  }
+
+  function sectionHref(url) {
+    var href = url.indexOf('sections/') === 0 ? url : 'sections/' + url;
+    if (document.body.getAttribute('data-nav-scope') !== 'landing') {
+      href = '../' + href;
+    }
+    return href;
   }
 
   function initFuse() {
-    var index = window.DELTACORE_SEARCH_INDEX || [];
+    var index = window.DEN_SEARCH_INDEX || [];
     if (typeof Fuse === 'undefined') return;
     fuse = new Fuse(index, {
       keys: ['title', 'text', 'section', 'tags'],
@@ -35,83 +47,102 @@
   }
 
   function renderResults(query, container) {
+    container.replaceChildren();
+
     if (!fuse || !query.trim()) {
-      container.innerHTML = '<p class="search-hint">Type to search vision, architecture, PetroMan, alerts, M1…</p>';
+      container.append(el('p', 'search-hint', 'Type to search vision, architecture, PetroMan, alerts, M1…'));
       return;
     }
+
     var results = fuse.search(query, { limit: 12 });
     if (!results.length) {
-      container.innerHTML = '<p class="search-empty">No results. Try: telemetry, fuel, MVP, integration.</p>';
+      container.append(el('p', 'search-empty', 'No results. Try: telemetry, fuel, MVP, integration.'));
       return;
     }
-    var html = '<ul class="search-results">';
-    results.forEach(function (r) {
-      var item = r.item;
-      var href = item.url.indexOf('sections/') === 0 ? item.url : 'sections/' + item.url;
-      if (document.body.getAttribute('data-nav-scope') !== 'landing') {
-        href = '../' + href;
-      }
-      html += '<li><a href="' + esc(href) + '">' +
-        '<span class="search-result-title">' + esc(item.title) + '</span>' +
-        '<span class="search-result-meta">' + esc(item.section) + ' · ' + statusLabel(item.status) + '</span>' +
-        '</a></li>';
+
+    var list = el('ul', 'search-results');
+    results.forEach(function (result) {
+      var item = result.item;
+      var link = el('a');
+      link.href = sectionHref(item.url);
+      link.append(
+        el('span', 'search-result-title', item.title),
+        el('span', 'search-result-meta', item.section + ' · ' + statusLabel(item.status))
+      );
+      var row = el('li');
+      row.append(link);
+      list.append(row);
     });
-    html += '</ul>';
-    container.innerHTML = html;
+    container.append(list);
   }
 
   function openSecret(secretPage) {
     close();
-    var href = document.body.getAttribute('data-nav-scope') === 'landing'
-      ? 'sections/' + secretPage
-      : secretPage;
-    location.href = href;
+    var onLanding = document.body.getAttribute('data-nav-scope') === 'landing';
+    location.href = onLanding ? 'sections/' + secretPage : secretPage;
+  }
+
+  function normalizedQuery(value) {
+    return String(value || '').trim().replace(/\s+/g, ' ').toLowerCase();
   }
 
   function ensureModal() {
     if (modal) return modal;
-    modal = document.createElement('div');
+
+    var input = el('input', 'search-modal-input');
+    input.type = 'search';
+    input.id = 'search-modal-input';
+    input.placeholder = 'Search portal… (Ctrl+K)';
+    input.autocomplete = 'off';
+
+    var results = el('div', 'search-modal-results');
+    results.id = 'search-modal-results';
+
+    var card = el('div', 'search-modal-card');
+    card.setAttribute('role', 'dialog');
+    card.setAttribute('aria-label', 'Search portal');
+    card.append(
+      input,
+      results,
+      el('p', 'search-modal-footer no-print', 'Powered by local index · no server required')
+    );
+
+    var backdrop = el('div', 'search-modal-backdrop');
+    backdrop.setAttribute('data-close', '');
+    backdrop.addEventListener('click', close);
+
+    modal = el('div', 'search-modal');
     modal.id = 'search-modal';
-    modal.className = 'search-modal';
     modal.hidden = true;
-    modal.innerHTML =
-      '<div class="search-modal-backdrop" data-close></div>' +
-      '<div class="search-modal-card" role="dialog" aria-label="Search portal">' +
-        '<input type="search" id="search-modal-input" class="search-modal-input" placeholder="Search portal… (Ctrl+K)" autocomplete="off">' +
-        '<div id="search-modal-results" class="search-modal-results"></div>' +
-        '<p class="search-modal-footer no-print">Powered by local index · no server required</p>' +
-      '</div>';
+    modal.append(backdrop, card);
     document.body.appendChild(modal);
-    modal.querySelector('[data-close]').addEventListener('click', close);
-    var input = document.getElementById('search-modal-input');
+
     input.addEventListener('input', function () {
-      renderResults(input.value, document.getElementById('search-modal-results'));
+      renderResults(input.value, results);
     });
-    input.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') {
+    input.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape') {
         close();
         return;
       }
-      if (e.key === 'Enter') {
-        var q = String(input.value || '')
-          .trim()
-          .replace(/\s+/g, ' ')
-          .toLowerCase();
-        var secretPage = SECRET_PAGES[q] || SECRET_PAGES[q.replace(/\s+/g, '')];
-        if (secretPage) {
-          e.preventDefault();
-          openSecret(secretPage);
-          return;
-        }
-        if (window.UnindexedSignal && typeof window.UnindexedSignal.matches === 'function') {
-          e.preventDefault();
-          var typed = String(input.value || '');
-          window.UnindexedSignal.matches(typed).then(function (hit) {
-            if (hit) openSecret(window.UnindexedSignal.page);
-          });
-        }
+      if (event.key !== 'Enter') return;
+
+      var query = normalizedQuery(input.value);
+      var secretPage = SECRET_PAGES[query] || SECRET_PAGES[query.replace(/\s+/g, '')];
+      if (secretPage) {
+        event.preventDefault();
+        openSecret(secretPage);
+        return;
       }
+
+      var signal = window.UnindexedSignal;
+      if (!signal || typeof signal.matches !== 'function') return;
+      event.preventDefault();
+      signal.matches(String(input.value || '')).then(function (hit) {
+        if (hit) openSecret(signal.page);
+      });
     });
+
     return modal;
   }
 
@@ -128,14 +159,14 @@
     if (modal) modal.hidden = true;
   }
 
-  document.addEventListener('keydown', function (e) {
-    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-      e.preventDefault();
+  document.addEventListener('keydown', function (event) {
+    if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
+      event.preventDefault();
       open();
     }
   });
 
-  window.DeltaCoreSearch = { open: open, close: close };
+  window.DenSearch = { open: open, close: close };
 
   function initLandingSearch() {
     var landing = document.getElementById('landing-search');

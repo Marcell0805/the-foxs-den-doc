@@ -1,0 +1,46 @@
+{
+    "id":  "ffs-web",
+    "title":  "FFS Web",
+    "status":  "live",
+    "kind":  "website",
+    "tags":  [
+                 "website",
+                 "finance"
+             ],
+    "searchKeywords":  [
+
+                       ],
+    "summary":  "Browser version of FFS for planning and tracking money. It does not sync with the Android app.",
+    "blocks":  [
+                   {
+                       "content":  "Browser version of FFS for planning and tracking money. It does not sync with the Android app.",
+                       "heading":  "About",
+                       "bullets":  [
+
+                                   ],
+                       "id":  "about"
+                   }
+               ],
+    "sidebarNote":  "Browser version of FFS for planning and tracking money. It does not sync with the Android app.",
+    "version":  null,
+    "build":  null,
+    "releaseNotes":  "Browser version of FFS for planning and tracking money. It does not sync with the Android app.",
+    "updateCheckUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs-web/mobile-version.json",
+    "icon":  "icons/ffs.png",
+    "platform":  "Website",
+    "whatsNew":  "Browser version of FFS for planning and tracking money. It does not sync with the Android app.",
+    "faq":  [
+                {
+                    "id":  "faq-1",
+                    "heading":  "What is FFS Web?",
+                    "content":  "The browser version of FFS. You can plan and track money in the browser. It is a separate product from the Android app."
+                },
+                {
+                    "id":  "faq-2",
+                    "heading":  "Does this sync with the Android app?",
+                    "content":  "No. Money you enter on the website does not appear on the phone, and the other way around."
+                }
+            ],
+    "externalUrl":  "https://ffs.foxbytelabs.co.za/",
+    "note":  "Browser version of FFS for planning and tracking money. It does not sync with the Android app."
+}

@@ -21,8 +21,50 @@
     return document.body.getAttribute('data-nav-scope') === 'section' ? '../assets/' : 'assets/';
   }
 
-  function nl(text) {
-    return esc(text).replace(/\n/g, '<br>');
+  function el(tag, className, text) {
+    var node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text != null) node.textContent = text;
+    return node;
+  }
+
+  function fill(parent, nodes) {
+    parent.replaceChildren.apply(parent, nodes.filter(Boolean));
+  }
+
+  function button(className, text) {
+    var node = el('button', className, text);
+    node.type = 'button';
+    return node;
+  }
+
+  function textBlock(tag, className, text) {
+    var node = el(tag, className);
+    String(text || '').split('\n').forEach(function (line, index) {
+      if (index) node.append(document.createElement('br'));
+      node.append(document.createTextNode(line));
+    });
+    return node;
+  }
+
+  function itemList(items, className) {
+    var list = el('ul', className);
+    (items || []).forEach(function (item) {
+      list.append(el('li', '', item));
+    });
+    return list;
+  }
+
+  function yesSlot() {
+    var slot = el('span', 'berg-yes-slot');
+    slot.setAttribute('aria-hidden', 'true');
+    return slot;
+  }
+
+  function actionRow(className, nodes) {
+    var row = el('div', className || 'berg-actions');
+    fill(row, nodes);
+    return row;
   }
 
   function defaultQuest() {
@@ -270,21 +312,18 @@
 
   Quest.prototype.showIntro = function () {
     var cfg = this.cfg;
-    var intro = (cfg.intro || []).map(function (line) {
-      return '<p>' + esc(line) + '</p>';
-    }).join('');
-    this.panel().innerHTML =
-      '<p class="berg-kicker">🏔️ Secret expedition</p>' +
-      '<h1>' + esc(cfg.heading) + '</h1>' +
-      '<p class="berg-subtitle">' + esc(cfg.subtitle) + '</p>' +
-      '<div class="berg-copy">' +
-        intro +
-        '<p class="berg-question">' + esc(cfg.question) + '</p>' +
-      '</div>' +
-      '<div class="berg-actions">' +
-        '<span class="berg-yes-slot" aria-hidden="true"></span>' +
-        '<button type="button" class="berg-btn berg-btn-no">' + esc(cfg.noLabel) + '</button>' +
-      '</div>';
+    var copy = el('div', 'berg-copy');
+    (cfg.intro || []).forEach(function (line) {
+      copy.append(el('p', '', line));
+    });
+    copy.append(el('p', 'berg-question', cfg.question));
+    fill(this.panel(), [
+      el('p', 'berg-kicker', '🏔️ Secret expedition'),
+      el('h1', '', cfg.heading),
+      el('p', 'berg-subtitle', cfg.subtitle),
+      copy,
+      actionRow('berg-actions', [yesSlot(), button('berg-btn berg-btn-no', cfg.noLabel)])
+    ]);
     this.parkYes();
     this.yesBtn.hidden = false;
     this.yesBtn.textContent = cfg.yesLabel;
@@ -303,31 +342,35 @@
   };
 
   Quest.prototype.showToast = function (title, body, extra) {
-    var el = this.root.querySelector('.berg-toast');
-    if (!el) return;
-    var html = title ? '<strong>' + esc(title) + '</strong>' : '';
-    if (body) html += '<div>' + nl(body) + '</div>';
-    if (extra) html += '<div>' + esc(extra) + '</div>';
-    el.innerHTML = html;
-    el.classList.add('is-visible');
+    var toast = this.root.querySelector('.berg-toast');
+    if (!toast) return;
+    fill(toast, [
+      title ? el('strong', '', title) : null,
+      body ? textBlock('div', '', body) : null,
+      extra ? el('div', '', extra) : null
+    ]);
+    toast.classList.add('is-visible');
     if (this.toastTimer) window.clearTimeout(this.toastTimer);
     var self = this;
     this.toastTimer = window.setTimeout(function () {
-      el.classList.remove('is-visible');
+      toast.classList.remove('is-visible');
     }, 2800);
   };
 
   Quest.prototype.showFoxLine = function () {
     var lines = this.cfg.foxLines || [];
     if (this.foxIndex >= lines.length) return;
-    var el = this.root.querySelector('.berg-narrator');
-    if (!el) return;
-    el.innerHTML = '<div class="berg-narrator-label">🦊 Fox</div><div>' + esc(lines[this.foxIndex]) + '</div>';
-    el.classList.add('is-visible');
+    var narrator = this.root.querySelector('.berg-narrator');
+    if (!narrator) return;
+    fill(narrator, [
+      el('div', 'berg-narrator-label', '🦊 Fox'),
+      el('div', '', lines[this.foxIndex])
+    ]);
+    narrator.classList.add('is-visible');
     this.foxIndex += 1;
     var self = this;
     this.after(4200, function () {
-      if (el) el.classList.remove('is-visible');
+      if (narrator) narrator.classList.remove('is-visible');
     });
   };
 
@@ -402,12 +445,15 @@
   };
 
   Quest.prototype.speakFox = function (line, ms) {
-    var el = this.root && this.root.querySelector('.berg-narrator');
-    if (!el || !line) return;
-    el.innerHTML = '<div class="berg-narrator-label">🦊 Fox</div><div>' + esc(line) + '</div>';
-    el.classList.add('is-visible');
+    var narrator = this.root && this.root.querySelector('.berg-narrator');
+    if (!narrator || !line) return;
+    fill(narrator, [
+      el('div', 'berg-narrator-label', '🦊 Fox'),
+      el('div', '', line)
+    ]);
+    narrator.classList.add('is-visible');
     this.after(ms || 4800, function () {
-      if (el) el.classList.remove('is-visible');
+      if (narrator) narrator.classList.remove('is-visible');
     });
   };
 
@@ -508,20 +554,16 @@
     var atEnd = this.noIndex >= labels.length - 1;
     var noLabel = labels[Math.min(this.noIndex, labels.length - 1)] || this.cfg.noLabel;
     this.dodgeArmed = false;
-    this.panel().innerHTML =
-      '<p class="berg-kicker">🏔️ Secret expedition</p>' +
-      '<h1>' + esc(this.cfg.heading) + '</h1>' +
-      '<p class="berg-question">' + esc(this.cfg.question) + '</p>' +
-      '<div class="berg-copy berg-no-reply">' +
-        '<p class="berg-no-title">' + esc(item.title) + '</p>' +
-        '<p>' + nl(item.body) + '</p>' +
-      '</div>' +
-      '<div class="berg-actions is-apart">' +
-        '<span class="berg-yes-slot" aria-hidden="true"></span>' +
-        '<button type="button" class="berg-btn berg-btn-no' + (atEnd ? ' berg-no-final' : '') + '">' +
-          esc(noLabel) +
-        '</button>' +
-      '</div>';
+    var reply = el('div', 'berg-copy berg-no-reply');
+    reply.append(el('p', 'berg-no-title', item.title), textBlock('p', '', item.body));
+    var noButton = button('berg-btn berg-btn-no' + (atEnd ? ' berg-no-final' : ''), noLabel);
+    fill(this.panel(), [
+      el('p', 'berg-kicker', '🏔️ Secret expedition'),
+      el('h1', '', this.cfg.heading),
+      el('p', 'berg-question', this.cfg.question),
+      reply,
+      actionRow('berg-actions is-apart', [yesSlot(), noButton])
+    ]);
     this.parkYes();
     var self = this;
     this.after(900, function () { self.dodgeArmed = true; });
@@ -694,18 +736,14 @@
     this.parkYes();
     this.yesBtn.hidden = true;
     var cfg = this.cfg;
-    var items = (cfg.acceptedItems || []).map(function (it) {
-      return '<li>' + esc(it) + '</li>';
-    }).join('');
-    this.panel().innerHTML =
-      '<p class="berg-kicker">The expedition begins</p>' +
-      '<h2>' + esc(cfg.acceptedTitle) + '</h2>' +
-      '<p class="berg-subtitle">' + esc(cfg.acceptedBody) + '</p>' +
-      '<ul class="berg-list">' + items + '</ul>' +
-      '<p class="berg-hint">Look around the Berg while the light changes.</p>' +
-      '<div class="berg-actions">' +
-        '<button type="button" class="berg-btn berg-btn-ghost berg-continue">Continue →</button>' +
-      '</div>';
+    fill(this.panel(), [
+      el('p', 'berg-kicker', 'The expedition begins'),
+      el('h2', '', cfg.acceptedTitle),
+      el('p', 'berg-subtitle', cfg.acceptedBody),
+      itemList(cfg.acceptedItems, 'berg-list'),
+      el('p', 'berg-hint', 'Look around the Berg while the light changes.'),
+      actionRow('berg-actions', [button('berg-btn berg-btn-ghost berg-continue', 'Continue →')])
+    ]);
     this.showFoxLine();
     var self = this;
     this.after(10000, function () { self.enterSunset(); });
@@ -717,14 +755,13 @@
     this.setPhase('sunset');
     var cfg = this.cfg;
     var hint = this.remainingHint();
-    this.panel().innerHTML =
-      '<p class="berg-kicker">' + esc(cfg.sunsetKicker || 'The light is changing') + '</p>' +
-      '<h2>' + esc(cfg.sunsetTitle || 'The Berg keeps its promises') + '</h2>' +
-      '<p class="berg-subtitle">' + esc(cfg.sunsetBody || 'The river is still talking. The escarpment is catching the last of the sun.') + '</p>' +
-      (hint ? '<p class="berg-hint">' + esc(hint) + '</p>' : '') +
-      '<div class="berg-actions">' +
-        '<button type="button" class="berg-btn berg-btn-ghost berg-continue">Continue →</button>' +
-      '</div>';
+    fill(this.panel(), [
+      el('p', 'berg-kicker', cfg.sunsetKicker || 'The light is changing'),
+      el('h2', '', cfg.sunsetTitle || 'The Berg keeps its promises'),
+      el('p', 'berg-subtitle', cfg.sunsetBody || 'The river is still talking. The escarpment is catching the last of the sun.'),
+      hint ? el('p', 'berg-hint', hint) : null,
+      actionRow('berg-actions', [button('berg-btn berg-btn-ghost berg-continue', 'Continue →')])
+    ]);
     this.showFoxLine();
     var self = this;
     this.after(14000, function () { self.enterNight(); });
@@ -733,13 +770,12 @@
   Quest.prototype.enterNight = function () {
     if (!this.completed || this.phase !== 'sunset') return;
     this.setPhase('night');
-    this.panel().innerHTML =
-      '<p class="berg-kicker">Night on the Berg</p>' +
-      '<h2>' + esc(this.cfg.nightLine) + '</h2>' +
-      '<p class="berg-subtitle">' + esc(this.cfg.nightBody || 'Look up. The sky is not empty.') + '</p>' +
-      '<div class="berg-actions">' +
-        '<button type="button" class="berg-btn berg-btn-ghost berg-continue">Continue →</button>' +
-      '</div>';
+    fill(this.panel(), [
+      el('p', 'berg-kicker', 'Night on the Berg'),
+      el('h2', '', this.cfg.nightLine),
+      el('p', 'berg-subtitle', this.cfg.nightBody || 'Look up. The sky is not empty.'),
+      actionRow('berg-actions', [button('berg-btn berg-btn-ghost berg-continue', 'Continue →')])
+    ]);
     this.showFoxLine();
     var self = this;
     this.after(1400, function () { self.maybeCelebrate(); });
@@ -759,26 +795,23 @@
     this.maybeCelebrate();
     this.showFoxLine();
     var cfg = this.cfg;
-    var items = (cfg.finaleItems || []).map(function (it) {
-      return '<li>' + esc(it) + '</li>';
-    }).join('');
-    var close = (cfg.finaleClose || []).map(function (line) {
-      return '<p>' + esc(line) + '</p>';
-    }).join('');
-    this.panel().innerHTML =
-      '<p class="berg-kicker">Drakensberg expedition</p>' +
-      '<h1 class="berg-finale-title">' + esc(cfg.finaleTitle) + '</h1>' +
-      '<p class="berg-subtitle">' + esc(cfg.finaleHeading) + '</p>' +
-      '<div class="berg-finale-stack">' +
-        '<p class="berg-place">' + esc(cfg.finalePlace) + '</p>' +
-        '<ul class="berg-list">' + items + '</ul>' +
-      '</div>' +
-      '<div class="berg-close">' + close + '</div>' +
-      '<p class="berg-hearts">🦊 ❤️ 🏹</p>' +
-      '<div class="berg-actions">' +
-        '<button type="button" class="berg-btn berg-replay">' + esc(cfg.replayLabel) + '</button>' +
-        '<a class="berg-btn berg-btn-ghost berg-return" href="../index.html">' + esc(cfg.returnLabel) + '</a>' +
-      '</div>';
+    var stack = el('div', 'berg-finale-stack');
+    stack.append(el('p', 'berg-place', cfg.finalePlace), itemList(cfg.finaleItems, 'berg-list'));
+    var close = el('div', 'berg-close');
+    (cfg.finaleClose || []).forEach(function (line) {
+      close.append(el('p', '', line));
+    });
+    var back = el('a', 'berg-btn berg-btn-ghost berg-return', cfg.returnLabel);
+    back.href = '../index.html';
+    fill(this.panel(), [
+      el('p', 'berg-kicker', 'Drakensberg expedition'),
+      el('h1', 'berg-finale-title', cfg.finaleTitle),
+      el('p', 'berg-subtitle', cfg.finaleHeading),
+      stack,
+      close,
+      el('p', 'berg-hearts', '🦊 ❤️ 🏹'),
+      actionRow('berg-actions', [button('berg-btn berg-replay', cfg.replayLabel), back])
+    ]);
   };
 
   Quest.prototype.flipToAccept = function (btn) {

@@ -33,8 +33,18 @@
                       "icon":  "icons/huntress-cookbook.png"
                   },
                   {
-                      "id":  "streamforge",
+                      "id":  "ffs-web",
                       "num":  4,
+                      "file":  "ffs-web.html",
+                      "label":  "FFS Web",
+                      "available":  true,
+                      "kind":  "website",
+                      "status":  "live",
+                      "icon":  "icons/ffs.png"
+                  },
+                  {
+                      "id":  "streamforge",
+                      "num":  5,
                       "file":  "streamforge.html",
                       "label":  "StreamForge",
                       "available":  true,
@@ -44,7 +54,7 @@
                   },
                   {
                       "id":  "ffs",
-                      "num":  5,
+                      "num":  6,
                       "file":  "ffs.html",
                       "label":  "FFS — Financial Forecasting System",
                       "available":  true,
@@ -55,7 +65,7 @@
                   },
                   {
                       "id":  "foxfill",
-                      "num":  6,
+                      "num":  7,
                       "file":  "foxfill.html",
                       "label":  "FoxFill",
                       "available":  true,
@@ -65,7 +75,7 @@
                   },
                   {
                       "id":  "wid",
-                      "num":  7,
+                      "num":  8,
                       "file":  "wid.html",
                       "label":  "What Was I Doing",
                       "available":  true,
@@ -75,7 +85,7 @@
                   },
                   {
                       "id":  "about",
-                      "num":  8,
+                      "num":  9,
                       "file":  "about.html",
                       "label":  "About",
                       "available":  true,

@@ -31,6 +31,74 @@ function Write-JsonFile([string]$path, $obj) {
     [IO.File]::WriteAllText($path, $json, $utf8)
 }
 
+function ConvertTo-HtmlText([string]$text) {
+    if ([string]::IsNullOrEmpty($text)) { return "" }
+    return (($text -replace '&', '&amp;') -replace '<', '&lt;') -replace '>', '&gt;'
+}
+
+function New-FfsLegalPageHtml($AppId, $AppTitle, $Documents) {
+    $body = New-Object System.Text.StringBuilder
+    foreach ($doc in @($Documents)) {
+        $anchor = ConvertTo-HtmlText ([string]$doc.id)
+        $heading = ConvertTo-HtmlText ([string]$doc.heading)
+        [void]$body.AppendLine("<article id=`"$anchor`">")
+        [void]$body.AppendLine("<h1>$heading</h1>")
+        $paragraph = New-Object System.Collections.Generic.List[string]
+        $lines = @(([string]$doc.content) -split "`r?`n") + @("")
+        foreach ($line in $lines) {
+            $trimmed = $line.Trim()
+            $isHeading = $trimmed.StartsWith("## ")
+            if ($trimmed.Length -eq 0 -or $isHeading) {
+                if ($paragraph.Count -gt 0) {
+                    $text = (($paragraph -join ' ').Trim())
+                    if ($text.Length -gt 0) {
+                        [void]$body.AppendLine("<p>$(ConvertTo-HtmlText $text)</p>")
+                    }
+                    $paragraph.Clear()
+                }
+                if ($isHeading) {
+                    $title = ConvertTo-HtmlText $trimmed.Substring(3).Trim()
+                    [void]$body.AppendLine("<h2>$title</h2>")
+                }
+                continue
+            }
+            $paragraph.Add($trimmed)
+        }
+        [void]$body.AppendLine("</article>")
+    }
+
+    return @"
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>$(ConvertTo-HtmlText $AppTitle) Terms and privacy</title>
+  <style>
+    :root { --primary: #0f3d2e; --surface: #f8f7f4; --text: #1f2a25; --muted: #6b7a72; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--text); background: var(--primary); line-height: 1.55; }
+    main { max-width: 720px; margin: 0 auto; min-height: 100vh; padding: 40px 24px 64px; background: var(--surface); }
+    h1 { margin: 0 0 12px; font-family: Georgia, "Times New Roman", serif; font-size: 28px; color: var(--primary); }
+    h2 { margin: 28px 0 8px; font-size: 18px; color: var(--primary); }
+    p { margin: 0 0 12px; font-size: 15px; }
+    a { color: var(--primary); font-weight: 600; }
+    .draft { margin: 0 0 28px; color: var(--muted); font-size: 14px; }
+    article + article { margin-top: 48px; padding-top: 32px; border-top: 1px solid #e4e0d8; }
+    .back { display: inline-block; margin-bottom: 20px; font-size: 13px; }
+  </style>
+</head>
+<body>
+  <main>
+    <a class="back" href="../sections/$(ConvertTo-HtmlText $AppId).html">← $(ConvertTo-HtmlText $AppTitle)</a>
+    <p class="draft">Draft for review. Not yet in force. A South African lawyer must review this before it is treated as the published terms, including the Consumer Protection Act and POPIA.</p>
+$($body.ToString())
+  </main>
+</body>
+</html>
+"@
+}
+
 function Resolve-RepoPath([string]$baseDir, [string]$path) {
     if ([System.IO.Path]::IsPathRooted($path)) { return $path }
     return [System.IO.Path]::GetFullPath((Join-Path $baseDir $path))
@@ -595,6 +663,24 @@ function Sync-AppsFromManifest {
         }
         if ($faqBlocks.Count -gt 0) { $section.faq = @($faqBlocks) }
 
+        $legalBlocks = [System.Collections.Generic.List[object]]::new()
+        if ($app.legal) {
+            foreach ($item in @($app.legal)) {
+                $heading = if ($item.heading) { [string]$item.heading } else { "" }
+                $content = if ($item.content) { [string]$item.content } else { "" }
+                if ([string]::IsNullOrWhiteSpace($heading)) { continue }
+                $anchor = "section"
+                if ($heading -match 'Terms of Use') { $anchor = "terms" }
+                elseif ($heading -match 'Privacy Policy' -or $heading -match 'Privacy Notice') { $anchor = "privacy" }
+                $legalBlocks.Add([ordered]@{
+                    id = $anchor
+                    heading = $heading.Trim()
+                    content = $content
+                })
+            }
+        }
+        if ($legalBlocks.Count -gt 0) { $section.legal = @($legalBlocks) }
+
         if ($kind -eq 'website') {
             if ($app.externalUrl) {
                 $section.externalUrl = $app.externalUrl
@@ -863,6 +949,22 @@ Get-ChildItem $dataDir -Filter "*.json" | ForEach-Object {
             }
         }
     }
+    if ($doc.legal) {
+        foreach ($item in $doc.legal) {
+            $legalText = @()
+            if ($item.heading) { $legalText += $item.heading }
+            if ($item.content) { $legalText += $item.content }
+            $searchEntries += [ordered]@{
+                id = "$id-$($item.id)"
+                title = if ($item.heading) { $item.heading } else { $doc.title }
+                section = $doc.title
+                url = "privacy/$id.html#$($item.id)"
+                text = ($legalText -join ' ')
+                tags = @($doc.tags)
+                status = $doc.status
+            }
+        }
+    }
 }
 
 $sectionParts = @()
@@ -910,7 +1012,7 @@ $portalName = $settings.portalName
 if (-not $portalName) { $portalName = "The Foxs Den" }
 
 $portalDataJs = @"
-window.DELTACORE_PORTAL = {
+window.DEN_PORTAL = {
   settings: $settingsJson,
   nav: $navJson,
   sections: $sectionsJsObject
@@ -918,7 +1020,7 @@ window.DELTACORE_PORTAL = {
 "@
 
 $searchIndexJs = @"
-window.DELTACORE_SEARCH_INDEX = $searchJson;
+window.DEN_SEARCH_INDEX = $searchJson;
 "@
 
 [IO.File]::WriteAllText((Join-Path $jsDir "portal-data.js"), $portalDataJs, $utf8)
@@ -976,6 +1078,18 @@ Get-ChildItem $sectionsDir -Filter "*.html" | ForEach-Object {
         Remove-Item $_.FullName -Force
         Write-Host "Removed stale section HTML: $($_.Name)"
     }
+}
+
+$legalDir = Join-Path $PortalRoot "privacy"
+foreach ($key in ($sections.Keys | Sort-Object)) {
+    $legalDoc = $sections[$key]
+    if (-not $legalDoc.legal) { continue }
+    if (-not (Test-Path $legalDir)) { New-Item -ItemType Directory -Path $legalDir | Out-Null }
+    $safeId = ($key -replace '[^a-zA-Z0-9_-]', '')
+    if ([string]::IsNullOrWhiteSpace($safeId)) { continue }
+    $legalHtml = New-FfsLegalPageHtml -AppId $safeId -AppTitle ([string]$legalDoc.title) -Documents @($legalDoc.legal)
+    [IO.File]::WriteAllText((Join-Path $legalDir "$safeId.html"), $legalHtml, $utf8)
+    Write-Host "Built privacy/$safeId.html"
 }
 
 Write-Host "Built portal-data.js ($($sections.Count) sections)"

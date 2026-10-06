@@ -14,20 +14,24 @@
     return d.innerHTML;
   }
 
+  var STATUS = {
+    live: { badge: 'status-live', label: 'Live' },
+    beta: { badge: 'status-beta', label: 'Beta' },
+    in_progress: { badge: 'status-progress', label: 'In Development' },
+    archived: { badge: 'status-archived', label: 'Archived' }
+  };
+
+  function statusInfo(status) {
+    return STATUS[status] || { badge: 'status-planned', label: 'Planned' };
+  }
+
   function statusLabel(status) {
-    if (status === 'live') return 'Live';
-    if (status === 'beta') return 'Beta';
-    if (status === 'in_progress') return 'In Development';
-    if (status === 'archived') return 'Archived';
-    return 'Planned';
+    return statusInfo(status).label;
   }
 
   function statusBadge(status) {
-    if (status === 'live') return '<span class="status-badge status-live">Live</span>';
-    if (status === 'beta') return '<span class="status-badge status-beta">Beta</span>';
-    if (status === 'in_progress') return '<span class="status-badge status-progress">In Development</span>';
-    if (status === 'archived') return '<span class="status-badge status-archived">Archived</span>';
-    return '<span class="status-badge status-planned">Planned</span>';
+    var info = statusInfo(status);
+    return '<span class="status-badge ' + info.badge + '">' + info.label + '</span>';
   }
 
   function assetsPrefix() {
@@ -36,7 +40,7 @@
   }
 
   function foxLockQuery() {
-    var s = window.DELTACORE_PORTAL && window.DELTACORE_PORTAL.settings;
+    var s = window.DEN_PORTAL && window.DEN_PORTAL.settings;
     return s && s.assetVersion ? '?v=' + s.assetVersion : '';
   }
 
@@ -53,15 +57,10 @@
     return '<img class="' + cls + '" src="' + esc(assetsPrefix() + file + foxLockQuery()) + '" alt="Code required" title="Code required" width="' + px + '" height="' + px + '" decoding="async">';
   }
 
-  function appIconHtml(icon, label) {
+  function iconHtml(icon, label, product) {
     var src = assetsPrefix() + (icon || 'logo.png');
-    return '<img class="app-icon" src="' + esc(src) + '" alt="" width="48" height="48" loading="lazy"' +
-      (label ? ' title="' + esc(label) + '"' : '') + '>';
-  }
-
-  function productIconHtml(icon, label) {
-    var src = assetsPrefix() + (icon || 'logo.png');
-    return '<img class="product-icon" src="' + esc(src) + '" alt="" width="72" height="72" loading="lazy"' +
+    var size = product ? 72 : 48;
+    return '<img class="' + (product ? 'product-icon' : 'app-icon') + '" src="' + esc(src) + '" alt="" width="' + size + '" height="' + size + '" loading="lazy"' +
       (label ? ' title="' + esc(label) + '"' : '') + '>';
   }
 
@@ -80,24 +79,37 @@
     return '';
   }
 
+  function kindFilterKey(kind) {
+    var key = String(kind || '').trim().toLowerCase();
+    if (key === 'website' || key === 'web') return 'website';
+    if (key === 'mobile') return 'mobile';
+    if (key === 'tool') return 'tool';
+    if (key === 'addon') return 'addon';
+    if (key === 'about') return 'about';
+    return 'other';
+  }
+
   function defaultPlatform(section) {
     if (section.platform) return section.platform;
-    if (section.kind === 'website') return 'Website';
-    if (section.kind === 'tool') return 'Windows';
-    if (section.kind === 'addon') return 'Chrome';
-    return 'Android';
+    var key = kindFilterKey(section.kind);
+    if (key === 'website') return 'Website';
+    if (key === 'tool') return 'Windows';
+    if (key === 'addon') return 'Chrome';
+    if (key === 'mobile') return 'Android';
+    return '';
   }
 
   function kindLabel(section) {
-    if (section.kind === 'website') return 'Website';
-    if (section.kind === 'tool') return 'Desktop tool';
-    if (section.kind === 'addon') return 'Browser add-on';
-    if (section.kind === 'mobile') return 'Mobile App';
+    var key = kindFilterKey(section.kind);
+    if (key === 'website') return 'Website';
+    if (key === 'tool') return 'Desktop tool';
+    if (key === 'addon') return 'Browser add-on';
+    if (key === 'mobile') return 'Mobile App';
     return 'Project';
   }
 
   function getSettings() {
-    return (window.DELTACORE_PORTAL && DELTACORE_PORTAL.settings) || {};
+    return (window.DEN_PORTAL && DEN_PORTAL.settings) || {};
   }
 
   function isAboutVisible() {
@@ -105,11 +117,11 @@
   }
 
   function getNav() {
-    return (window.DELTACORE_PORTAL && DELTACORE_PORTAL.nav && DELTACORE_PORTAL.nav.items) || [];
+    return (window.DEN_PORTAL && DEN_PORTAL.nav && DEN_PORTAL.nav.items) || [];
   }
 
   function getSection(id) {
-    return window.DELTACORE_PORTAL && DELTACORE_PORTAL.sections && DELTACORE_PORTAL.sections[id];
+    return window.DEN_PORTAL && DEN_PORTAL.sections && DEN_PORTAL.sections[id];
   }
 
   var SVG_BACK = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>';
@@ -165,14 +177,18 @@
         '</span>' +
       '</a>';
     var ext = '<span class="toolbar-ext" aria-hidden="true">↗</span>';
-    var links =
-      '<nav class="toolbar-links" aria-label="Foxbyte Labs">' +
-        '<a class="toolbar-link" href="' + labsUrl + '#enter" target="_blank" rel="noopener noreferrer">Destinations ' + ext + '</a>' +
-        '<a class="toolbar-link" href="' + labsUrl + '#lab" target="_blank" rel="noopener noreferrer">Projects ' + ext + '</a>' +
-        '<a class="toolbar-link" href="' + labsUrl + '#about" target="_blank" rel="noopener noreferrer">About ' + ext + '</a>' +
-        '<a class="toolbar-link is-current" href="' + homeHref + '"' + (scope === 'landing' ? ' aria-current="page"' : '') + '>The Den</a>' +
-        '<a class="toolbar-link" href="' + githubUrl + '" target="_blank" rel="noopener noreferrer">GitHub ' + ext + '</a>' +
-      '</nav>';
+    var externalLinks = [
+      [labsUrl + '#enter', 'Destinations'],
+      [labsUrl + '#lab', 'Projects'],
+      [labsUrl + '#about', 'About']
+    ];
+    var links = '<nav class="toolbar-links" aria-label="Foxbyte Labs">';
+    externalLinks.forEach(function (pair) {
+      links += '<a class="toolbar-link" href="' + pair[0] + '" target="_blank" rel="noopener noreferrer">' + pair[1] + ' ' + ext + '</a>';
+    });
+    links += '<a class="toolbar-link is-current" href="' + homeHref + '"' + (scope === 'landing' ? ' aria-current="page"' : '') + '>The Den</a>';
+    links += '<a class="toolbar-link" href="' + githubUrl + '" target="_blank" rel="noopener noreferrer">GitHub ' + ext + '</a>';
+    links += '</nav>';
     mount.outerHTML =
       '<header class="portal-toolbar no-print" aria-label="Page tools">' +
         '<div class="toolbar-inner">' +
@@ -196,7 +212,7 @@
       btn.addEventListener('click', function () { window.print(); });
     });
     var searchBtn = document.getElementById('toolbar-search-btn');
-    if (searchBtn && window.DeltaCoreSearch) searchBtn.addEventListener('click', window.DeltaCoreSearch.open);
+    if (searchBtn && window.DenSearch) searchBtn.addEventListener('click', window.DenSearch.open);
     var menu = document.getElementById('toolbar-menu-btn');
     if (menu) menu.addEventListener('click', toggleSidebar);
   }
@@ -217,14 +233,24 @@
     var about = [];
     var other = [];
     getNav().forEach(function (item) {
-      if (item.kind === 'about') about.push(item);
-      else if (item.kind === 'website') websites.push(item);
-      else if (item.kind === 'tool') tools.push(item);
-      else if (item.kind === 'addon') addons.push(item);
-      else if (item.kind === 'mobile' || !item.kind) mobile.push(item);
+      var key = kindFilterKey(item.kind);
+      if (key === 'about') about.push(item);
+      else if (key === 'website') websites.push(item);
+      else if (key === 'tool') tools.push(item);
+      else if (key === 'addon') addons.push(item);
+      else if (key === 'mobile') mobile.push(item);
       else other.push(item);
     });
     return { mobile: mobile, websites: websites, tools: tools, addons: addons, about: about, other: other };
+  }
+
+  function itemBits(item, label, labelClass, extra) {
+    var icon = item.icon ? iconHtml(item.icon, item.label) : '';
+    var lock = foxLockSlotHtml(!!item.codeProtected);
+    var badge = statusBadge(item.status || 'live');
+    return icon +
+      '<span class="' + labelClass + '">' + esc(label) + '</span>' +
+      lock + badge + (extra || '');
   }
 
   function renderSidebarGroup(title, items, active, prefix) {
@@ -234,15 +260,14 @@
     html += '<ol>';
     items.forEach(function (item, i) {
       var label = (i + 1) + '. ' + item.label;
-      var lock = foxLockSlotHtml(!!item.codeProtected);
-      var badge = statusBadge(item.status || 'live');
-      var icon = item.icon ? appIconHtml(item.icon, item.label) : '';
+      var soon = item.id !== active && !(item.available && item.file);
+      var inner = itemBits(item, label, 'sidebar-item-text', soon ? ' <em>(soon)</em>' : '');
       if (item.id === active) {
-        html += '<li class="active"><span class="sidebar-item-inner">' + icon + '<span class="sidebar-item-text">' + esc(label) + '</span>' + lock + badge + '</span></li>';
+        html += '<li class="active"><span class="sidebar-item-inner">' + inner + '</span></li>';
       } else if (item.available && item.file) {
-        html += '<li><a href="' + prefix + item.file + '" class="sidebar-item-link"><span class="sidebar-item-inner">' + icon + '<span class="sidebar-item-text">' + esc(label) + '</span>' + lock + badge + '</span></a></li>';
+        html += '<li><a href="' + prefix + item.file + '" class="sidebar-item-link"><span class="sidebar-item-inner">' + inner + '</span></a></li>';
       } else {
-        html += '<li class="unavailable"><span class="sidebar-item-inner">' + icon + '<span class="sidebar-item-text">' + esc(label) + '</span>' + lock + badge + ' <em>(soon)</em></span></li>';
+        html += '<li class="unavailable"><span class="sidebar-item-inner">' + inner + '</span></li>';
       }
     });
     html += '</ol></div>';
@@ -253,13 +278,13 @@
     if (!items.length) return '';
     var html = '<div class="sidebar-footer">';
     items.forEach(function (item) {
-      var label = item.label || 'About';
+      var label = esc(item.label || 'About');
       if (item.id === active) {
-        html += '<div class="sidebar-footer-link active">' + esc(label) + '</div>';
+        html += '<div class="sidebar-footer-link active">' + label + '</div>';
       } else if (item.available && item.file) {
-        html += '<a class="sidebar-footer-link" href="' + prefix + item.file + '">' + esc(label) + '</a>';
+        html += '<a class="sidebar-footer-link" href="' + prefix + item.file + '">' + label + '</a>';
       } else {
-        html += '<div class="sidebar-footer-link unavailable">' + esc(label) + '</div>';
+        html += '<div class="sidebar-footer-link unavailable">' + label + '</div>';
       }
     });
     html += '</div>';
@@ -324,11 +349,12 @@
   var ICO_BOOK = '<svg class="meta-ico" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.7" d="M5 5.5A2.5 2.5 0 0 1 7.5 3H19v16H7.5A2.5 2.5 0 0 0 5 21.5z"/><path fill="none" stroke="currentColor" stroke-width="1.7" d="M5 5.5A2.5 2.5 0 0 1 7.5 8H19"/></svg>';
 
   function platformIcon(section) {
-    var kind = section && section.kind;
-    if (kind === 'website') return ICO_GLOBE;
-    if (kind === 'tool') return ICO_WINDOW;
-    if (kind === 'addon') return ICO_PUZZLE;
-    return ICO_ANDROID;
+    var key = kindFilterKey(section && section.kind);
+    if (key === 'website') return ICO_GLOBE;
+    if (key === 'tool') return ICO_WINDOW;
+    if (key === 'addon') return ICO_PUZZLE;
+    if (key === 'mobile') return ICO_ANDROID;
+    return '';
   }
 
   function versionParts(section) {
@@ -849,7 +875,7 @@
 
   function renderProductHeader(section) {
     return '<header class="product-header">' +
-      productIconHtml(section.icon, section.title) +
+      iconHtml(section.icon, section.title, true) +
       '<div class="product-header-text">' +
         '<p class="product-kind">' + esc(kindLabel(section)) + '</p>' +
         '<div class="product-title-row">' +
@@ -859,10 +885,6 @@
         (section.summary ? '<p class="product-tagline">' + esc(section.summary) + '</p>' : '') +
       '</div>' +
     '</header>';
-  }
-
-  function renderProductMeta(section) {
-    return renderMetaFacts(section);
   }
 
   function renderGooglePlayButton(section) {
@@ -885,17 +907,18 @@
     return prefix + 'install.html#' + id;
   }
 
-  function renderProductActions(section) {
-    var html = '<div class="product-actions">';
+  function renderProductActions(section, extraClass) {
+    var html = '<div class="product-actions' + (extraClass ? ' ' + extraClass : '') + '">';
     var gateId = section.codeProtected ? section.id : null;
-    if (section.kind === 'website' && section.externalUrl) {
+    var key = kindFilterKey(section.kind);
+    if (key === 'website' && section.externalUrl) {
       html += '<a href="' + esc(section.externalUrl) + '" class="app-download-btn" target="_blank" rel="noopener"' +
         (gateId ? ' data-code-gate="' + esc(gateId) + '"' : '') + '>Open site</a>';
-    } else if (section.kind === 'tool') {
+    } else if (key === 'tool') {
       var toolHelp = installHelpHref('tool');
       if (section.package) html += renderDownloadChannel(section.package, toolHelp, gateId, true);
       if (section.packageBeta) html += renderDownloadChannel(section.packageBeta, toolHelp, gateId, true);
-    } else if (section.kind === 'addon') {
+    } else if (key === 'addon') {
       if (section.storeUrl) {
         html += '<a href="' + esc(section.storeUrl) + '" class="app-download-btn" target="_blank" rel="noopener"' +
           (gateId ? ' data-code-gate="' + esc(gateId) + '"' : '') + '>Get on Chrome Web Store</a>';
@@ -907,7 +930,7 @@
         html += '<a href="' + esc(section.privacyUrl) + '" class="app-download-btn app-download-btn-secondary" target="_blank" rel="noopener">Privacy policy</a>';
       }
       html += '<p class="addon-install-hint">Prefer the Chrome Web Store when listed. Or <a href="' + esc(addonHelp) + '">read the install guide</a>.</p>';
-    } else {
+    } else if (key === 'mobile') {
       var apkHelp = installHelpHref('mobile');
       if (section.apk) html += renderDownloadChannel(section.apk, apkHelp, gateId, true);
       if (section.apkBeta) html += renderDownloadChannel(section.apkBeta, apkHelp, gateId, true);
@@ -1150,7 +1173,7 @@
     html += '<div class="product-hero-wrap">';
     html += '<p class="product-crumbs">Projects · ' + esc(crumbKind) + ' · ' + esc(section.title) + '</p>';
     html += '<header class="product-hero">';
-    html += productIconHtml(section.icon, section.title);
+    html += iconHtml(section.icon, section.title, true);
     html += '<div class="product-hero-copy">';
     html += '<p class="product-kind">' + esc(kindName) + ' ' + statusBadge(section.status) + '</p>';
     html += '<h1>' + esc(section.title) + '</h1>';
@@ -1172,6 +1195,7 @@
     html += '</dl></section>';
     html += '<section class="product-side-card"><h2>Quick links</h2><nav class="product-quick">';
     if (faq.length) html += '<a href="#faq"><span class="info-ico">' + ICO_FAQ + '</span><span>FAQ</span></a>';
+    if ((section.legal || []).length) html += '<a href="../privacy/' + esc(section.id) + '.html"><span class="info-ico">' + ICO_BOOK + '</span><span>Terms and privacy</span></a>';
     if (section.whatsNew || section.releaseNotes) html += '<a href="#changelog"><span class="info-ico">' + ICO_NOTE + '</span><span>Changelog</span></a>';
     if (section.roadmap) html += '<a href="#roadmap"><span class="info-ico">' + ICO_BOOK + '</span><span>Roadmap</span></a>';
     if (blocks.length) html += '<a href="#about"><span class="info-ico">' + ICO_NOTE + '</span><span>About</span></a>';
@@ -1187,7 +1211,7 @@
       related.forEach(function (other) {
         var otherSection = getSection(other.id) || {};
         html += '<a class="den-related-item" href="' + esc(other.file) + '">' +
-          appIconHtml(other.icon, other.label) +
+          iconHtml(other.icon, other.label) +
           '<span><strong>' + esc(other.label) + '</strong><em>' + esc(otherSection.summary || '') + '</em></span>' +
           '<span class="den-related-go" aria-hidden="true">›</span></a>';
       });
@@ -1202,6 +1226,7 @@
     if (features.length) html += '<a href="#features">Features</a>';
     if (blocks.length) html += '<a href="#about">About</a>';
     if (faq.length) html += '<a href="#faq">FAQ</a>';
+    if ((section.legal || []).length) html += '<a href="../privacy/' + esc(section.id) + '.html">Terms and privacy</a>';
     if (section.whatsNew || section.releaseNotes) html += '<a href="#changelog">Changelog</a>';
     if (section.roadmap) html += '<a href="#roadmap">Roadmap</a>';
     html += '</nav>';
@@ -1399,20 +1424,15 @@
     if (!items.length) return '';
     var html = '<section class="landing-group"><h2 class="landing-group-title">' + esc(title) + '</h2><ol class="landing-nav">';
     function renderItem(item, index, extra) {
-      var n = index + 1;
-      var badge = statusBadge(item.status || 'live');
-      var lock = foxLockSlotHtml(!!item.codeProtected);
-      var icon = item.icon ? appIconHtml(item.icon, item.label) : '';
-      var cls = extra ? ' class="landing-nav-extra"' : '';
+      var label = (index + 1) + '. ' + item.label;
+      var body = itemBits(item, label, 'landing-nav-label', item.available && item.file ? '' : ' <em>(coming soon)</em>');
       var hiddenAttr = extra ? ' hidden' : '';
       if (item.available && item.file) {
-        return '<li' + cls + hiddenAttr + '><a href="sections/' + item.file + '" class="landing-nav-link">' + icon +
-          '<span class="landing-nav-label">' + n + '. ' + esc(item.label) + '</span>' +
-          lock + badge + '</a></li>';
+        var extraClass = extra ? ' class="landing-nav-extra"' : '';
+        return '<li' + extraClass + hiddenAttr + '><a href="sections/' + item.file + '" class="landing-nav-link">' + body + '</a></li>';
       }
-      return '<li class="unavailable' + (extra ? ' landing-nav-extra' : '') + '"' + hiddenAttr + '>' + icon +
-        '<span class="landing-nav-label">' + n + '. ' + esc(item.label) + '</span>' +
-        lock + badge + ' <em>(coming soon)</em></li>';
+      var unavailableClass = 'unavailable' + (extra ? ' landing-nav-extra' : '');
+      return '<li class="' + unavailableClass + '"' + hiddenAttr + '>' + body + '</li>';
     }
     items.forEach(function (item, i) {
       html += renderItem(item, i, i >= LANDING_GROUP_LIMIT);
@@ -1433,14 +1453,6 @@
     return []
       .concat(groups.mobile, groups.websites, groups.tools, groups.addons, groups.other)
       .filter(function (item) { return item && item.id && item.id !== 'about'; });
-  }
-
-  function kindFilterKey(kind) {
-    if (kind === 'mobile') return 'mobile';
-    if (kind === 'website') return 'website';
-    if (kind === 'tool') return 'tool';
-    if (kind === 'addon') return 'addon';
-    return 'other';
   }
 
   function sectionForItem(item) {
@@ -1471,7 +1483,7 @@
     var cls = 'den-card' + (featured ? ' den-card--feature' : '');
     var html = '<article class="' + cls + '" data-kind="' + esc(kindFilterKey(item.kind)) + '" data-project-id="' + esc(item.id) + '">';
     html += '<button type="button" class="den-card-hit" data-select="' + esc(item.id) + '">';
-    html += appIconHtml(item.icon, item.label);
+    html += iconHtml(item.icon, item.label);
     html += '<span class="den-card-copy">';
     html += '<span class="den-card-kicker">' + esc(kindLabel(section.kind ? section : { kind: item.kind })) + '</span>';
     html += '<span class="den-card-title">' + esc(item.label) + '</span>';
@@ -1490,29 +1502,6 @@
     return html;
   }
 
-  function renderLandingActions(section) {
-    var html = '<div class="product-actions den-detail-actions">';
-    var gateId = section.codeProtected ? section.id : null;
-    var help = installHelpHref(section.kind || 'mobile');
-    if (section.kind === 'website' && section.externalUrl) {
-      html += '<a href="' + esc(section.externalUrl) + '" class="app-download-btn" target="_blank" rel="noopener"' +
-        (gateId ? ' data-code-gate="' + esc(gateId) + '"' : '') + '>Open site</a>';
-    } else if (section.kind === 'tool' || section.kind === 'addon') {
-      if (section.kind === 'addon' && section.storeUrl) {
-        html += '<a href="' + esc(section.storeUrl) + '" class="app-download-btn" target="_blank" rel="noopener"' +
-          (gateId ? ' data-code-gate="' + esc(gateId) + '"' : '') + '>Get on Chrome Web Store</a>';
-      }
-      if (section.package) html += renderDownloadChannel(section.package, help, gateId, true);
-      if (section.packageBeta) html += renderDownloadChannel(section.packageBeta, help, gateId, true);
-    } else {
-      if (section.apk) html += renderDownloadChannel(section.apk, help, gateId, true);
-      if (section.apkBeta) html += renderDownloadChannel(section.apkBeta, help, gateId, true);
-      html += renderGooglePlayButton(section);
-    }
-    html += '</div>';
-    return html;
-  }
-
   function renderWorkshopDetail(item) {
     var mount = document.querySelector('[data-den-detail]');
     if (!mount || !item) return;
@@ -1521,14 +1510,14 @@
     var html = '<div class="den-detail-card">';
     html += '<p class="den-detail-label">Project details</p>';
     html += '<header class="den-detail-head">';
-    html += productIconHtml(item.icon || section.icon, item.label);
+    html += iconHtml(item.icon || section.icon, item.label, true);
     html += '<div>';
     html += '<p class="den-card-kicker">' + esc(kindLabel(section.kind ? section : { kind: item.kind })) + ' ' + statusBadge(item.status || section.status || 'live') + '</p>';
     html += '<h2>' + esc(section.title || item.label) + '</h2>';
     html += '</div></header>';
     if (section.summary) html += '<p class="den-detail-summary">' + esc(section.summary) + '</p>';
     html += renderMetaFacts(section.kind ? section : { kind: item.kind });
-    html += renderLandingActions(section.id ? section : { id: item.id, kind: item.kind });
+    html += renderProductActions(section.id ? section : { id: item.id, kind: item.kind }, 'den-detail-actions');
     if (href && (section.whatsNew || section.releaseNotes)) {
       html += '<section class="whats-new den-detail-news" id="den-changelog"><div class="whats-new-head"><h2>What\'s New</h2>' +
         '<a class="whats-new-all" href="' + esc(href) + '">View all →</a></div><ul>';
@@ -1546,7 +1535,7 @@
       related.forEach(function (other) {
         var otherSection = sectionForItem(other);
         html += '<a class="den-related-item" href="sections/' + esc(other.file) + '">' +
-          appIconHtml(other.icon, other.label) +
+          iconHtml(other.icon, other.label) +
           '<span><strong>' + esc(other.label) + '</strong><em>' + esc(otherSection.summary || '') + '</em></span>' +
           '<span class="den-related-go" aria-hidden="true">›</span></a>';
       });
@@ -1556,7 +1545,6 @@
     html += '</div>';
     mount.innerHTML = html;
     if (section.id) bindCodeGates(mount, section);
-    mount.querySelectorAll('[data-project-id], .den-card').forEach(function () {});
     document.querySelectorAll('.den-card').forEach(function (card) {
       card.classList.toggle('is-selected', card.getAttribute('data-project-id') === item.id);
     });
@@ -1596,7 +1584,7 @@
     html += '<button type="button" class="den-filter" data-filter="addon">Browser add-ons</button>';
     html += '<span class="den-filter-count">' + counts.all + ' projects</span></div>';
     if (featured) {
-      html += '<h2 class="den-block-title">Featured project</h2>';
+      html += '<h2 class="den-block-title" data-featured-heading>Featured project</h2>';
       html += renderWorkshopCard(featured, true);
     }
     html += '<h2 class="den-block-title">All projects</h2><div class="den-grid">';
@@ -1611,6 +1599,9 @@
       document.querySelectorAll('[data-filter]').forEach(function (el) {
         el.classList.toggle('is-active', el.getAttribute('data-filter') === key);
       });
+      var featuredMatches = !featured || key === 'all' || kindFilterKey(featured.kind) === key;
+      var heading = catalog.querySelector('[data-featured-heading]');
+      if (heading) heading.hidden = !featuredMatches;
       catalog.querySelectorAll('.den-card').forEach(function (card) {
         var show = key === 'all' || card.getAttribute('data-kind') === key;
         card.hidden = !show;

@@ -281,6 +281,11 @@ body[data-nav-scope="landing"] .toolbar-link.is-current {
   line-height: 1.45;
 }
 
+.den-card[hidden],
+.den-block-title[hidden] {
+  display: none !important;
+}
+
 .den-card--feature {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 168px;

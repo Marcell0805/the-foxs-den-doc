@@ -1,72 +1,121 @@
 (function () {
   function getSettings() {
-    return (window.DELTACORE_PORTAL && DELTACORE_PORTAL.settings) || {};
+    return (window.DEN_PORTAL && DEN_PORTAL.settings) || {};
   }
+
   function getAuth() {
     return getSettings().auth || {};
   }
+
   function isAuthEnabled() {
     var auth = getAuth();
     if (auth.enabled === false) return false;
     if (auth.enabled === true) return true;
-    // Legacy: treat non-empty password as enabled
-    return !!(auth.password);
+    // Older portals turn the gate on by storing a password and leaving enabled unset.
+    return !!auth.password;
   }
+
   function getStorageKey() {
-    var auth = getAuth();
-    return (auth && auth.storageKey) || 'deltacore_portal_auth';
+    return getAuth().storageKey || 'the_fox_s_den_portal_auth';
   }
+
   function getPassword() {
-    var auth = getAuth();
-    return (auth && auth.password) || 'deltacore';
+    return getAuth().password || 'the_fox_s_den';
   }
+
+  function markUnlocked() {
+    document.documentElement.classList.add('auth-ok');
+  }
+
   function unlock() {
     sessionStorage.setItem(getStorageKey(), '1');
-    document.documentElement.classList.add('auth-ok');
+    markUnlocked();
+
     var gate = document.getElementById('auth-gate');
     if (gate) gate.remove();
   }
+
+  function assetUrl(script, path) {
+    if (!script) return path;
+    return new URL(path, script.src).href;
+  }
+
+  function element(tag, className, text) {
+    var node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text) node.textContent = text;
+    return node;
+  }
+
   function showGate() {
     var script = document.querySelector('script[src*="auth.js"]');
-    var logoUrl = script ? new URL('../assets/logo.png?v=denfox1', script.src).href : '../assets/logo.png?v=denfox1';
-    var logoFallback = script ? new URL('../assets/logo.svg', script.src).href : '../assets/logo.svg';
-    var s = getSettings();
-    var title = s.portalName || 'DeltaCore Engineering Portal';
-    var subtitle = s.tagline || 'Industrial intelligence platform';
-    var gate = document.createElement('div');
-    gate.id = 'auth-gate';
-    gate.className = 'auth-gate';
-    gate.innerHTML =
-      '<div class="auth-gate-card">' +
-        '<img src="' + logoUrl + '" alt="" class="auth-gate-logo" onerror="this.onerror=null;this.src=\'' + logoFallback + '\';">' +
-        '<h2 class="auth-gate-title">' + title + '</h2>' +
-        '<p class="auth-gate-subtitle">' + subtitle + '</p>' +
-        '<form class="auth-gate-form" id="auth-form">' +
-          '<input type="password" id="auth-password" class="auth-gate-input" placeholder="Enter password" autocomplete="off" autofocus>' +
-          '<p class="auth-gate-error" id="auth-error" hidden>Incorrect password.</p>' +
-          '<button type="submit" class="auth-gate-button">Enter</button>' +
-        '</form>' +
-      '</div>';
-    document.body.prepend(gate);
-    document.getElementById('auth-form').addEventListener('submit', function (e) {
-      e.preventDefault();
-      var input = document.getElementById('auth-password');
-      var error = document.getElementById('auth-error');
-      if (input.value === getPassword()) { unlock(); }
-      else { error.hidden = false; input.value = ''; input.focus(); }
+    var settings = getSettings();
+
+    var logo = element('img', 'auth-gate-logo');
+    logo.alt = '';
+    logo.src = assetUrl(script, '../assets/logo.png?v=denfox1');
+    logo.addEventListener('error', function onLogoError() {
+      logo.removeEventListener('error', onLogoError);
+      logo.src = assetUrl(script, '../assets/logo.svg');
     });
+
+    var input = element('input', 'auth-gate-input');
+    input.type = 'password';
+    input.id = 'auth-password';
+    input.placeholder = 'Enter password';
+    input.autocomplete = 'off';
+    input.autofocus = true;
+
+    var error = element('p', 'auth-gate-error', 'Incorrect password.');
+    error.id = 'auth-error';
+    error.hidden = true;
+
+    var button = element('button', 'auth-gate-button', 'Enter');
+    button.type = 'submit';
+
+    var form = element('form', 'auth-gate-form');
+    form.id = 'auth-form';
+    form.append(input, error, button);
+    form.addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      if (input.value === getPassword()) {
+        unlock();
+        return;
+      }
+
+      error.hidden = false;
+      input.value = '';
+      input.focus();
+    });
+
+    var card = element('div', 'auth-gate-card');
+    card.append(
+      logo,
+      element('h2', 'auth-gate-title', settings.portalName || "The Fox's Den"),
+      element('p', 'auth-gate-subtitle', settings.tagline || 'The collection of things that escaped the workshop.'),
+      form
+    );
+
+    var gate = element('div', 'auth-gate');
+    gate.id = 'auth-gate';
+    gate.append(card);
+    document.body.prepend(gate);
   }
+
   function init() {
-    if (!isAuthEnabled()) {
-      document.documentElement.classList.add('auth-ok');
+    var alreadyIn = !isAuthEnabled() || sessionStorage.getItem(getStorageKey()) === '1';
+    if (alreadyIn) {
+      markUnlocked();
       return;
     }
-    if (sessionStorage.getItem(getStorageKey()) === '1') {
-      document.documentElement.classList.add('auth-ok');
-      return;
-    }
+
     showGate();
   }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
-  else init();
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
 })();

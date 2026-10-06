@@ -192,6 +192,33 @@
       ]
     },
     {
+      "id": "ffs-web",
+      "title": "FFS Web",
+      "kind": "website",
+      "visible": true,
+      "repoPath": "D:\\repos\\FFS Web",
+      "readme": "about.md",
+      "externalUrl": "https://ffs.foxbytelabs.co.za/",
+      "icon": "icons/ffs.png",
+      "note": "Browser version of FFS for planning and tracking money. It does not sync with the Android app.",
+      "summaryOverride": "Browser version of FFS for planning and tracking money. It does not sync with the Android app.",
+      "status": "live",
+      "tags": [
+        "website",
+        "finance"
+      ],
+      "faq": [
+        {
+          "heading": "What is FFS Web?",
+          "content": "The browser version of FFS. You can plan and track money in the browser. It is a separate product from the Android app."
+        },
+        {
+          "heading": "Does this sync with the Android app?",
+          "content": "No. Money you enter on the website does not appear on the phone, and the other way around."
+        }
+      ]
+    },
+    {
       "id": "streamforge",
       "title": "StreamForge",
       "kind": "tool",
