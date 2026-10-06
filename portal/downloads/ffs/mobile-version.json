@@ -1,11 +1,11 @@
 {
     "channel":  "live",
-    "releaseNotes":  "Waiting payments stay in Needs review until you accept them\nThis month compares the same days last month\nWallet and your bank count as one payment, on the bank\nSwitched-off banks sit in Bank off and stay out of reports\nHourly reminder while payments are still waiting\nBudget rows open transactions or goals\nPayday salary can count in this month\nMark a payment towards a goal\nConfirm on a payment alert now confirms it\nChoose your bank from a list on an account",
-    "sizeLabel":  "89.2 MB",
+    "releaseNotes":  "- Agree to the Terms of Use and Privacy Policy before Home\n- Read them again in Settings, with licences and About\n- Free allows one statement import, until you wipe all data\n- Exporting a CSV is part of Plus\n- Plus is welcomed by name on the menu and on Home",
+    "sizeLabel":  "89.6 MB",
     "storeUrl":  "https://play.google.com/store/apps/details?id=dev.marcellvn.ffs",
-    "build":  28,
+    "build":  31,
     "version":  "1.1.0",
     "apkUrl":  "https://marcell0805.github.io/the-foxs-den-doc/downloads/ffs.apk",
     "distribution":  "both",
-    "sizeBytes":  93495006
+    "sizeBytes":  93986526
 }
