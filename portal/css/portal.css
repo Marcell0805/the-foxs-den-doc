@@ -1403,7 +1403,14 @@ body.dedication-page .main {
   text-align: center;
 }
 
-.dedication-unlock-msg {
+.dedication-unlock-inner--heart {
+  max-width: min(42rem, 98vw);
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.dedication-unlock-msg,
+.dedication-unlock-voice {
   font-family: var(--font-display);
   font-size: clamp(1.05rem, 3.5vw, 1.35rem);
   color: var(--heading);
@@ -1412,12 +1419,19 @@ body.dedication-page .main {
   line-height: 1.55;
   opacity: 0;
   transform: translateY(6px);
-  transition: opacity 0.35s ease, transform 0.35s ease;
+  transition: opacity 0.35s ease, transform 0.35s ease, color 0.6s ease;
 }
 
-.dedication-unlock-msg.is-visible {
+.dedication-unlock-msg.is-visible,
+.dedication-unlock-voice.is-visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+.dedication-unlock-voice.is-soft {
+  opacity: 0.42;
+  font-style: italic;
+  font-size: clamp(0.95rem, 2.8vw, 1.1rem);
 }
 
 .dedication-unlock-heart {
@@ -1436,9 +1450,271 @@ body.dedication-page .main {
   transform: scale(1);
 }
 
+.word-heart-letter {
+  max-width: 32rem;
+  margin: 0 auto;
+  text-align: center;
+  font-family: var(--font-display);
+  opacity: 0;
+}
+
+.word-heart-letter.is-waiting {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.word-heart-letter.is-revealed {
+  animation: dedication-fade 0.9s ease-out both;
+}
+
+.word-heart-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 5vw, 2.35rem);
+  font-weight: 700;
+  font-style: italic;
+  color: var(--heading);
+  letter-spacing: 0.01em;
+  margin: 0 0 1.5rem;
+}
+
+.word-heart-flourish {
+  margin: 0 auto 1.75rem;
+}
+
+.word-heart-epilogue {
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 3vw, 1.2rem);
+  line-height: 1.75;
+  font-style: italic;
+  color: var(--text);
+  margin: 0 auto 2rem;
+  max-width: 28rem;
+}
+
+.word-heart-closing {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: var(--heading);
+}
+
+.word-heart-closing p {
+  margin: 0 0 0.35rem;
+}
+
+.dedication-unlock.is-handing-off {
+  transition: opacity 0.55s ease;
+}
+
+.dedication-unlock.is-handing-off .word-heart {
+  transform: scale(0.06) translateY(38vh);
+  opacity: 0;
+  transition: transform 0.75s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.65s ease;
+}
+
+.word-heart {
+  position: relative;
+  width: min(38rem, 96vw);
+  height: min(34rem, 82vh);
+  margin: 0.25rem auto 0;
+  transform-origin: center center;
+}
+
+.word-heart-thread {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.word-heart-thread-path {
+  stroke: color-mix(in srgb, var(--orange) 70%, #c45c6a);
+  stroke-width: 0.35;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0;
+  stroke-dasharray: 320;
+  stroke-dashoffset: 320;
+  transition: opacity 0.4s ease;
+  vector-effect: non-scaling-stroke;
+}
+
+.word-heart.is-thread-on .word-heart-thread-path {
+  opacity: 0.45;
+  animation: word-heart-thread-draw 1.1s ease forwards;
+}
+
+.word-heart-beads {
+  position: absolute;
+  inset: 0;
+}
+
+.word-heart-bead {
+  position: absolute;
+  transform: translate(-50%, -50%) scale(0.75);
+  font-family: var(--font-display);
+  font-size: clamp(0.72rem, 1.45vw, 0.95rem);
+  line-height: 1.2;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  letter-spacing: 0.02em;
+  padding: 0.15em 0.2em;
+  transition:
+    opacity 0.28s ease,
+    transform 0.28s ease,
+    color 0.28s ease,
+    filter 0.28s ease,
+    font-style 0.28s ease;
+}
+
+.word-heart-bead--left {
+  color: var(--navy);
+}
+
+.word-heart-bead--right {
+  color: #c45c6a;
+}
+
+.word-heart-bead--named {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.word-heart-bead.is-flashing {
+  opacity: 1;
+  font-style: italic;
+  transform: translate(-50%, -50%) scale(1.18);
+  color: #c45c6a;
+  filter: drop-shadow(0 0 10px color-mix(in srgb, #c45c6a 55%, transparent));
+}
+
+.word-heart-bead.is-flashing::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 2.4em;
+  height: 2.4em;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, color-mix(in srgb, #c45c6a 35%, transparent), transparent 70%);
+  z-index: -1;
+  animation: word-heart-ink 0.35s ease-out both;
+}
+
+.word-heart-bead.is-settled {
+  opacity: 0.72;
+  transform: translate(-50%, -50%) scale(1);
+  font-style: normal;
+  filter: none;
+}
+
+.word-heart-bead--left.is-settled {
+  color: color-mix(in srgb, var(--navy) 88%, #1a2e24);
+}
+
+.word-heart-bead--right.is-settled {
+  color: color-mix(in srgb, #c45c6a 85%, var(--navy));
+}
+
+.word-heart-bead--named.is-settled {
+  opacity: 0.92;
+}
+
+.word-heart-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  max-width: 12.5rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.55s ease, transform 0.55s ease;
+}
+
+.word-heart.is-center-on .word-heart-center {
+  opacity: 1;
+}
+
+.word-heart-center-title {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 700;
+  font-size: clamp(1.25rem, 4vw, 1.65rem);
+  color: #c45c6a;
+  line-height: 1.2;
+  margin: 0;
+  text-shadow: 0 4px 18px color-mix(in srgb, #c45c6a 25%, transparent);
+}
+
+.word-heart-center-sub {
+  font-family: var(--font-display);
+  font-size: clamp(0.78rem, 2.2vw, 0.92rem);
+  color: var(--heading);
+  line-height: 1.4;
+  margin: 0.55rem 0 0;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+
+.word-heart.is-sub-on .word-heart-center-sub {
+  opacity: 0.9;
+  transform: translateY(0);
+}
+
+.word-heart.is-pulse-once {
+  animation: dedication-heart-pulse 1.35s ease-in-out 1;
+}
+
+.dedication-signoff--replay {
+  cursor: pointer;
+  display: inline-block;
+  border-radius: 4px;
+  transition: color 0.25s ease, transform 0.25s ease;
+}
+
+.dedication-signoff--replay:hover,
+.dedication-signoff--replay:focus-visible {
+  color: #c45c6a;
+  outline: none;
+  transform: translateY(-1px);
+}
+
+.dedication-flourish.is-receiving {
+  animation: dedication-flourish-receive 1.15s ease;
+}
+
+.dedication-flourish.is-receiving::before {
+  animation: dedication-flourish-dot 1.15s ease;
+}
+
 @keyframes dedication-heart-pulse {
   0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.12); }
+  50% { transform: scale(1.06); }
+}
+
+@keyframes word-heart-thread-draw {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes word-heart-ink {
+  from { opacity: 0.9; transform: translate(-50%, -50%) scale(0.4); }
+  to { opacity: 0; transform: translate(-50%, -50%) scale(1.5); }
+}
+
+@keyframes dedication-flourish-receive {
+  0% { filter: drop-shadow(0 0 0 transparent); }
+  35% { filter: drop-shadow(0 0 10px color-mix(in srgb, #c45c6a 45%, transparent)); }
+  100% { filter: drop-shadow(0 0 0 transparent); }
+}
+
+@keyframes dedication-flourish-dot {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); background: var(--orange); }
+  40% { transform: translate(-50%, -50%) scale(1.8); background: #c45c6a; }
 }
 
 .dedication-letter.is-waiting {
@@ -1454,19 +1730,36 @@ body.dedication-revealing .portal-toolbar {
 
 @media (prefers-reduced-motion: reduce) {
   .dedication-unlock,
-  .dedication-unlock-msg {
+  .dedication-unlock-msg,
+  .dedication-unlock-voice,
+  .word-heart,
+  .word-heart-bead,
+  .word-heart-center,
+  .word-heart-center-sub,
+  .word-heart-thread-path {
     transition: none;
+    animation: none !important;
+  }
+  .word-heart.is-thread-on .word-heart-thread-path {
+    stroke-dashoffset: 0;
+    opacity: 0.45;
   }
   .dedication-letter,
   .dedication-letter.is-waiting,
-  .dedication-letter.is-revealed {
+  .dedication-letter.is-revealed,
+  .word-heart-letter,
+  .word-heart-letter.is-waiting,
+  .word-heart-letter.is-revealed {
     opacity: 1;
     animation: none;
   }
   .dedication-mark,
   .dedication-title,
   .dedication-closing,
-  .dedication-photo {
+  .dedication-photo,
+  .dedication-flourish.is-receiving,
+  .dedication-flourish.is-receiving::before,
+  .dedication-unlock-heart {
     animation: none;
   }
 }

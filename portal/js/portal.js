@@ -139,7 +139,12 @@
   }
 
   function isDedicationPage() {
-    return document.body.getAttribute('data-section-id') === 'my-huntress';
+    var id = document.body.getAttribute('data-section-id');
+    return id === 'my-huntress' || id === 'ek-is-lief-vir-jou';
+  }
+
+  function isWordHeartPage() {
+    return document.body.getAttribute('data-section-id') === 'ek-is-lief-vir-jou';
   }
 
   function isQuestPage() {
@@ -151,7 +156,7 @@
   }
 
   function isSecretExperiencePage() {
-    return isDedicationPage() || isQuestPage() || isUnindexedPage();
+    return isDedicationPage() || isQuestPage() || isUnindexedPage() || isWordHeartPage();
   }
 
   function renderToolbar() {
@@ -840,6 +845,310 @@
     });
   }
 
+  var WORD_HEART_WORDS_LEFT = [
+    'Te amo', 'Je t\'aime', 'Ti amo',
+    '我爱你', '사랑해', 'Fox',
+    'Lief vir jou', 'Nakupenda'
+  ];
+  var WORD_HEART_WORDS_RIGHT = [
+    'I love you', 'Älskar dig', 'Aishiteru',
+    'Te quiero', 'Kocham cię', 'Huntress',
+    'Ek is lief', 'Je t\'adore'
+  ];
+
+  function wordHeartPoint(t) {
+    var x = 16 * Math.pow(Math.sin(t), 3);
+    var y = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
+    return { x: x, y: y };
+  }
+
+  function wordHeartToPercent(pt) {
+    // Classic curve spans roughly x:-16..16, y:-6..17 — map into a wide stage.
+    return {
+      x: 50 + (pt.x / 16) * 44,
+      y: 44 + ((pt.y + 2) / 19) * 46
+    };
+  }
+
+  function renderWordHeartPage(section) {
+    var html = '<article class="word-heart-letter">';
+    html += '<h1 class="word-heart-title">' + esc(section.greeting || section.title || 'Ek is lief vir jou') + '</h1>';
+    html += '<div class="dedication-flourish word-heart-flourish" aria-hidden="true"></div>';
+    if (section.epilogue) {
+      html += '<p class="word-heart-epilogue">' + esc(section.epilogue) + '</p>';
+    }
+    html += '<footer class="word-heart-closing">';
+    if (section.closing) {
+      html += '<p>' + esc(section.closing) + '</p>';
+    }
+    html += '<p class="dedication-signoff word-heart-signoff">' + esc(section.signoff || 'Your Fox') + '</p>';
+    html += '</footer>';
+    html += '</article>';
+    return html;
+  }
+
+  function playWordHeartPage(page, section) {
+    if (!page) return;
+
+    var voiceLine = section.voiceLine || 'The code to the hearts has been found…';
+    var centerLine = section.centerLine || 'My Huntress';
+    var chosenLine = section.chosenLine || 'You are the one the heart has chosen.';
+    var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var replaying = false;
+
+    function pulseFlourish() {
+      var flourish = page.querySelector('.word-heart-flourish');
+      if (!flourish) return;
+      flourish.classList.remove('is-receiving');
+      void flourish.offsetWidth;
+      flourish.classList.add('is-receiving');
+      window.setTimeout(function () {
+        flourish.classList.remove('is-receiving');
+      }, 1200);
+    }
+
+    function revealPage() {
+      page.classList.remove('is-waiting');
+      page.classList.add('is-revealed');
+      document.body.classList.remove('dedication-revealing');
+      pulseFlourish();
+      bindSignoffReplay();
+    }
+
+    function createHeartOverlay() {
+      var overlay = document.createElement('div');
+      overlay.className = 'dedication-unlock dedication-unlock--heart';
+      overlay.setAttribute('role', 'status');
+      overlay.setAttribute('aria-live', 'polite');
+      overlay.innerHTML =
+        '<div class="dedication-unlock-inner dedication-unlock-inner--heart">' +
+          '<p class="dedication-unlock-voice"></p>' +
+          '<div class="word-heart" aria-hidden="true">' +
+            '<svg class="word-heart-thread" viewBox="0 0 100 100" preserveAspectRatio="none">' +
+              '<path class="word-heart-thread-path" d="" fill="none"></path>' +
+            '</svg>' +
+            '<div class="word-heart-beads"></div>' +
+            '<div class="word-heart-center">' +
+              '<p class="word-heart-center-title"></p>' +
+              '<p class="word-heart-center-sub"></p>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+      document.body.appendChild(overlay);
+      document.body.classList.add('dedication-revealing');
+      return overlay;
+    }
+
+    function buildWordHeart(overlay, instant) {
+      var beadsHost = overlay.querySelector('.word-heart-beads');
+      var threadPath = overlay.querySelector('.word-heart-thread-path');
+      var leftWords = WORD_HEART_WORDS_LEFT.slice();
+      var rightWords = WORD_HEART_WORDS_RIGHT.slice();
+      var count = Math.min(leftWords.length, rightWords.length);
+      var leftPts = [];
+      var rightPts = [];
+      var i;
+
+      for (i = 0; i < count; i++) {
+        // Stay on the mid-lobes only so tip/cleft crowding cannot happen.
+        var u = 0.22 + (i / Math.max(count - 1, 1)) * 0.56;
+        var leftRaw = wordHeartPoint(Math.PI - u * Math.PI);
+        var rightRaw = wordHeartPoint(Math.PI + u * Math.PI);
+        // Push each bead outward from the heart center so labels don't kiss.
+        leftRaw.x *= 1.12;
+        leftRaw.y *= 1.08;
+        rightRaw.x *= 1.12;
+        rightRaw.y *= 1.08;
+        var leftPct = wordHeartToPercent(leftRaw);
+        var rightPct = wordHeartToPercent(rightRaw);
+        leftPct.x -= 3.2;
+        rightPct.x += 3.2;
+        leftPts.push(leftPct);
+        rightPts.push(rightPct);
+      }
+
+      var pathParts = [];
+      for (i = 0; i < count; i++) {
+        pathParts.push(
+          (i === 0 ? 'M' : 'L') +
+          leftPts[i].x.toFixed(2) + ' ' + leftPts[i].y.toFixed(2)
+        );
+      }
+      for (i = count - 1; i >= 0; i--) {
+        pathParts.push('L' + rightPts[i].x.toFixed(2) + ' ' + rightPts[i].y.toFixed(2));
+      }
+      pathParts.push('Z');
+      if (threadPath) threadPath.setAttribute('d', pathParts.join(' '));
+
+      var beads = [];
+      for (i = 0; i < count; i++) {
+        var leftEl = document.createElement('span');
+        leftEl.className = 'word-heart-bead word-heart-bead--left' +
+          (leftWords[i] === 'Fox' ? ' word-heart-bead--named' : '');
+        leftEl.textContent = leftWords[i];
+        leftEl.style.left = leftPts[i].x.toFixed(2) + '%';
+        leftEl.style.top = leftPts[i].y.toFixed(2) + '%';
+        beadsHost.appendChild(leftEl);
+
+        var rightEl = document.createElement('span');
+        rightEl.className = 'word-heart-bead word-heart-bead--right' +
+          (rightWords[i] === 'Huntress' ? ' word-heart-bead--named' : '');
+        rightEl.textContent = rightWords[i];
+        rightEl.style.left = rightPts[i].x.toFixed(2) + '%';
+        rightEl.style.top = rightPts[i].y.toFixed(2) + '%';
+        beadsHost.appendChild(rightEl);
+
+        beads.push(leftEl, rightEl);
+      }
+
+      if (instant) {
+        beads.forEach(function (el) { el.classList.add('is-settled'); });
+        overlay.querySelector('.word-heart').classList.add('is-complete', 'is-thread-on');
+      }
+
+      return beads;
+    }
+
+    function dismissHeartOverlay(overlay, withHandoff, done) {
+      if (withHandoff && !reduceMotion) {
+        overlay.classList.add('is-handing-off');
+        window.setTimeout(function () {
+          overlay.classList.add('is-leaving');
+          window.setTimeout(function () {
+            if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+            done();
+          }, 550);
+        }, 700);
+        return;
+      }
+      overlay.classList.add('is-leaving');
+      window.setTimeout(function () {
+        if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+        done();
+      }, reduceMotion ? 0 : 650);
+    }
+
+    function playWordHeartSequence(opts, done) {
+      opts = opts || {};
+      var replay = !!opts.replay;
+      var overlay = createHeartOverlay();
+      var voice = overlay.querySelector('.dedication-unlock-voice');
+      var heart = overlay.querySelector('.word-heart');
+      var centerTitle = overlay.querySelector('.word-heart-center-title');
+      var centerSub = overlay.querySelector('.word-heart-center-sub');
+      var beads = buildWordHeart(overlay, reduceMotion || replay);
+
+      centerTitle.textContent = centerLine;
+      centerSub.textContent = chosenLine;
+
+      if (reduceMotion || replay) {
+        voice.textContent = replay ? '' : voiceLine;
+        if (!replay) voice.classList.add('is-visible', 'is-soft');
+        heart.classList.add('is-complete', 'is-thread-on', 'is-center-on', 'is-sub-on');
+        if (!reduceMotion) heart.classList.add('is-pulse-once');
+        window.setTimeout(function () {
+          dismissHeartOverlay(overlay, !replay, function () {
+            replaying = false;
+            done();
+          });
+        }, reduceMotion ? 900 : (replay ? 2800 : 3200));
+        return;
+      }
+
+      voice.textContent = voiceLine;
+      window.setTimeout(function () { voice.classList.add('is-visible'); }, 80);
+
+      var pairGap = 110;
+      var restAfterPair = 300;
+      var t = 420;
+      var pairCount = beads.length / 2;
+      var p;
+
+      for (p = 0; p < pairCount; p++) {
+        (function (leftBead, rightBead, at) {
+          window.setTimeout(function () {
+            leftBead.classList.add('is-flashing');
+            window.setTimeout(function () {
+              leftBead.classList.remove('is-flashing');
+              leftBead.classList.add('is-settled');
+            }, 180);
+          }, at);
+          window.setTimeout(function () {
+            rightBead.classList.add('is-flashing');
+            window.setTimeout(function () {
+              rightBead.classList.remove('is-flashing');
+              rightBead.classList.add('is-settled');
+            }, 180);
+          }, at + pairGap);
+        })(beads[p * 2], beads[p * 2 + 1], t);
+        t += pairGap + restAfterPair;
+      }
+
+      var threadAt = t + 80;
+      var meetAt = threadAt + 450;
+      var centerAt = meetAt + 700;
+      var subAt = centerAt + 650;
+      var holdAt = subAt + 2200;
+
+      window.setTimeout(function () {
+        heart.classList.add('is-thread-on');
+      }, threadAt);
+
+      window.setTimeout(function () {
+        heart.classList.add('is-complete', 'is-pulse-once');
+        voice.classList.add('is-soft');
+      }, meetAt);
+
+      window.setTimeout(function () {
+        voice.classList.remove('is-visible');
+        heart.classList.add('is-center-on');
+      }, centerAt);
+
+      window.setTimeout(function () {
+        heart.classList.add('is-sub-on');
+      }, subAt);
+
+      window.setTimeout(function () {
+        dismissHeartOverlay(overlay, true, done);
+      }, holdAt);
+    }
+
+    function bindSignoffReplay() {
+      var signoff = page.querySelector('.word-heart-signoff');
+      if (!signoff || signoff.getAttribute('data-replay-bound') === '1') return;
+      signoff.setAttribute('data-replay-bound', '1');
+      signoff.setAttribute('role', 'button');
+      signoff.setAttribute('tabindex', '0');
+      signoff.setAttribute('title', 'Replay the heart');
+      signoff.classList.add('dedication-signoff--replay');
+
+      function replay() {
+        if (replaying) return;
+        replaying = true;
+        document.body.classList.add('dedication-revealing');
+        playWordHeartSequence({ replay: true }, function () {
+          document.body.classList.remove('dedication-revealing');
+          pulseFlourish();
+          replaying = false;
+        });
+      }
+
+      signoff.addEventListener('click', replay);
+      signoff.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          replay();
+        }
+      });
+    }
+
+    whenAuthOk(function () {
+      page.classList.add('is-waiting');
+      document.body.classList.add('dedication-revealing');
+      playWordHeartSequence({ replay: false }, revealPage);
+    });
+  }
+
   function renderDedication(section) {
     var html = '<article class="dedication-letter">';
     var markSrc = (section.mark && section.mark.src) || '../assets/cookbook-icon.png';
@@ -1112,6 +1421,15 @@
     if (id === 'berg-awaits' || section.kind === 'quest') {
       document.body.classList.add('quest-page');
       startBergQuest(mount, section);
+      return;
+    }
+
+    if (id === 'ek-is-lief-vir-jou' || section.kind === 'word-heart') {
+      document.body.classList.add('dedication-page', 'word-heart-page');
+      document.body.setAttribute('data-section-id', 'ek-is-lief-vir-jou');
+      mount.innerHTML = renderWordHeartPage(section);
+      var heartPage = mount.querySelector('.word-heart-letter');
+      if (heartPage) playWordHeartPage(heartPage, section);
       return;
     }
 
@@ -1874,6 +2192,7 @@
     if (isDedicationPage()) document.body.classList.add('dedication-page');
     if (isQuestPage()) document.body.classList.add('quest-page');
     if (isUnindexedPage()) document.body.classList.add('unindexed-page');
+    if (isWordHeartPage()) document.body.classList.add('word-heart-page');
     renderToolbar();
     renderSidebar();
     renderSection();

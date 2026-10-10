@@ -8,7 +8,8 @@
     'myhuntress': 'my-huntress.html',
     'my huntress': 'my-huntress.html',
     'drakenberg': 'berg-awaits.html',
-    'drakensberg': 'berg-awaits.html'
+    'drakensberg': 'berg-awaits.html',
+    'ek is lief vir jou': 'ek-is-lief-vir-jou.html'
   };
 
   var STATUS_LABELS = {
