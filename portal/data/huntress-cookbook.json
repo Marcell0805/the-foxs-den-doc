@@ -14,12 +14,12 @@
     "summary":  "Gluten-free, onion-free, IBS-conscious recipes for the Huntress — browse chapters online.",
     "blocks":  [
                    {
-                       "content":  "Gluten-free, onion-free, IBS-conscious recipes for the Huntress — browse chapters online.",
+                       "content":  "A personal cookbook for the Huntress — gluten-free, onion-free, and IBS-conscious meals built with care by the Sly Fox.",
                        "heading":  "About",
                        "bullets":  [
 
                                    ],
-                       "id":  "about"
+                       "id":  "readme-1"
                    }
                ],
     "sidebarNote":  "Gluten-free, onion-free, IBS-conscious recipes for the Huntress — browse chapters online.",

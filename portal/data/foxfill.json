@@ -14,12 +14,12 @@
     "summary":  "Privacy-first form filling from a local profile. Scan, review, then fill — your details stay on this device.",
     "blocks":  [
                    {
-                       "content":  "Privacy-first Chrome extension that fills web forms from a locally stored profile. Current: Phase 9 — multi-profile, custom fields, encryption, full settings page (local), optional in-page overlay preview. Product rules and roadmap: PLAN.md",
+                       "content":  "• Searchable country picker (type to find your country)\n• Phone field hint follows your country dial code (+1, +44, +27, …)\n• New profiles start with a country from your browser language\n• Address labels adapt (State/ZIP, County/Postcode, or Province/Postal Code)\n• Clearer tips — less South Africa–only wording",
                        "heading":  "About",
                        "bullets":  [
 
                                    ],
-                       "id":  "readme-1"
+                       "id":  "about"
                    }
                ],
     "sidebarNote":  "Download the zip and load in Chrome.",

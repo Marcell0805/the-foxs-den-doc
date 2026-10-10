@@ -845,35 +845,100 @@
     });
   }
 
-  var WORD_HEART_WORDS_LEFT = [
-    'Te amo', 'Je t\'aime', 'Ti amo',
-    '我爱你', '사랑해', 'Fox',
-    'Lief vir jou', 'Nakupenda'
-  ];
-  var WORD_HEART_WORDS_RIGHT = [
-    'I love you', 'Älskar dig', 'Aishiteru',
-    'Te quiero', 'Kocham cię', 'Huntress',
-    'Ek is lief', 'Je t\'adore'
+  /* Filled heart via concentric parametric rings + collision packing. */
+  var WORD_HEART_PHRASES = [
+    'Te amo', 'Je t\'aime', 'Ti amo', 'Eu te amo', 'I love you',
+    '我爱你', '愛してる', '사랑해', 'أحبك', 'Я люблю',
+    'Σ\'αγαπώ', 'Nakupenda', 'Mahal kita', 'Volim te', 'Te iubesc',
+    'Szeretlek', 'Kocham cię', 'Älskar dig', 'Te quiero', 'Aishiteru',
+    'Wo ai ni', 'Lief vir jou', 'Anh yêu em', 'My heart', 'Je t\'adore'
   ];
 
-  function wordHeartPoint(t) {
+  function wordHeartCurvePoint(t) {
     var x = 16 * Math.pow(Math.sin(t), 3);
     var y = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
     return { x: x, y: y };
   }
 
-  function wordHeartToPercent(pt) {
-    // Classic curve spans roughly x:-16..16, y:-6..17 — map into a wide stage.
+  function wordHeartStagePoint(pt, scale) {
+    // Parametric heart: x≈[-16,16], y≈[-6,17] → stage % with clear lobes + tip.
     return {
-      x: 50 + (pt.x / 16) * 44,
-      y: 44 + ((pt.y + 2) / 19) * 46
+      x: 50 + (pt.x / 16) * 41 * scale,
+      y: 40 + ((pt.y + 6) / 23) * 52 * scale
     };
   }
 
+  function wordHeartPhraseWidth(phrase) {
+    return Math.max(3.4, String(phrase).length * 0.78);
+  }
+
+  function wordHeartCanPlace(x, y, width, placed) {
+    var i;
+    for (i = 0; i < placed.length; i++) {
+      var p = placed[i];
+      if (Math.abs(x - p.x) < (width + p.w) * 0.55 && Math.abs(y - p.y) < 2.85) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function isInBerniceClearing(x, y) {
+    var dx = (x - 50) / 13.5;
+    var dy = (y - 47) / 10.5;
+    return dx * dx + dy * dy < 1;
+  }
+
+  function sampleFilledHeartPoints() {
+    var candidates = [];
+    var scale;
+    var i;
+
+    // Outer ring first so the silhouette is unmistakably a heart.
+    for (scale = 1; scale >= 0.3; scale -= 0.09) {
+      var count = Math.max(14, Math.round(22 + scale * 48));
+      for (i = 0; i < count; i++) {
+        var t = (i / count) * Math.PI * 2;
+        var stage = wordHeartStagePoint(wordHeartCurvePoint(t), scale);
+        if (isInBerniceClearing(stage.x, stage.y)) continue;
+        candidates.push(stage);
+      }
+    }
+
+    var placed = [];
+    var phraseIndex = 0;
+    candidates.forEach(function (pt) {
+      var tries = 0;
+      var phrase;
+      var width;
+      while (tries < WORD_HEART_PHRASES.length) {
+        phrase = WORD_HEART_PHRASES[phraseIndex % WORD_HEART_PHRASES.length];
+        phraseIndex += 1;
+        tries += 1;
+        width = wordHeartPhraseWidth(phrase);
+        if (wordHeartCanPlace(pt.x, pt.y, width, placed)) {
+          placed.push({ x: pt.x, y: pt.y, w: width, phrase: phrase });
+          break;
+        }
+      }
+    });
+
+    // Tip-up fill order.
+    placed.sort(function (a, b) {
+      if (a.y !== b.y) return b.y - a.y;
+      return a.x - b.x;
+    });
+    return placed;
+  }
+
   function renderWordHeartPage(section) {
-    var html = '<article class="word-heart-letter">';
+    var destSrc = assetsPrefix() + 'word-heart-destination.jpg';
+    var html = '<article class="word-heart-letter word-heart-destination">';
+    html += '<div class="word-heart-destination-bg" style="background-image:url(\'' + esc(destSrc) + '\')" aria-hidden="true"></div>';
+    html += '<div class="word-heart-card">';
+    html += '<div class="word-heart-card-mark" aria-hidden="true">♥</div>';
     html += '<h1 class="word-heart-title">' + esc(section.greeting || section.title || 'Ek is lief vir jou') + '</h1>';
-    html += '<div class="dedication-flourish word-heart-flourish" aria-hidden="true"></div>';
+    html += '<div class="word-heart-card-divider" aria-hidden="true">♥</div>';
     if (section.epilogue) {
       html += '<p class="word-heart-epilogue">' + esc(section.epilogue) + '</p>';
     }
@@ -883,27 +948,29 @@
     }
     html += '<p class="dedication-signoff word-heart-signoff">' + esc(section.signoff || 'Your Fox') + '</p>';
     html += '</footer>';
-    html += '</article>';
+    html += '<div class="dedication-flourish word-heart-flourish" aria-hidden="true"></div>';
+    html += '</div></article>';
     return html;
   }
 
   function playWordHeartPage(page, section) {
     if (!page) return;
 
-    var voiceLine = section.voiceLine || 'The code to the hearts has been found…';
-    var centerLine = section.centerLine || 'My Huntress';
-    var chosenLine = section.chosenLine || 'You are the one the heart has chosen.';
+    var voiceLine = section.voiceLine || 'To the owner of my heart';
+    var centerLine = section.centerLine || 'Bernice';
+    var stageSrc = assetsPrefix() + 'word-heart-stage.jpg';
     var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var replaying = false;
+    var holdMs = 10000;
 
     function pulseFlourish() {
-      var flourish = page.querySelector('.word-heart-flourish');
-      if (!flourish) return;
-      flourish.classList.remove('is-receiving');
-      void flourish.offsetWidth;
-      flourish.classList.add('is-receiving');
+      var card = page.querySelector('.word-heart-card');
+      if (!card) return;
+      card.classList.remove('is-receiving');
+      void card.offsetWidth;
+      card.classList.add('is-receiving');
       window.setTimeout(function () {
-        flourish.classList.remove('is-receiving');
+        card.classList.remove('is-receiving');
       }, 1200);
     }
 
@@ -920,17 +987,19 @@
       overlay.className = 'dedication-unlock dedication-unlock--heart';
       overlay.setAttribute('role', 'status');
       overlay.setAttribute('aria-live', 'polite');
+      overlay.style.setProperty('--word-heart-stage', 'url("' + stageSrc + '")');
       overlay.innerHTML =
+        '<div class="word-heart-stage-veil" aria-hidden="true"></div>' +
+        '<div class="word-heart-petals" aria-hidden="true">' +
+          '<span></span><span></span><span></span><span></span><span></span><span></span>' +
+        '</div>' +
         '<div class="dedication-unlock-inner dedication-unlock-inner--heart">' +
           '<p class="dedication-unlock-voice"></p>' +
           '<div class="word-heart" aria-hidden="true">' +
-            '<svg class="word-heart-thread" viewBox="0 0 100 100" preserveAspectRatio="none">' +
-              '<path class="word-heart-thread-path" d="" fill="none"></path>' +
-            '</svg>' +
+            '<div class="word-heart-glow"></div>' +
             '<div class="word-heart-beads"></div>' +
             '<div class="word-heart-center">' +
               '<p class="word-heart-center-title"></p>' +
-              '<p class="word-heart-center-sub"></p>' +
             '</div>' +
           '</div>' +
         '</div>';
@@ -941,69 +1010,26 @@
 
     function buildWordHeart(overlay, instant) {
       var beadsHost = overlay.querySelector('.word-heart-beads');
-      var threadPath = overlay.querySelector('.word-heart-thread-path');
-      var leftWords = WORD_HEART_WORDS_LEFT.slice();
-      var rightWords = WORD_HEART_WORDS_RIGHT.slice();
-      var count = Math.min(leftWords.length, rightWords.length);
-      var leftPts = [];
-      var rightPts = [];
+      var points = sampleFilledHeartPoints();
+      var beads = [];
       var i;
 
-      for (i = 0; i < count; i++) {
-        // Stay on the mid-lobes only so tip/cleft crowding cannot happen.
-        var u = 0.22 + (i / Math.max(count - 1, 1)) * 0.56;
-        var leftRaw = wordHeartPoint(Math.PI - u * Math.PI);
-        var rightRaw = wordHeartPoint(Math.PI + u * Math.PI);
-        // Push each bead outward from the heart center so labels don't kiss.
-        leftRaw.x *= 1.12;
-        leftRaw.y *= 1.08;
-        rightRaw.x *= 1.12;
-        rightRaw.y *= 1.08;
-        var leftPct = wordHeartToPercent(leftRaw);
-        var rightPct = wordHeartToPercent(rightRaw);
-        leftPct.x -= 3.2;
-        rightPct.x += 3.2;
-        leftPts.push(leftPct);
-        rightPts.push(rightPct);
-      }
-
-      var pathParts = [];
-      for (i = 0; i < count; i++) {
-        pathParts.push(
-          (i === 0 ? 'M' : 'L') +
-          leftPts[i].x.toFixed(2) + ' ' + leftPts[i].y.toFixed(2)
-        );
-      }
-      for (i = count - 1; i >= 0; i--) {
-        pathParts.push('L' + rightPts[i].x.toFixed(2) + ' ' + rightPts[i].y.toFixed(2));
-      }
-      pathParts.push('Z');
-      if (threadPath) threadPath.setAttribute('d', pathParts.join(' '));
-
-      var beads = [];
-      for (i = 0; i < count; i++) {
-        var leftEl = document.createElement('span');
-        leftEl.className = 'word-heart-bead word-heart-bead--left' +
-          (leftWords[i] === 'Fox' ? ' word-heart-bead--named' : '');
-        leftEl.textContent = leftWords[i];
-        leftEl.style.left = leftPts[i].x.toFixed(2) + '%';
-        leftEl.style.top = leftPts[i].y.toFixed(2) + '%';
-        beadsHost.appendChild(leftEl);
-
-        var rightEl = document.createElement('span');
-        rightEl.className = 'word-heart-bead word-heart-bead--right' +
-          (rightWords[i] === 'Huntress' ? ' word-heart-bead--named' : '');
-        rightEl.textContent = rightWords[i];
-        rightEl.style.left = rightPts[i].x.toFixed(2) + '%';
-        rightEl.style.top = rightPts[i].y.toFixed(2) + '%';
-        beadsHost.appendChild(rightEl);
-
-        beads.push(leftEl, rightEl);
+      for (i = 0; i < points.length; i++) {
+        var pt = points[i];
+        var el = document.createElement('span');
+        var tone = (i % 3 === 0) ? 'warm' : (i % 3 === 1) ? 'rose' : 'gold';
+        el.className = 'word-heart-bead word-heart-bead--' + tone;
+        el.textContent = pt.phrase;
+        el.style.left = pt.x.toFixed(2) + '%';
+        el.style.top = pt.y.toFixed(2) + '%';
+        el.style.setProperty('--twinkle-delay', ((i % 12) * 0.22).toFixed(2) + 's');
+        beadsHost.appendChild(el);
+        beads.push(el);
       }
 
       if (instant) {
-        beads.forEach(function (el) { el.classList.add('is-settled'); });
-        overlay.querySelector('.word-heart').classList.add('is-complete', 'is-thread-on');
+        beads.forEach(function (bead) { bead.classList.add('is-settled'); });
+        overlay.querySelector('.word-heart').classList.add('is-complete');
       }
 
       return beads;
@@ -1035,78 +1061,58 @@
       var voice = overlay.querySelector('.dedication-unlock-voice');
       var heart = overlay.querySelector('.word-heart');
       var centerTitle = overlay.querySelector('.word-heart-center-title');
-      var centerSub = overlay.querySelector('.word-heart-center-sub');
       var beads = buildWordHeart(overlay, reduceMotion || replay);
 
       centerTitle.textContent = centerLine;
-      centerSub.textContent = chosenLine;
 
       if (reduceMotion || replay) {
         voice.textContent = replay ? '' : voiceLine;
         if (!replay) voice.classList.add('is-visible', 'is-soft');
-        heart.classList.add('is-complete', 'is-thread-on', 'is-center-on', 'is-sub-on');
+        heart.classList.add('is-complete', 'is-center-on', 'is-twinkling');
         if (!reduceMotion) heart.classList.add('is-pulse-once');
         window.setTimeout(function () {
           dismissHeartOverlay(overlay, !replay, function () {
             replaying = false;
             done();
           });
-        }, reduceMotion ? 900 : (replay ? 2800 : 3200));
+        }, reduceMotion ? 1200 : (holdMs + (replay ? 400 : 800)));
         return;
       }
 
       voice.textContent = voiceLine;
       window.setTimeout(function () { voice.classList.add('is-visible'); }, 80);
 
-      var pairGap = 110;
-      var restAfterPair = 300;
-      var t = 420;
-      var pairCount = beads.length / 2;
-      var p;
+      // Slower tip-to-top fill with a brighter flash on each word.
+      var stepMs = 95;
+      var flashMs = 360;
+      var startAt = 500;
+      var i;
 
-      for (p = 0; p < pairCount; p++) {
-        (function (leftBead, rightBead, at) {
+      for (i = 0; i < beads.length; i++) {
+        (function (bead, at) {
           window.setTimeout(function () {
-            leftBead.classList.add('is-flashing');
+            bead.classList.add('is-flashing');
             window.setTimeout(function () {
-              leftBead.classList.remove('is-flashing');
-              leftBead.classList.add('is-settled');
-            }, 180);
+              bead.classList.remove('is-flashing');
+              bead.classList.add('is-settled');
+            }, flashMs);
           }, at);
-          window.setTimeout(function () {
-            rightBead.classList.add('is-flashing');
-            window.setTimeout(function () {
-              rightBead.classList.remove('is-flashing');
-              rightBead.classList.add('is-settled');
-            }, 180);
-          }, at + pairGap);
-        })(beads[p * 2], beads[p * 2 + 1], t);
-        t += pairGap + restAfterPair;
+        })(beads[i], startAt + i * stepMs);
       }
 
-      var threadAt = t + 80;
-      var meetAt = threadAt + 450;
-      var centerAt = meetAt + 700;
-      var subAt = centerAt + 650;
-      var holdAt = subAt + 2200;
+      var filledAt = startAt + beads.length * stepMs + 280;
+      var centerAt = filledAt + 550;
+      var holdAt = centerAt + holdMs;
 
       window.setTimeout(function () {
-        heart.classList.add('is-thread-on');
-      }, threadAt);
-
-      window.setTimeout(function () {
-        heart.classList.add('is-complete', 'is-pulse-once');
+        heart.classList.add('is-complete', 'is-pulse-once', 'is-twinkling');
         voice.classList.add('is-soft');
-      }, meetAt);
+      }, filledAt);
 
       window.setTimeout(function () {
         voice.classList.remove('is-visible');
         heart.classList.add('is-center-on');
       }, centerAt);
-
-      window.setTimeout(function () {
-        heart.classList.add('is-sub-on');
-      }, subAt);
 
       window.setTimeout(function () {
         dismissHeartOverlay(overlay, true, done);

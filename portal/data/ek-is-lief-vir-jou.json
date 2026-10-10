@@ -5,10 +5,11 @@
   "status": "live",
   "hidden": true,
   "greeting": "Ek is lief vir jou",
-  "centerLine": "My Huntress",
-  "chosenLine": "You are the one the heart has chosen.",
-  "voiceLine": "The code to the hearts has been found…",
+  "centerLine": "Bernice",
+  "voiceLine": "To the owner of my heart",
   "epilogue": "In every language, and in the quiet ones that never need words — this is for you.",
   "closing": "Always,",
-  "signoff": "Your Fox"
+  "signoff": "Your Fox",
+  "stageImage": "word-heart-stage.jpg",
+  "destinationImage": "word-heart-destination.jpg"
 }
