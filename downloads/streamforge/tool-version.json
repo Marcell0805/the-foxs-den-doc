@@ -1,0 +1,10 @@
+{
+    "channel": "live",
+    "releaseNotes": "Fixed scheduling multiple games on the same day — each game now keeps its own time, and same-day games are sorted earliest to latest.",
+    "packageUrl": "https://den.foxbytelabs.co.za/downloads/streamforge-win-x64.zip",
+    "publishedAt": "2026-09-10",
+    "sizeLabel": "81.6 MB",
+    "build": 12,
+    "version": "1.0.11",
+    "sizeBytes": 85591936
+}
