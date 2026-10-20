@@ -1,10 +1,10 @@
 {
-    "channel": "live",
-    "releaseNotes": "Fixed scheduling multiple games on the same day — each game now keeps its own time, and same-day games are sorted earliest to latest.",
-    "packageUrl": "https://den.foxbytelabs.co.za/downloads/streamforge-win-x64.zip",
-    "publishedAt": "2026-09-10",
-    "sizeLabel": "81.6 MB",
-    "build": 12,
-    "version": "1.0.11",
-    "sizeBytes": 85591936
+    "channel":  "live",
+    "releaseNotes":  "WPF desktop app with a setup wizard for RAWG and Discord.\n• Light and dark themes\n• Time picker and a live Discord preview on the schedule\n• Mention emotes, roles, and people in announcements\n• Service Status for Steam, RAWG, Discord, and the integration API\n• Settings stay on this PC; the weekly schedule lasts for this session",
+    "packageUrl":  "https://den.foxbytelabs.co.za/downloads/streamforge-win-x64.zip",
+    "publishedAt":  "2026-10-20",
+    "sizeLabel":  "95.8 MB",
+    "build":  13,
+    "version":  "1.1.0",
+    "sizeBytes":  100460221
 }
